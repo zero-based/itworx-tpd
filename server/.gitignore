@@ -1,0 +1,5 @@
+# env files
+.env
+
+# Compiled files
+dist/
