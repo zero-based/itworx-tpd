@@ -1,13 +1,15 @@
 require("dotenv").config();
 
+import { AppContext } from "./types";
+import { appSession } from "./middlewares/session";
+import { cors } from "./middlewares/cors";
+import { errorHandler } from "./middlewares/errorHandler";
+
 import "reflect-metadata";
 import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-
-import { cors } from "./middlewares/cors";
-import { AppContext } from "./types";
 import { createConnection } from "typeorm";
 
 const main = async () => {
@@ -25,12 +27,14 @@ const main = async () => {
   const app = express();
 
   app.use(cors);
+  app.use(appSession);
 
   const server = new ApolloServer({
     context: ({ req, res }): AppContext => ({ req, res }),
     schema: await buildSchema({
       resolvers: [path.join(__dirname, "./resolvers/*.[jt]s")],
     }),
+    formatError: errorHandler,
   });
 
   server.applyMiddleware({ app, cors: false });

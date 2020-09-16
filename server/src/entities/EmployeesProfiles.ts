@@ -1,4 +1,6 @@
+import { Field, ObjectType } from "type-graphql";
 import {
+  BaseEntity,
   Column,
   Entity,
   Index,
@@ -14,42 +16,55 @@ import { EmployeeTraining } from "./EmployeeTraining";
 import { Managers } from "./Managers";
 import { ReleaseRequests } from "./ReleaseRequests";
 
+@ObjectType()
 @Index("manager_id_fk_idx", ["directManager"], {})
 @Entity("employees_profiles", { schema: "hackathon" })
-export class EmployeesProfiles {
+export class EmployeesProfiles extends BaseEntity {
+  @Field()
   @Column("varchar", { primary: true, name: "id", length: 36 })
   id: string;
 
+  @Field()
   @Column("varchar", { name: "name", length: 256 })
   name: string;
 
+  @Field()
   @Column("varchar", { name: "title", length: 128 })
   title: string;
 
+  @Field()
   @Column("date", { name: "hiring_date" })
   hiringDate: string;
 
+  @Field()
   @Column("varchar", { name: "function", length: 128 })
   function: string;
 
+  @Field()
   @Column("varchar", { name: "direct_manager", length: 36 })
   directManager: string;
 
+  @Field()
   @Column("varchar", { name: "workgroup", length: 128 })
   workgroup: string;
 
+  @Field()
   @Column("varchar", { name: "employment_type", length: 64 })
   employmentType: string;
 
+  @Field()
   @Column("int", { name: "allocation_percentage" })
   allocationPercentage: number;
 
+  @Field(() => String)
   @Column("date", { name: "skills_last_update_date", nullable: true })
   skillsLastUpdateDate: string | null;
 
+  @Field()
   @Column("varchar", { name: "employee_email", length: 320 })
   employeeEmail: string;
 
+  @Field(() => String)
   @Column("varchar", {
     name: "employee_profile_picture",
     nullable: true,
@@ -57,9 +72,11 @@ export class EmployeesProfiles {
   })
   employeeProfilePicture: string | null;
 
+  @Field()
   @Column("varchar", { name: "mobile_number", length: 20 })
   mobileNumber: string;
 
+  @Field()
   @Column("varchar", { name: "cost_center", length: 128 })
   costCenter: string;
 
