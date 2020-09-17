@@ -1,48 +1,49 @@
+import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
+
 import { AppContext } from "../types";
 import { EmployeesProfiles } from "../entities/EmployeesProfiles";
 import { InvalidCredentialsError } from "../errors/InvalidCredentials";
 import { UserInput } from "./types/UserInput";
 import { Users } from "../entities/Users";
 
-import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
-
 @Resolver(Users)
 export class UserResolver {
-  @Query(() => Users, { nullable: true })
-  me(@Ctx() { req }: AppContext) {
-    var userId = req.session?.userId;
-    if (!userId) {
-      return null;
-    }
-    return Users.findOne({ id: userId });
+  @Query(() => EmployeesProfiles, { nullable: true })
+  me(
+    @Ctx() { req }: AppContext
+  ): Promise<EmployeesProfiles | undefined> | null {
+    var profileId = req.session?.profileId;
+    if (!profileId) return null;
+    return EmployeesProfiles.findOne(profileId);
   }
 
   @Mutation(() => EmployeesProfiles)
   async login(
-    @Arg("input") input: UserInput,
+    @Arg("input") { email, password }: UserInput,
     @Ctx() { req }: AppContext
   ): Promise<EmployeesProfiles | undefined> {
-    const dbUser = await Users.findOne({ email: input.email });
+    const user = await Users.findOne({ email });
 
-    if (!dbUser) {
+    if (!user) {
       throw new InvalidCredentialsError("email");
     }
 
-    if (input.password !== dbUser!.password) {
+    if (password !== user.password) {
       throw new InvalidCredentialsError("password");
     }
 
-    req.session!.userId = dbUser!.id;
-
-    const employeeProfile = await EmployeesProfiles.findOne({
-      employeeEmail: dbUser?.email,
+    const profile = await EmployeesProfiles.findOne({
+      employeeEmail: user?.email,
     });
 
-    return employeeProfile;
+    // Save session's data
+    req.session!.profileId = profile!.id;
+
+    return profile;
   }
 
   @Mutation(() => Boolean)
-  logout(@Ctx() { req, res }: AppContext) {
+  logout(@Ctx() { req, res }: AppContext): Promise<boolean> {
     return new Promise((resolve) =>
       req.session!.destroy((err) => {
         res.clearCookie("qid");
