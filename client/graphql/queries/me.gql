@@ -1,6 +1,5 @@
 query Me {
   me {
-    email
-    password
+    ...EmployeeProfile
   }
 }

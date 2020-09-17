@@ -1,5 +1,5 @@
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { createUrqlClient } from "../urql/createUrqlClient";
 import { useMeQuery } from "../generated/graphql";
 
 const Home = () => {

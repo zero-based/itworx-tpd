@@ -1,4 +1,4 @@
-import { createUrqlClient } from "../utils/createUrqlClient";
+import { createUrqlClient } from "../urql/createUrqlClient";
 import { useLoginMutation } from "../generated/graphql";
 
 import React from "react";
