@@ -47,10 +47,6 @@ const Login: React.FC<loginProps> = ({}) => {
         <Button
           type="primary"
           htmlType="submit"
-          style={{
-            background: "#C63527",
-            borderColor: "#C63527",
-          }}
         >
           Login
         </Button>
