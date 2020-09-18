@@ -1,4 +1,4 @@
-import "antd/dist/antd.css";
+import "../styles/antd.less";
 import "../styles/vars.css";
 import "../styles/global.css";
 

@@ -1,0 +1,14 @@
+fragment EmployeeProfile on EmployeesProfiles {
+  id
+  name
+  title
+  hiringDate
+  function
+  directManager
+  workgroup
+  employmentType
+  allocationPercentage
+  employeeEmail
+  mobileNumber
+  costCenter
+}
