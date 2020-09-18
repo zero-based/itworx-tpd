@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { Skills } from "./Skills";
 import { EmployeesProfiles } from "./EmployeesProfiles";
+import { Skills } from "./Skills";
 
 @Index("Employee_ID_idx", ["employeeId"], {})
 @Index("Skill_ID_idx", ["skillId"], {})
@@ -18,13 +18,6 @@ export class EmployeeSkills {
   @Column("date", { name: "last_used_date" })
   lastUsedDate: string;
 
-  @ManyToOne(() => Skills, (skills) => skills.employeeSkills, {
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
-  })
-  @JoinColumn([{ name: "skill_id", referencedColumnName: "skillId" }])
-  skill: Skills;
-
   @ManyToOne(
     () => EmployeesProfiles,
     (employeesProfiles) => employeesProfiles.employeeSkills,
@@ -32,4 +25,11 @@ export class EmployeeSkills {
   )
   @JoinColumn([{ name: "employee_id", referencedColumnName: "id" }])
   employee: EmployeesProfiles;
+
+  @ManyToOne(() => Skills, (skills) => skills.employeeSkills, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "skill_id", referencedColumnName: "skillId" }])
+  skill: Skills;
 }

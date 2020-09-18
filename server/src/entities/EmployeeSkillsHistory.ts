@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { EmployeesProfiles } from "./EmployeesProfiles";
 import { Skills } from "./Skills";
+import { EmployeesProfiles } from "./EmployeesProfiles";
 
 @Index("employee_skill_history_employee_id_fk_idx", ["employeeId"], {})
 @Index("employee_skills_history_skill_id_fk_idx", ["skillId"], {})
@@ -30,6 +30,13 @@ export class EmployeeSkillsHistory {
   @Column("varchar", { name: "function", length: 128 })
   function: string;
 
+  @ManyToOne(() => Skills, (skills) => skills.employeeSkillsHistories, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+  })
+  @JoinColumn([{ name: "skill_id", referencedColumnName: "skillId" }])
+  skill: Skills;
+
   @ManyToOne(
     () => EmployeesProfiles,
     (employeesProfiles) => employeesProfiles.employeeSkillsHistories,
@@ -37,11 +44,4 @@ export class EmployeeSkillsHistory {
   )
   @JoinColumn([{ name: "employee_id", referencedColumnName: "id" }])
   employee: EmployeesProfiles;
-
-  @ManyToOne(() => Skills, (skills) => skills.employeeSkillsHistories, {
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
-  })
-  @JoinColumn([{ name: "skill_id", referencedColumnName: "skillId" }])
-  skill: Skills;
 }

@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { EmployeesProfiles } from "./EmployeesProfiles";
 import { ReleaseRequestsActions } from "./ReleaseRequestsActions";
@@ -12,7 +13,7 @@ import { ReleaseRequestsActions } from "./ReleaseRequestsActions";
 @Index("release_request_employee_id_fk_idx", ["employeeId"], {})
 @Entity("release_requests", { schema: "hackathon" })
 export class ReleaseRequests {
-  @Column("int", { primary: true, name: "reference_number" })
+  @PrimaryGeneratedColumn({ type: "int", name: "reference_number" })
   referenceNumber: number;
 
   @Column("varchar", { name: "manager_name", length: 256 })

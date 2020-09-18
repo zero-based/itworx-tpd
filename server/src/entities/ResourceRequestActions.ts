@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { ResourceRequests } from "./ResourceRequests";
 
 @Index(
@@ -8,7 +15,7 @@ import { ResourceRequests } from "./ResourceRequests";
 )
 @Entity("resource_request_actions", { schema: "hackathon" })
 export class ResourceRequestActions {
-  @Column("int", { primary: true, name: "action_id" })
+  @PrimaryGeneratedColumn({ type: "int", name: "action_id" })
   actionId: number;
 
   @Column("int", { name: "resource_request_reference_number" })
