@@ -1,10 +1,10 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ResourceRequestActions } from "./ResourceRequestActions";
 import { ResourceRequestSkills } from "./ResourceRequestSkills";
 
 @Entity("resource_requests", { schema: "hackathon" })
 export class ResourceRequests {
-  @Column("int", { primary: true, name: "reference_number" })
+  @PrimaryGeneratedColumn({ type: "int", name: "reference_number" })
   referenceNumber: number;
 
   @Column("varchar", { name: "manager_name", length: 256 })

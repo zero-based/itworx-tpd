@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { CertificationProviders } from "./CertificationProviders";
 import { EmployeeCertifications } from "./EmployeeCertifications";
@@ -12,7 +13,7 @@ import { EmployeeCertifications } from "./EmployeeCertifications";
 @Index("certifications_provider_id_fk_idx", ["certificationProviderId"], {})
 @Entity("certifications", { schema: "hackathon" })
 export class Certifications {
-  @Column("int", { primary: true, name: "certification_id" })
+  @PrimaryGeneratedColumn({ type: "int", name: "certification_id" })
   certificationId: number;
 
   @Column("int", { name: "certification_provider_id" })

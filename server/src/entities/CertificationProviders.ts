@@ -1,9 +1,9 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Certifications } from "./Certifications";
 
 @Entity("certification_providers", { schema: "hackathon" })
 export class CertificationProviders {
-  @Column("int", { primary: true, name: "certificatoin_provider_id" })
+  @PrimaryGeneratedColumn({ type: "int", name: "certificatoin_provider_id" })
   certificatoinProviderId: number;
 
   @Column("varchar", { name: "certification_provider_name", length: 128 })

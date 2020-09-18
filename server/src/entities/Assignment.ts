@@ -1,10 +1,17 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { EmployeesProfiles } from "./EmployeesProfiles";
 
 @Index("assignment_employee_id_fk_idx", ["employeeId"], {})
 @Entity("assignment", { schema: "hackathon" })
 export class Assignment {
-  @Column("int", { primary: true, name: "assignment_id" })
+  @PrimaryGeneratedColumn({ type: "int", name: "assignment_id" })
   assignmentId: number;
 
   @Column("varchar", { name: "employee_id", length: 36 })
