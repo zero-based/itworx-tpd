@@ -1,0 +1,8 @@
+fragment RegularUserResponse on UserResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...EmployeeProfile
+  }
+}

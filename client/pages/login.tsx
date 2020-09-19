@@ -9,7 +9,6 @@ import { useRouter } from "next/dist/client/router";
 import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../uitls/toErrorMap";
-import { extractFieldErrors } from "../uitls/extractFieldErrors";
 import { createUrqlClient } from "../urql/createUrqlClient";
 
 const Login: React.FC<{}> = ({}) => {
@@ -34,10 +33,10 @@ const Login: React.FC<{}> = ({}) => {
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values, { setErrors }) => {
-            const { error } = await login(values);
-            if (error) {
-              var fieldErrors = extractFieldErrors(error);
-              var errorMap = toErrorMap(fieldErrors);
+            const response = await login(values);
+            const errors = response.data?.login?.errors;
+            if (errors) {
+              var errorMap = toErrorMap(errors);
               setErrors(errorMap);
             } else {
               router.push("/");
