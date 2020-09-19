@@ -1,10 +1,17 @@
-import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Ctx, ObjectType } from "type-graphql";
 
+import RegularResponse from "./types/RegularResponse";
 import { AppContext } from "../types";
 import { EmployeesProfiles } from "../entities/EmployeesProfiles";
-import { InvalidCredentialsError } from "../errors/InvalidCredentials";
+import { FieldError } from "./types/FieldError";
 import { UserInput } from "./types/UserInput";
 import { Users } from "../entities/Users";
+
+@ObjectType()
+export class userResponse extends RegularResponse(
+  FieldError,
+  EmployeesProfiles
+) {}
 
 @Resolver(Users)
 export class UserResolver {
@@ -17,29 +24,38 @@ export class UserResolver {
     return EmployeesProfiles.findOne(profileId);
   }
 
-  @Mutation(() => EmployeesProfiles)
+  @Mutation(() => userResponse)
   async login(
     @Arg("input") { email, password }: UserInput,
     @Ctx() { req }: AppContext
-  ): Promise<EmployeesProfiles | undefined> {
+  ): Promise<userResponse> {
     const user = await Users.findOne({ email });
-
     if (!user) {
-      throw new InvalidCredentialsError("email");
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "Incorrect email",
+          },
+        ],
+      };
     }
-
     if (password !== user.password) {
-      throw new InvalidCredentialsError("password");
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "Incorrect password",
+          },
+        ],
+      };
     }
-
     const profile = await EmployeesProfiles.findOne({
       employeeEmail: user?.email,
     });
-
     // Save session's data
     req.session!.profileId = profile!.id;
-
-    return profile;
+    return { data: profile };
   }
 
   @Mutation(() => Boolean)
