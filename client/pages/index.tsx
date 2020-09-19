@@ -1,15 +1,15 @@
 import { withUrqlClient } from "next-urql";
-import { Typography } from "antd";
+import { Heading, HeadingLevel } from "baseui/heading";
 
-import { createUrqlClient } from "../urql/createUrqlClient";
 import { MainLayout } from "../components/MainLayout";
+import { createUrqlClient } from "../urql/createUrqlClient";
 
-const { Title } = Typography;
-
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <MainLayout>
-      <Title>TPD</Title>
+      <HeadingLevel>
+        <Heading>TPD</Heading>
+      </HeadingLevel>
     </MainLayout>
   );
 };

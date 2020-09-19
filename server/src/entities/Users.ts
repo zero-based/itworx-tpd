@@ -1,10 +1,16 @@
 import { Field, ObjectType } from "type-graphql";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { UserRole } from "./UserRole";
 
 @ObjectType()
 @Entity("users", { schema: "hackathon" })
-export class Users {
+export class Users extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;

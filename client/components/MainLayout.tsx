@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { useStyletron } from "baseui";
 
 import { Footer } from "./Footer";
 import { NavBar } from "./NavBar";
@@ -6,13 +6,26 @@ import { NavBar } from "./NavBar";
 interface MainLayoutProps {}
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const [css] = useStyletron();
+
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <div
+      className={css({
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      })}
+    >
       <NavBar />
-      <Layout.Content style={{ padding: 48 }}>
+      <main
+        className={css({
+          flex: 1,
+          padding: "32px",
+        })}
+      >
         {children}
-      </Layout.Content>
+      </main>
       <Footer />
-    </Layout>
+    </div>
   );
 };

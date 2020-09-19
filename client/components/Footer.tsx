@@ -1,11 +1,19 @@
-import { Layout } from "antd";
+import { useStyletron } from "baseui";
+import { Label3 } from "baseui/typography";
 
 interface FooterProps {}
 
 export const Footer: React.FC<FooterProps> = () => {
+  const [css, theme] = useStyletron();
+
   return (
-    <Layout.Footer style={{ textAlign: "center" }}>
-      © 2020 ITWorx All rights reserved
-    </Layout.Footer>
+    <footer
+      className={css({
+        padding: "32px",
+        textAlign: "center",
+      })}
+    >
+      <Label3> © 2020 ITWorx All rights reserved</Label3>
+    </footer>
   );
 };

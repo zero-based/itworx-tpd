@@ -1,94 +1,83 @@
 import React from "react";
-import { Button, Col, Form, Input, Row } from "antd";
-import { Store } from "antd/lib/form/interface";
+import { styled, useStyletron } from "baseui";
+import { Button } from "baseui/button";
+import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/dist/client/router";
 
-import { createUrqlClient } from "../urql/createUrqlClient";
+import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
-import { mapErrorToField } from "../uitls/mapErrorToField";
+import { toErrorMap } from "../uitls/toErrorMap";
 import { extractFieldErrors } from "../uitls/extractFieldErrors";
-
-const requiredRule = [{ required: true }];
+import { createUrqlClient } from "../urql/createUrqlClient";
 
 const Login: React.FC<{}> = ({}) => {
+  const [css] = useStyletron();
   const [, login] = useLoginMutation();
-  const [form] = Form.useForm();
   const router = useRouter();
 
-  const onSubmit = async (values: Store) => {
-    const { error } = await login({
-      email: values.email,
-      password: values.password,
-    });
-    if (error) {
-      var fieldErrors = extractFieldErrors(error);
-      var fieldData = mapErrorToField(fieldErrors);
-      form.setFields(fieldData);
-    } else {
-      router.push("/");
-    }
-  };
-
   return (
-    <>
-      <Row>
-        <Col lg={12} xs={24}>
-          <div
-            style={{
-              backgroundImage: `url('./assets/cover-login.jpg')`,
-              minHeight: "100vh",
-              backgroundPositionX: "right",
-              backgroundPositionY: "center",
-              backgroundSize: "cover",
-            }}
-          ></div>
-        </Col>
-        <Col
-          lg={12}
-          xs={24}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 32,
+    <FlexGrid flexGridColumnCount={[1, 1, 2, 2]}>
+      <FlexGridItem>
+        <div
+          className={css({
+            backgroundImage: `url('./assets/cover-login.jpg')`,
+            minHeight: "100vh",
+            backgroundPositionX: "right",
+            backgroundPositionY: "center",
+            backgroundSize: "cover",
+          })}
+        />
+      </FlexGridItem>
+      <FlexGridItem display="flex">
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={async (values, { setErrors }) => {
+            const { error } = await login(values);
+            if (error) {
+              var fieldErrors = extractFieldErrors(error);
+              var errorMap = toErrorMap(fieldErrors);
+              setErrors(errorMap);
+            } else {
+              router.push("/");
+            }
           }}
         >
-          <img
-            src="/assets/logo-master.png"
-            style={{ width: "180px", marginBottom: 32 }}
-          />
-          <Form
-            form={form}
-            layout="vertical"
-            size="large"
-            initialValues={{ email: "", password: "" }}
-            onFinish={onSubmit}
-            hideRequiredMark
-            style={{ width: "80%" }}
-          >
-            <Form.Item name="email" label="Email" rules={requiredRule}>
-              <Input />
-            </Form.Item>
-
-            <Form.Item name="password" label="Password" rules={requiredRule}>
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item style={{ textAlign: "center" }}>
+          {({ isSubmitting }) => (
+            <Form
+              style={{
+                margin: "auto",
+                width: "70%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "32px 0",
+              }}
+            >
+              <img
+                src="/assets/logo-master.png"
+                className={css({ width: "180px", marginBottom: "32px" })}
+              />
+              <InputField name="email" label="Email" required />
+              <InputField
+                name="password"
+                label="Password"
+                type="password"
+                required
+              />
               <Button
-                type="primary"
-                htmlType="submit"
-                style={{ padding: "0 32px", marginTop: 24 }}
+                type="submit"
+                isLoading={isSubmitting}
+                $style={{ marginTop: "24px" }}
               >
                 Login
               </Button>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
-    </>
+            </Form>
+          )}
+        </Formik>
+      </FlexGridItem>
+    </FlexGrid>
   );
 };
 

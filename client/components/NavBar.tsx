@@ -1,9 +1,19 @@
-import { Layout, Menu } from "antd";
-import { CaretDownOutlined, PlusOutlined } from "@ant-design/icons";
-import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import * as React from "react";
+import { StatefulMenu } from "baseui/menu";
+import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
+import {
+  HeaderNavigation,
+  ALIGN,
+  StyledNavigationList,
+  StyledNavigationItem,
+} from "baseui/header-navigation";
+import { Label1 } from "baseui/typography";
+import { Button } from "baseui/button";
 import { useRouter } from "next/dist/client/router";
+import { Plus } from "baseui/icon";
 
-const { SubMenu } = Menu;
+import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { Block } from "baseui/block";
 
 interface NavBarProps {}
 
@@ -12,46 +22,74 @@ export const NavBar: React.FC<NavBarProps> = () => {
   const [, logout] = useLogoutMutation();
   const router = useRouter();
 
-  const handleLogout = () => {
-    router.push("/login");
-    logout();
-  };
-
   return (
-    <Layout.Header
-      style={{
-        width: "100%",
-        padding: 0,
-      }}
-    >
-      <Menu mode="horizontal" style={{ display: "flex" }}>
-        <Menu.Item key="home" onClick={() => router.push("/")}>
+    <HeaderNavigation>
+      <StyledNavigationList $align={ALIGN.left}>
+        <StyledNavigationItem />
+        <Block display="flex" alignItems="center">
           <img src="/assets/logo-master.png" alt="logo" width="100px" />
-        </Menu.Item>
-        <SubMenu key="talents" title="Talents">
-          <Menu.Item key="resources">Resources</Menu.Item>
-          <Menu.Item key="releases">Releases</Menu.Item>
-        </SubMenu>
-        <div id="items-divider" style={{ marginRight: "auto" }}></div>
-        <SubMenu key="create" icon={<PlusOutlined />}>
-          <Menu.ItemGroup title="Request">
-            <Menu.Item key="create:resource">Resource</Menu.Item>
-            <Menu.Item key="create:release">Release</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        {!data?.me ? (
-          <Menu.Item key="more:status" onClick={() => router.push("/login")}>
-            Login
-          </Menu.Item>
-        ) : (
-          <SubMenu key="more" icon={<CaretDownOutlined />}>
-            <Menu.Item key="more:account">{data.me?.name}</Menu.Item>
-            <Menu.Item key="more:logout" onClick={handleLogout}>
+        </Block>
+      </StyledNavigationList>
+
+      <StyledNavigationList $align={ALIGN.left}>
+        <StyledNavigationItem>
+          <StatefulPopover
+            triggerType={TRIGGER_TYPE.hover}
+            content={() => (
+              <StatefulMenu
+                onItemSelect={({ item }) => router.push(item.route)}
+                items={{
+                  __ungrouped: [],
+                  Requests: [
+                    { label: "Resource Request", route: "/" },
+                    { label: "Release Request", route: "/" },
+                  ],
+                }}
+              />
+            )}
+          >
+            <Label1>Talents</Label1>
+          </StatefulPopover>
+        </StyledNavigationItem>
+      </StyledNavigationList>
+      <StyledNavigationList $align={ALIGN.center} />
+
+      <StyledNavigationList $align={ALIGN.right}>
+        <StyledNavigationItem>
+          <StatefulPopover
+            triggerType={TRIGGER_TYPE.hover}
+            content={() => (
+              <StatefulMenu
+                onItemSelect={({ item }) => router.push(item.route)}
+                items={{
+                  __ungrouped: [],
+                  Requests: [
+                    { label: "Resource Request", route: "/" },
+                    { label: "Release Request", route: "/" },
+                  ],
+                }}
+              />
+            )}
+          >
+            <Plus size={24} />
+          </StatefulPopover>
+        </StyledNavigationItem>
+        <StyledNavigationItem>
+          {!data?.me ? (
+            <Button onClick={() => router.push("/login")}>Login</Button>
+          ) : (
+            <Button
+              onClick={() => {
+                router.push("/login");
+                logout();
+              }}
+            >
               Logout
-            </Menu.Item>
-          </SubMenu>
-        )}
-      </Menu>
-    </Layout.Header>
+            </Button>
+          )}
+        </StyledNavigationItem>
+        <StyledNavigationItem />
+      </StyledNavigationList>
+    </HeaderNavigation>
   );
 };
