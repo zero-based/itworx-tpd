@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
+import { validate } from "class-validator";
 
 import { AppContext } from "../types";
 import { EmployeesProfiles } from "../entities/EmployeesProfiles";
@@ -6,7 +7,6 @@ import { UserInput } from "../types/inputs/UserInput";
 import { UserResponse } from "../types/responses/UserResponse";
 import { Users } from "../entities/Users";
 import { mapToFieldError } from "../utils/mapToFieldError";
-import { validate } from "class-validator";
 
 @Resolver(Users)
 export class UserResolver {
