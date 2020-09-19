@@ -1,14 +1,30 @@
-import * as React from "react";
+import { useStyletron } from "baseui";
+
 import { Footer } from "./Footer";
-import NavBar from "./NavBar";
+import { NavBar } from "./NavBar";
 
 interface MainLayoutProps {}
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const [css] = useStyletron();
+
   return (
-    <div style={{ display: "flex" }}>
+    <div
+      className={css({
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      })}
+    >
       <NavBar />
-      <main>{children}</main>
+      <main
+        className={css({
+          flex: 1,
+          padding: "32px",
+        })}
+      >
+        {children}
+      </main>
       <Footer />
     </div>
   );

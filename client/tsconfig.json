@@ -14,6 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "styletron.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "styletron.ts"],
   "exclude": ["node_modules"]
 }

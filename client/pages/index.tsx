@@ -1,20 +1,17 @@
-import * as React from "react";
-import { useStyletron } from "baseui";
-import { Button } from "baseui/button";
-import { MainLayout } from "../components/MainLayout";
 import { withUrqlClient } from "next-urql";
+import { Heading, HeadingLevel } from "baseui/heading";
+
+import { MainLayout } from "../components/MainLayout";
 import { createUrqlClient } from "../urql/createUrqlClient";
 
-const Index: React.FC = () => {
-  const [css, theme] = useStyletron();
-
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <MainLayout>
-      <Button onClick={() => console.log("Boilerplate")}>Log Text</Button>
-      <p className={css({ color: theme.colors.accent600 })}> Hello!</p>
+      <HeadingLevel>
+        <Heading>TPD</Heading>
+      </HeadingLevel>
     </MainLayout>
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Index);
+export default withUrqlClient(createUrqlClient)(Home);
