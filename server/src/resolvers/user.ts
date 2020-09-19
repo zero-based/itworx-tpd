@@ -1,17 +1,12 @@
-import { Resolver, Query, Mutation, Arg, Ctx, ObjectType } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 
-import RegularResponse from "./types/RegularResponse";
 import { AppContext } from "../types";
 import { EmployeesProfiles } from "../entities/EmployeesProfiles";
-import { FieldError } from "./types/FieldError";
-import { UserInput } from "./types/UserInput";
+import { UserInput } from "../types/inputs/UserInput";
+import { UserResponse } from "../types/responses/UserResponse";
 import { Users } from "../entities/Users";
-
-@ObjectType()
-export class userResponse extends RegularResponse(
-  FieldError,
-  EmployeesProfiles
-) {}
+import { mapToFieldError } from "../utils/mapToFieldError";
+import { validate } from "class-validator";
 
 @Resolver(Users)
 export class UserResolver {
@@ -24,37 +19,37 @@ export class UserResolver {
     return EmployeesProfiles.findOne(profileId);
   }
 
-  @Mutation(() => userResponse)
+  @Mutation(() => UserResponse)
   async login(
-    @Arg("input") { email, password }: UserInput,
+    @Arg("input") input: UserInput,
     @Ctx() { req }: AppContext
-  ): Promise<userResponse> {
-    const user = await Users.findOne({ email });
-    if (!user) {
+  ): Promise<UserResponse> {
+    const validationErrors = await validate(input);
+    if (validationErrors.length > 0) {
+      return {
+        errors: mapToFieldError(validationErrors),
+      };
+    }
+
+    const user = await Users.findOne({ email: input.email });
+    if (!user || input.password !== user.password) {
       return {
         errors: [
           {
             field: "email",
-            message: "Incorrect email",
+            message: "Incorrect email or password",
           },
         ],
       };
     }
-    if (password !== user.password) {
-      return {
-        errors: [
-          {
-            field: "password",
-            message: "Incorrect password",
-          },
-        ],
-      };
-    }
+
     const profile = await EmployeesProfiles.findOne({
       employeeEmail: user?.email,
     });
+
     // Save session's data
     req.session!.profileId = profile!.id;
+
     return { data: profile };
   }
 

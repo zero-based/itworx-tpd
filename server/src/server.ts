@@ -3,7 +3,6 @@ require("dotenv").config();
 import { AppContext } from "./types";
 import { appSession } from "./middlewares/session";
 import { cors } from "./middlewares/cors";
-import { errorHandler } from "./middlewares/errorHandler";
 
 import "reflect-metadata";
 import express from "express";
@@ -33,8 +32,8 @@ const main = async () => {
     context: ({ req, res }): AppContext => ({ req, res }),
     schema: await buildSchema({
       resolvers: [path.join(__dirname, "./resolvers/*.[jt]s")],
+      validate: false,
     }),
-    formatError: errorHandler,
   });
 
   server.applyMiddleware({ app, cors: false });
