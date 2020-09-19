@@ -1,57 +1,194 @@
-import { Layout, Menu } from "antd";
-import { CaretDownOutlined, PlusOutlined } from "@ant-design/icons";
-import { useLogoutMutation, useMeQuery } from "../generated/graphql";
-import { useRouter } from "next/dist/client/router";
-
-const { SubMenu } = Menu;
-
-interface NavBarProps {}
-
-export const NavBar: React.FC<NavBarProps> = () => {
-  const [{ data }] = useMeQuery();
-  const [, logout] = useLogoutMutation();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    router.push("/login");
-    logout();
-  };
-
-  return (
-    <Layout.Header
-      style={{
-        width: "100%",
-        padding: 0,
+import * as React from "react";
+import { useStyletron } from "baseui";
+import { StyledLink } from "baseui/link";
+import { Button } from "baseui/button";
+import { Layer } from "baseui/layer";
+import {
+  ChevronDown,
+  Delete,
+  Overflow as UserIcon,
+  Upload as Icon,
+} from "baseui/icon";
+import { Unstable_AppNavBar as AppNavBar, POSITION } from "baseui/app-nav-bar";
+function renderItem(item: any) {
+  return item.label;
+}
+const MAIN_NAV = [
+  {
+    icon: Icon,
+    item: { label: "Primary alpha1" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+  },
+  {
+    icon: Icon,
+    item: { label: "Primary alpha2" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+  },
+  {
+    icon: ChevronDown,
+    item: { label: "Primary alpha3" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+    navExitIcon: Delete,
+    navPosition: { desktop: POSITION.horizontal },
+    nav: [
+      {
+        icon: Icon,
+        item: { label: "Secondary menu1" },
+        mapItemToNode: renderItem,
+        mapItemToString: renderItem,
+        nav: [
+          {
+            icon: Icon,
+            item: { label: "Tertiary menu1" },
+            mapItemToNode: renderItem,
+            mapItemToString: renderItem,
+          },
+          {
+            icon: Icon,
+            item: { label: "Tertiary menu2" },
+            mapItemToNode: renderItem,
+            mapItemToString: renderItem,
+          },
+          {
+            icon: Icon,
+            item: { label: "Secondary menu3" },
+            mapItemToNode: renderItem,
+            mapItemToString: renderItem,
+          },
+          {
+            icon: Icon,
+            item: { label: "Secondary menu4" },
+            mapItemToNode: renderItem,
+            mapItemToString: renderItem,
+          },
+        ],
+      },
+      {
+        icon: Icon,
+        item: { label: "Secondary menu2" },
+        mapItemToNode: renderItem,
+        mapItemToString: renderItem,
+      },
+    ],
+  },
+  {
+    icon: ChevronDown,
+    item: { label: "Primary alpha4" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+    navExitIcon: Delete,
+    navPosition: { desktop: POSITION.horizontal },
+    nav: [
+      {
+        icon: ChevronDown,
+        item: { label: "Secondary menu1" },
+        mapItemToNode: renderItem,
+        mapItemToString: renderItem,
+      },
+      {
+        icon: Icon,
+        item: { label: "Secondary menu2" },
+        mapItemToNode: renderItem,
+        mapItemToString: renderItem,
+      },
+    ],
+  },
+];
+const USER_NAV = [
+  {
+    icon: UserIcon,
+    item: { label: "Account item1" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+  },
+  {
+    icon: UserIcon,
+    item: { label: "Account item2" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+  },
+  {
+    icon: UserIcon,
+    item: { label: "Account item3" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+  },
+  {
+    icon: UserIcon,
+    item: { label: "Account item4" },
+    mapItemToNode: renderItem,
+    mapItemToString: renderItem,
+  },
+];
+function isActive(arr: Array<any>, item: any, activeItem: any): boolean {
+  let active = false;
+  for (let i = 0; i < arr.length; i++) {
+    const elm = arr[i];
+    if (elm === item) {
+      if (item === activeItem) return true;
+      return isActive((item && item.nav) || [], activeItem, activeItem);
+    } else if (elm.nav) {
+      active = isActive(elm.nav || [], item, activeItem);
+    }
+  }
+  return active;
+}
+export default () => {
+  const [css] = useStyletron();
+  const [isNavBarVisible, setIsNavBarVisible] = React.useState(false);
+  const [activeNavItem, setActiveNavItem] = React.useState();
+  const containerStyles = css({
+    boxSizing: "border-box",
+    width: "100vw",
+    position: "fixed",
+    top: "0",
+    left: "0",
+  });
+  const appDisplayName = (
+    <StyledLink
+      $style={{
+        textDecoration: "none",
+        color: "inherit",
+        ":hover": { color: "inherit" },
+        ":visited": { color: "inherit" },
       }}
+      href={"#"}
     >
-      <Menu mode="horizontal" style={{ display: "flex" }}>
-        <Menu.Item key="home" onClick={() => router.push("/")}>
-          <img src="/assets/logo-master.png" alt="logo" width="100px" />
-        </Menu.Item>
-        <SubMenu key="talents" title="Talents">
-          <Menu.Item key="resources">Resources</Menu.Item>
-          <Menu.Item key="releases">Releases</Menu.Item>
-        </SubMenu>
-        <div id="items-divider" style={{ marginRight: "auto" }}></div>
-        <SubMenu key="create" icon={<PlusOutlined />}>
-          <Menu.ItemGroup title="Request">
-            <Menu.Item key="create:resource">Resource</Menu.Item>
-            <Menu.Item key="create:release">Release</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        {!data?.me ? (
-          <Menu.Item key="more:status" onClick={() => router.push("/login")}>
-            Login
-          </Menu.Item>
-        ) : (
-          <SubMenu key="more" icon={<CaretDownOutlined />}>
-            <Menu.Item key="more:account">{data.me?.name}</Menu.Item>
-            <Menu.Item key="more:logout" onClick={handleLogout}>
-              Logout
-            </Menu.Item>
-          </SubMenu>
-        )}
-      </Menu>
-    </Layout.Header>
+      App Something
+    </StyledLink>
+  );
+  return (
+    <React.Fragment>
+      <Button onClick={() => setIsNavBarVisible(!isNavBarVisible)}>
+        {isNavBarVisible ? "Hide" : "Show"} navigation bar
+      </Button>
+      {isNavBarVisible ? (
+        <Layer>
+          <div className={containerStyles}>
+            <AppNavBar
+              appDisplayName={appDisplayName}
+              mainNav={MAIN_NAV}
+              isNavItemActive={({ item }) => {
+                return (
+                  item === activeNavItem ||
+                  isActive(MAIN_NAV, item, activeNavItem)
+                );
+              }}
+              onNavItemSelect={({ item }) => {
+                if (item === activeNavItem) return;
+                //setActiveNavItem(item);
+              }}
+              userNav={USER_NAV}
+              username="Umka Marshmallow"
+              usernameSubtitle="5.0"
+              userImgUrl=""
+            />
+          </div>
+        </Layer>
+      ) : null}
+    </React.Fragment>
   );
 };

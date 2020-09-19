@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import { Store } from "antd/lib/form/interface";
 import { withUrqlClient } from "next-urql";
@@ -93,3 +93,4 @@ const Login: React.FC<{}> = ({}) => {
 };
 
 export default withUrqlClient(createUrqlClient)(Login);
+*/

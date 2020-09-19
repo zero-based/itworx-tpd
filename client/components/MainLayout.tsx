@@ -1,18 +1,15 @@
-import { Layout } from "antd";
-
+import * as React from "react";
 import { Footer } from "./Footer";
-import { NavBar } from "./NavBar";
+import NavBar from "./NavBar";
 
 interface MainLayoutProps {}
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <div style={{ display: "flex" }}>
       <NavBar />
-      <Layout.Content style={{ padding: 48 }}>
-        {children}
-      </Layout.Content>
+      <main>{children}</main>
       <Footer />
-    </Layout>
+    </div>
   );
 };

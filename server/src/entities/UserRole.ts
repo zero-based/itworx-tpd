@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   Index,
@@ -11,7 +12,7 @@ import { Users } from "./Users";
 
 @Index("role_id_fk_idx", ["roleId"], {})
 @Entity("user_role", { schema: "hackathon" })
-export class UserRole {
+export class UserRole extends BaseEntity {
   @Column("int", { primary: true, name: "user_id" })
   userId: number;
 
