@@ -6,7 +6,7 @@ import { AppContext } from "../types";
 import { ResourceRequestResponse } from "../types/responses/ResourceRequestResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
 import { validate } from "class-validator";
-import { PaginatedResourceResponse } from "../types/responses/PaginatedResourceResponse";
+import { PaginatedResourceRequestResponse } from "../types/responses/PaginatedResourceRequestResponse";
 
 @Resolver()
 export class ResourceRequestResolver {
@@ -77,12 +77,12 @@ export class ResourceRequestResolver {
   }
 
   // Get 30 ResourceRequest
-  @Query(() => PaginatedResourceResponse)
+  @Query(() => PaginatedResourceRequestResponse)
   async resourceRequests(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
     @Ctx() { req }: AppContext
-  ): Promise<PaginatedResourceResponse> {
+  ): Promise<PaginatedResourceRequestResponse> {
     const requestLimit = Math.min(30, limit);
     const fetchLimit = requestLimit + 1;
 
@@ -99,7 +99,7 @@ export class ResourceRequestResolver {
     return {
       data: {
         hasMore: requests.length == fetchLimit,
-        resourceRequests: requests.slice(0, requestLimit),
+        items: requests.slice(0, requestLimit),
       },
     };
   }
