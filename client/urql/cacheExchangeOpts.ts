@@ -16,7 +16,8 @@ export const cacheExchangeOpts: CacheExchangeOpts = {
           cache,
           result,
           { query: MeDocument },
-          (_result, _query) => (_result.login ? { me: _result.login } : _query)
+          (_result, _query) =>
+            _result.login.data ? { me: _result.login.data } : _query
         );
       },
       logout: (result, args, cache, info) => {
