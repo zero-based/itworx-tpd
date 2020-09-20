@@ -6,7 +6,7 @@ import { mapToFieldError } from "../utils/mapToFieldError";
 import { ReleaseRequests } from "../entities/ReleaseRequests";
 import { AppContext } from "../types";
 import { MoreThan } from "typeorm";
-import { PaginatedReleaseResponse } from "../types/responses/PaginatedReleaseResponse";
+import { PaginatedReleaseRequestResponse } from "../types/responses/PaginatedReleaseRequestResponse";
 
 @Resolver()
 export class ReleaseRequestResolver {
@@ -108,13 +108,13 @@ export class ReleaseRequestResolver {
     return true;
   }
 
-  // Get 30 ReleaseeRequest
-  @Query(() => PaginatedReleaseResponse)
+  // Get 30 ReleaseRequest
+  @Query(() => PaginatedReleaseRequestResponse)
   async releaseRequests(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
     @Ctx() { req }: AppContext
-  ): Promise<PaginatedReleaseResponse> {
+  ): Promise<PaginatedReleaseRequestResponse> {
     const requestLimit = Math.min(30, limit);
     const fetchLimit = requestLimit + 1;
 
@@ -131,7 +131,7 @@ export class ReleaseRequestResolver {
     return {
       data: {
         hasMore: requests.length == fetchLimit,
-        releaseRequests: requests.slice(0, requestLimit),
+        items: requests.slice(0, requestLimit),
       },
     };
   }
