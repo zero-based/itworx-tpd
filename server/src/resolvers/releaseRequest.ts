@@ -45,15 +45,15 @@ export class ReleaseRequestResolver {
   // Get A RleaseRequest
   @Query(() => ReleaseRequestResponse, { nullable: true })
   async releaseRequest(
-    @Arg("reference_number") reference_number: number
+    @Arg("referenceNumber", () => Int) referenceNumber: number
   ): Promise<ReleaseRequestResponse | undefined> {
-    const releaseRequest = await ReleaseRequests.findOne(reference_number);
+    const releaseRequest = await ReleaseRequests.findOne(referenceNumber);
     if (!releaseRequest) {
       return {
         errors: [
           {
-            field: "reference_number",
-            message: "No Release Request At This Reference Number",
+            field: "referenceNumber",
+            message: "Release Request does not exist",
           },
         ],
       };
@@ -65,16 +65,16 @@ export class ReleaseRequestResolver {
   // Update ReleaseRequest
   @Mutation(() => ReleaseRequestResponse, { nullable: true })
   async updateReleaseRequest(
-    @Arg("reference_number") reference_number: number,
+    @Arg("referenceNumber", () => Int) referenceNumber: number,
     @Arg("input") input: ReleaseRequestInput
   ): Promise<ReleaseRequestResponse | undefined> {
-    const ReleaseRequest = await ReleaseRequests.findOne(reference_number);
+    const ReleaseRequest = await ReleaseRequests.findOne(referenceNumber);
     if (!ReleaseRequest) {
       return {
         errors: [
           {
-            field: "reference_number",
-            message: "No Release Request At This Reference Number",
+            field: "referenceNumber",
+            message: "Release Request does not exist",
           },
         ],
       };
@@ -95,16 +95,16 @@ export class ReleaseRequestResolver {
       };
     }
 
-    await ReleaseRequests.update(reference_number, { ...input });
+    await ReleaseRequests.update(referenceNumber, { ...input });
     return { data: { ...ReleaseRequest, ...input } as ReleaseRequests };
   }
 
   // Delete Release Request
   @Mutation(() => Boolean)
   async deleteReleaseRequest(
-    @Arg("reference_number") reference_number: number
+    @Arg("referenceNumber", () => Int) referenceNumber: number
   ): Promise<boolean> {
-    await ReleaseRequests.delete(reference_number);
+    await ReleaseRequests.delete(referenceNumber);
     return true;
   }
 
