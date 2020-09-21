@@ -29,15 +29,15 @@ export class ResourceRequestResolver {
   // Get A ResourceRequest
   @Query(() => ResourceRequestResponse, { nullable: true })
   async resourceRequest(
-    @Arg("reference_number", () => Int) referenceNumber: number
+    @Arg("referenceNumber", () => Int) referenceNumber: number
   ): Promise<ResourceRequestResponse | undefined> {
     const resourceRequest = await ResourceRequests.findOne(referenceNumber);
     if (!resourceRequest) {
       return {
         errors: [
           {
-            field: "reference_number",
-            message: "No Resource Request At This Reference Number",
+            field: "referenceNumber",
+            message: "Resource Request does not exist",
           },
         ],
       };
@@ -49,7 +49,7 @@ export class ResourceRequestResolver {
   // Update ResourceRequest
   @Mutation(() => ResourceRequestResponse, { nullable: true })
   async updateResourceRequest(
-    @Arg("reference_number", () => Int) referenceNumber: number,
+    @Arg("referenceNumber", () => Int) referenceNumber: number,
     @Arg("input") input: ResourceRequestInput
   ): Promise<ResourceRequestResponse | undefined> {
     const resourceRequest = await ResourceRequests.findOne(referenceNumber);
@@ -57,8 +57,8 @@ export class ResourceRequestResolver {
       return {
         errors: [
           {
-            field: "reference_number",
-            message: "No Resource Request At This Reference Number",
+            field: "referenceNumber",
+            message: "Resource Request does not exist",
           },
         ],
       };
@@ -70,7 +70,7 @@ export class ResourceRequestResolver {
   // Delete Resource Request
   @Mutation(() => Boolean)
   async deleteResourceRequest(
-    @Arg("reference_number", () => Int) referenceNumber: number
+    @Arg("referenceNumber", () => Int) referenceNumber: number
   ): Promise<boolean> {
     await ResourceRequests.delete(referenceNumber);
     return true;
