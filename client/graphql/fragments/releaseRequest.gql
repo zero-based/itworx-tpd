@@ -1,0 +1,14 @@
+fragment ReleaseRequest on ReleaseRequests {
+  referenceNumber
+  managerName
+  employeeName
+  employeeId
+  employeeTitle
+  function
+  releaseDate
+  propability
+  releasePercentage
+  releaseReason
+  leaving
+  requestStatus
+}
