@@ -41,8 +41,14 @@ export const NavBar: React.FC<NavBarProps> = () => {
                 items={{
                   __ungrouped: [],
                   Requests: [
-                    { label: "Resource Request", route: "/" },
-                    { label: "Release Request", route: "/" },
+                    {
+                      label: "Resource Request",
+                      route: "/view/resourceRequests",
+                    },
+                    {
+                      label: "Release Request",
+                      route: "/view/releaseRequests",
+                    },
                   ],
                 }}
               />

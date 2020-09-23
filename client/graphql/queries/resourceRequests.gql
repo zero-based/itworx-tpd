@@ -1,0 +1,13 @@
+query ResourceRequests($cursor: Int, $limit: Int!) {
+  resourceRequests(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        ...ResourceRequest
+      }
+    }
+  }
+}

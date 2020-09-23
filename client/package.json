@@ -16,6 +16,7 @@
     "next": "latest",
     "next-urql": "^1.1.0",
     "react": "^16.8.0",
+    "react-csv": "^2.0.3",
     "react-dom": "^16.8.0",
     "react-is": "^16.13.1",
     "styletron-engine-atomic": "^1.4.6",

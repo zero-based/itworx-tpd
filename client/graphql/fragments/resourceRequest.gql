@@ -1,0 +1,19 @@
+fragment ResourceRequest on ResourceRequests {
+  referenceNumber
+  managerName
+  function
+  title
+  startDate
+  endDate
+  propability
+  percentage
+  status
+  coreTeamMember
+  replacenement
+  replacementFor
+  requestsCount
+  relatedOpportunity
+  comments
+  assignedResource
+  actualPercentage
+}

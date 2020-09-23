@@ -1,0 +1,13 @@
+query ReleaseRequests($cursor: Int, $limit: Int!) {
+  releaseRequests(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        ...ReleaseRequest
+      }
+    }
+  }
+}
