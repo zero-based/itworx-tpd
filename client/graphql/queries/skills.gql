@@ -1,0 +1,14 @@
+query Skills($cursor: Int, $limit: Int!) {
+  skills(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        skillId
+        skillName
+      }
+    }
+  }
+}

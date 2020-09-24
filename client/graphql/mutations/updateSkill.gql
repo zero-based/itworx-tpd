@@ -1,0 +1,11 @@
+mutation UpdateSkill($skillId: Int!, $skillName: String!) {
+  updateSkill(skillId: $skillId, skillName: $skillName) {
+    errors {
+      ...Error
+    }
+    data {
+      skillId
+      skillName
+    }
+  }
+}

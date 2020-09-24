@@ -57,6 +57,27 @@ export const NavBar: React.FC<NavBarProps> = () => {
             <Label1>Talents</Label1>
           </StatefulPopover>
         </StyledNavigationItem>
+        <StyledNavigationItem>
+          <StatefulPopover
+            triggerType={TRIGGER_TYPE.hover}
+            content={() => (
+              <StatefulMenu
+                onItemSelect={({ item }) => router.push(item.route)}
+                items={{
+                  __ungrouped: [],
+                  Skills: [
+                    {
+                      label: "Skills",
+                      route: "/view/skills",
+                    },
+                  ],
+                }}
+              />
+            )}
+          >
+            <Label1>Skills & Certifications</Label1>
+          </StatefulPopover>
+        </StyledNavigationItem>
       </StyledNavigationList>
       <StyledNavigationList $align={ALIGN.center} />
 
@@ -72,6 +93,9 @@ export const NavBar: React.FC<NavBarProps> = () => {
                   Requests: [
                     { label: "Resource Request", route: "/" },
                     { label: "Release Request", route: "/" },
+                  ],
+                  "Skills & Certificates": [
+                    { label: "Skill", route: "/create/skill" },
                   ],
                 }}
               />
