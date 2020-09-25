@@ -1,0 +1,13 @@
+mutation CreateCertificationProvider($certificationProviderName: String!) {
+  createCertificationProvider(
+    certificationProviderName: $certificationProviderName
+  ) {
+    errors {
+      ...Error
+    }
+    data {
+      certificatoinProviderId
+      certificationProviderName
+    }
+  }
+}
