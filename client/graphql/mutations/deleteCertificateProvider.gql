@@ -1,0 +1,3 @@
+mutation DeleteCertificateProvider($certificationProviderId: Int!) {
+  deleteCertificateProvider(certificationProviderId: $certificationProviderId)
+}

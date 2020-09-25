@@ -71,6 +71,12 @@ export const NavBar: React.FC<NavBarProps> = () => {
                       route: "/view/skills",
                     },
                   ],
+                  Certifications: [
+                    {
+                      label: "Certificate Providers",
+                      route: "/view/certificateProviders",
+                    },
+                  ],
                 }}
               />
             )}
@@ -96,6 +102,10 @@ export const NavBar: React.FC<NavBarProps> = () => {
                   ],
                   "Skills & Certificates": [
                     { label: "Skill", route: "/create/skill" },
+                    {
+                      label: "Certificate Provider",
+                      route: "/create/certificateProvider",
+                    },
                   ],
                 }}
               />

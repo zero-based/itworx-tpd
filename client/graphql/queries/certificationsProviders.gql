@@ -1,0 +1,15 @@
+query CertificationsProviders($cursor: Int, $limit: Int!) {
+  certificationsProviders(cursor: $cursor, limit: $limit) {
+    errors {
+      field
+      message
+    }
+    data {
+      hasMore
+      items {
+        certificatoinProviderId
+        certificationProviderName
+      }
+    }
+  }
+}
