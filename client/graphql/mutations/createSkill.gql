@@ -1,0 +1,11 @@
+mutation CreateSkill($skillName: String!) {
+  createSkill(skillName: $skillName) {
+    errors {
+      ...Error
+    }
+    data {
+      skillId
+      skillName
+    }
+  }
+}

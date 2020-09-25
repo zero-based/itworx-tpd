@@ -1,0 +1,11 @@
+query skill($skillId: Int!) {
+  skill(skillId: $skillId) {
+    errors {
+      ...Error
+    }
+    data {
+      skillId
+      skillName
+    }
+  }
+}
