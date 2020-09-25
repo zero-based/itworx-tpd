@@ -23,6 +23,7 @@ CREATE TABLE `employee_training` (
   `event_from_date` date NOT NULL,
   `event_to_date` date NOT NULL,
   `total_training_hours` int(11) NOT NULL,
+  PRIMARY KEY (`employee_id`,`training_activity_name`),
   KEY `employee_id_idx` (`employee_id`),
   CONSTRAINT `employee_id_training` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
