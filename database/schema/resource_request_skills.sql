@@ -21,6 +21,7 @@ CREATE TABLE `resource_request_skills` (
   `request_reference_number` int(11) NOT NULL,
   `category` varchar(64) NOT NULL,
   `subcategory` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`skill_id`,`request_reference_number`),
   KEY `skill_id_fk_idx` (`skill_id`),
   KEY `resource_request_skills_reference_number_fk_idx` (`request_reference_number`),
   CONSTRAINT `resource_request_skills_reference_number_fk` FOREIGN KEY (`request_reference_number`) REFERENCES `resource_requests` (`reference_number`) ON DELETE NO ACTION ON UPDATE NO ACTION,

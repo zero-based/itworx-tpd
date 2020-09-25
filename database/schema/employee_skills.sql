@@ -21,6 +21,7 @@ CREATE TABLE `employee_skills` (
   `skill_id` int(11) NOT NULL,
   `experience_level` varchar(32) NOT NULL,
   `last_used_date` date NOT NULL,
+  PRIMARY KEY (`employee_id`,`skill_id`),
   KEY `Employee_ID_idx` (`employee_id`),
   KEY `Skill_ID_idx` (`skill_id`),
   CONSTRAINT `Employee_ID` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,

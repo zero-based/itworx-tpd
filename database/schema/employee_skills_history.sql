@@ -25,6 +25,7 @@ CREATE TABLE `employee_skills_history` (
   `manager_name` varchar(256) NOT NULL,
   `title` varchar(128) NOT NULL,
   `function` varchar(128) NOT NULL,
+  PRIMARY KEY (`employee_id`,`skill_id`),
   KEY `employee_skill_history_employee_id_fk_idx` (`employee_id`),
   KEY `employee_skills_history_skill_id_fk_idx` (`skill_id`),
   CONSTRAINT `employee_skill_history_employee_id_fk` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
