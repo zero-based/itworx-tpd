@@ -3,6 +3,7 @@
   "name": "tpd",
   "workspaces": [
     "client",
+    "database",
     "server"
   ],
   "scripts": {
