@@ -97,8 +97,14 @@ export const NavBar: React.FC<NavBarProps> = () => {
                 items={{
                   __ungrouped: [],
                   Requests: [
-                    { label: "Resource Request", route: "/" },
-                    { label: "Release Request", route: "/" },
+                    {
+                      label: "Resource Request",
+                      route: "/create/resourceRequest",
+                    },
+                    {
+                      label: "Release Request",
+                      route: "/",
+                    },
                   ],
                   "Skills & Certificates": [
                     { label: "Skill", route: "/create/skill" },
