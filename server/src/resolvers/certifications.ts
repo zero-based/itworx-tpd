@@ -3,9 +3,9 @@ import { MoreThan } from "typeorm";
 
 import { Certifications } from "../entities/Certifications";
 import { CertificationResponse } from "../types/responses/CertificationResponse";
+import { EmployeeCertifications } from "../entities/EmployeeCertifications";
 import { PaginatedCertificationResponse } from "../types/responses/PaginatedCertificationResponse";
 import { UserRole as R } from "../types/UserRole";
-
 
 @Resolver()
 export class CertificationResolver {
@@ -25,6 +25,7 @@ export class CertificationResolver {
       },
       take: fetchLimit,
     });
+
     return {
       data: {
         hasMore: certificates.length == fetchLimit,
@@ -38,6 +39,7 @@ export class CertificationResolver {
   @Mutation(() => CertificationResponse, { nullable: true })
   async updateCertification(
     @Arg("certificationId", () => Int) certificationId: number,
+    @Arg("certificationProviderId", () => Int) certificationProviderId: number,
     @Arg("certificationName") certificationName: string
   ): Promise<CertificationResponse | undefined> {
     const certification = await Certifications.findOne(certificationId);
@@ -53,6 +55,7 @@ export class CertificationResolver {
     }
     await Certifications.update(certificationId, {
       certificationName,
+      certificationProviderId,
     });
     return {
       data: {
@@ -106,5 +109,17 @@ export class CertificationResolver {
   ): Promise<boolean> {
     await Certifications.delete(certificationId);
     return true;
+  }
+
+  @Query(() => Int)
+  async certificationsTalentsCount(
+    @Arg("certificationId", () => Int) certificationId: number
+  ): Promise<number> {
+    const [, count] = await EmployeeCertifications.findAndCount({
+      where: {
+        certificationId: certificationId,
+      },
+    });
+    return count;
   }
 }
