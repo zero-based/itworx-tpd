@@ -9,7 +9,7 @@ export class EmployeeCertificationInput {
 
   @IsNotEmpty({ message: "required field" })
   @Field()
-  certificateName: string;
+  certificationName: string;
 
   @IsNotEmpty({ message: "required field" })
   @Field()

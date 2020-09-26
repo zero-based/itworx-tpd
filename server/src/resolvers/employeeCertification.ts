@@ -1,178 +1,17 @@
-import { EmployeeSkillResponse } from "../types/responses/EmployeeSkillResponse";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import { EmployeeSkillInput } from "../types/inputs/EmployeeSkillInput";
 import { validate } from "class-validator";
-import { mapToFieldError } from "../utils/mapToFieldError";
-import { EmployeeSkills } from "../entities/EmployeeSkills";
-import { Skills } from "../entities/Skills";
-import { PaginatedEmployeeSkillResponse } from "../types/responses/PaginatedEmployeeSkillResponse";
-import { AppContext } from "../types";
-import { MoreThan } from "typeorm";
-import { EmployeeCertificationResponse } from "../types/responses/EmployeeCertificationResponse";
-import { EmployeeCertificationInput } from "../types/inputs/EmployeeCertificationInput";
-import { Certifications } from "../entities/Certifications";
 import { CertificationProviders } from "../entities/CertificationProviders";
+import { Certifications } from "../entities/Certifications";
 import { EmployeeCertifications } from "../entities/EmployeeCertifications";
+import { AppContext } from "../types";
+import { EmployeeCertificationInput } from "../types/inputs/EmployeeCertificationInput";
+import { EmployeeCertificationResponse } from "../types/responses/EmployeeCertificationResponse";
 import { PaginatedEmployeeCertificationResponse } from "../types/responses/PaginatedEmployeeCertificationResponse";
+import { mapToFieldError } from "../utils/mapToFieldError";
+import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { MoreThan } from "typeorm";
 
 @Resolver()
-export class EmployeeProfileResolver {
-  ////////////////////////////////////////////// SKILL //////////////////////////////////////////////
-  // Add EmployeeSkill
-  @Mutation(() => EmployeeSkillResponse)
-  async createEmployeeSkill(
-    @Arg("input") input: EmployeeSkillInput,
-    @Ctx() { req }: AppContext
-  ): Promise<EmployeeSkillResponse> {
-    const validationErrors = await validate(input);
-    if (validationErrors.length > 0) {
-      return {
-        errors: mapToFieldError(validationErrors),
-      };
-    }
-
-    const skill = await Skills.findOne({ skillName: input.skillName });
-    if (!skill) {
-      return {
-        errors: [
-          {
-            field: "skill",
-            message: "Can not find this skill",
-          },
-        ],
-      };
-    }
-    return {
-      data: await EmployeeSkills.create({
-        employeeId: req.session!.profileId,
-        skillId: skill?.skillId,
-        experienceLevel: input.experienceLevel,
-        lastUsedDate: input.lastUsedDate,
-      }).save(),
-    };
-  }
-
-  // Get An EmployeeSkill
-  @Query(() => EmployeeSkillResponse, { nullable: true })
-  async EmployeeSkill(
-    @Arg("skillId", () => Int) skillId: number,
-    @Ctx() { req }: AppContext
-  ): Promise<EmployeeSkillResponse | undefined> {
-    const employeeSkill = await EmployeeSkills.findOne({
-      where: {
-        employeeId: req.session!.profileId,
-        skillId: skillId,
-      },
-    });
-    if (!employeeSkill) {
-      return {
-        errors: [
-          {
-            field: "skill",
-            message: "Skill does not exist",
-          },
-        ],
-      };
-    }
-    return { data: employeeSkill };
-  }
-
-  // Get 30 EmployeeSkill
-  @Query(() => PaginatedEmployeeSkillResponse)
-  async EmployeeSkills(
-    @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
-    @Ctx() { req }: AppContext
-  ): Promise<PaginatedEmployeeSkillResponse> {
-    const requestLimit = Math.min(30, limit);
-    const fetchLimit = requestLimit + 1;
-
-    const requests = await EmployeeSkills.find({
-      order: { skillId: "ASC" },
-      where: {
-        ...(cursor ? { skillId: MoreThan(cursor) } : {}),
-        employeeId: req.session!.profileId,
-      },
-      take: fetchLimit,
-    });
-
-    return {
-      data: {
-        hasMore: requests.length == fetchLimit,
-        items: requests.slice(0, requestLimit),
-      },
-    };
-  }
-
-  // Update EmployeeSkill
-  @Mutation(() => EmployeeSkillResponse, { nullable: true })
-  async updateEmployeeSkill(
-    @Arg("skillId", () => Int) skillId: number,
-    @Arg("input") input: EmployeeSkillInput,
-    @Ctx() { req }: AppContext
-  ): Promise<EmployeeSkillResponse | undefined> {
-    const employeeSkill = await EmployeeSkills.findOne({
-      where: {
-        employeeId: req.session!.profileId,
-        skillId: skillId,
-      },
-    });
-
-    if (!employeeSkill) {
-      return {
-        errors: [
-          {
-            field: "skillId",
-            message: "Can not find this skill",
-          },
-        ],
-      };
-    }
-
-    const skill = await Skills.findOne({
-      skillName: input.skillName,
-    });
-
-    if (!skill) {
-      return {
-        errors: [
-          {
-            field: "skill",
-            message: "Can not find this skill",
-          },
-        ],
-      };
-    }
-
-    const updated = {
-      skillId: skill.skillId,
-      experienceLevel: input.experienceLevel,
-      lastUsedDate: input.lastUsedDate,
-    };
-
-    await EmployeeSkills.update(
-      { employeeId: req.session!.profileId, skillId: skill.skillId },
-      { ...updated }
-    );
-
-    return { data: { ...employeeSkill, ...updated } as EmployeeSkills };
-  }
-
-  // Delete Employee Skill
-  @Mutation(() => Boolean)
-  async deleteEmployeeSkill(
-    @Arg("skillId", () => Int) skillId: number,
-    @Ctx() { req }: AppContext
-  ): Promise<boolean> {
-    await EmployeeSkills.delete({
-      employeeId: req.session!.profileId,
-      skillId: skillId,
-    });
-    return true;
-  }
-
-  ////////////////////////////////////////////// Certificates //////////////////////////////////////////////
-
+export class EmployeeCertification {
   // Add Certification
   @Mutation(() => EmployeeCertificationResponse)
   async createEmployeeCertification(
@@ -189,14 +28,14 @@ export class EmployeeProfileResolver {
     // Get Certification Id
     const certification = await Certifications.findOne({
       where: {
-        certificationName: input.certificateName,
+        certificationName: input.certificationName,
       },
     });
     if (!certification) {
       return {
         errors: [
           {
-            field: "certification",
+            field: "certificationName",
             message: "Can not find this certification",
           },
         ],
@@ -213,7 +52,7 @@ export class EmployeeProfileResolver {
       return {
         errors: [
           {
-            field: "certificationProvider",
+            field: "certificateProvider",
             message: "Can not find this Certification Provider",
           },
         ],
@@ -227,7 +66,7 @@ export class EmployeeProfileResolver {
       return {
         errors: [
           {
-            field: "certificationProvider",
+            field: "certificationName",
             message: "Invalid Certification",
           },
         ],
@@ -245,7 +84,7 @@ export class EmployeeProfileResolver {
 
   // Get A CertificationProvider
   @Query(() => EmployeeCertificationResponse, { nullable: true })
-  async EmployeeCertification(
+  async employeeCertification(
     @Arg("certificationId", () => Int) certificationId: number,
     @Ctx() { req }: AppContext
   ): Promise<EmployeeCertificationResponse | undefined> {
@@ -257,13 +96,11 @@ export class EmployeeProfileResolver {
       },
     });
 
-    console.log(employeeCertification);
-
     if (!employeeCertification) {
       return {
         errors: [
           {
-            field: "employeeCertification",
+            field: "certificationId",
             message: "Employee Certification does not exist",
           },
         ],
@@ -275,7 +112,7 @@ export class EmployeeProfileResolver {
 
   // Get 30 EmployeeCertification
   @Query(() => PaginatedEmployeeCertificationResponse)
-  async EmployeeCertifications(
+  async employeeCertifications(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
     @Ctx() { req }: AppContext
@@ -326,14 +163,14 @@ export class EmployeeProfileResolver {
     }
 
     const certification = await Certifications.findOne({
-      certificationName: input.certificateName,
+      certificationName: input.certificationName,
     });
 
     if (!certification) {
       return {
         errors: [
           {
-            field: "certification",
+            field: "certificationName",
             message: "Can not find this certification",
           },
         ],
@@ -350,8 +187,8 @@ export class EmployeeProfileResolver {
       return {
         errors: [
           {
-            field: "certificationProvider",
-            message: "Can not find this Certification Provider",
+            field: "certificateProvider",
+            message: "Can not find this Certificate Provider",
           },
         ],
       };
@@ -364,7 +201,7 @@ export class EmployeeProfileResolver {
       return {
         errors: [
           {
-            field: "certificationProvider",
+            field: "certificationName",
             message: "Invalid Certification",
           },
         ],
