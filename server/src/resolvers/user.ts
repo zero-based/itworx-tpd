@@ -7,8 +7,6 @@ import { UserInput } from "../types/inputs/UserInput";
 import { UserResponse } from "../types/responses/UserResponse";
 import { Users } from "../entities/Users";
 import { mapToFieldError } from "../utils/mapToFieldError";
-import { UserRole } from "../entities/UserRole";
-import { Role } from "../entities/Role";
 
 @Resolver(Users)
 export class UserResolver {
@@ -33,7 +31,10 @@ export class UserResolver {
       };
     }
 
-    const user = await Users.findOne({ email: input.email });
+    const user = await Users.findOne(
+      { email: input.email },
+      { relations: ["role"] } // eager relation creates ER_DUP_FIELDNAME
+    );
     if (!user || input.password !== user.password) {
       return {
         errors: [
@@ -51,15 +52,8 @@ export class UserResolver {
 
     // Save session's data
     req.session!.profileId = profile!.id;
-
-    const userRole = await UserRole.findOne(user!.id);
-    if (userRole !== undefined) {
-      if (userRole.roleId !== null) {
-        const role = await Role.findOne(userRole.roleId);
-        req.session!.userRole = role!.roleName;
-        req.session!.userName = user.userName;
-      }
-    }
+    req.session!.userRole = user.role.roleName;
+    req.session!.userName = user.userName;
 
     return { data: profile };
   }

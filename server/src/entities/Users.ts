@@ -1,32 +1,36 @@
-import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   Entity,
-  OneToOne,
+  Index,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserRole } from "./UserRole";
+import { Role } from "./Role";
 
-@ObjectType()
+@Index("role_id_fk_idx", ["roleId"], {})
 @Entity("users", { schema: "hackathon" })
 export class Users extends BaseEntity {
-  @Field()
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
-  @Field()
   @Column("varchar", { name: "user_name", length: 32 })
   userName: string;
 
-  @Field()
   @Column("varchar", { name: "password", length: 32 })
   password: string;
 
-  @Field()
   @Column("varchar", { name: "email", length: 320 })
   email: string;
 
-  @OneToOne(() => UserRole, (userRole) => userRole.user)
-  userRole: UserRole;
+  @Column("int", { name: "role_id" })
+  roleId: number;
+
+  @ManyToOne(() => Role, (role) => role.users, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION"
+  })
+  @JoinColumn([{ name: "role_id", referencedColumnName: "id" }])
+  role: Role;
 }

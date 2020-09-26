@@ -4,7 +4,7 @@ fragment EmployeeProfile on EmployeesProfiles {
   title
   hiringDate
   function
-  directManager
+  directManagerId
   workgroup
   employmentType
   allocationPercentage

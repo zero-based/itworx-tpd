@@ -21,7 +21,10 @@ CREATE TABLE `users` (
   `user_name` varchar(32) NOT NULL,
   `password` varchar(32) NOT NULL,
   `email` varchar(320) NOT NULL,
-  PRIMARY KEY (`id`)
+  `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id_fk_idx` (`role_id`),
+  CONSTRAINT `role_id_fk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

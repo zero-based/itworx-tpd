@@ -22,7 +22,7 @@ CREATE TABLE `employees_profiles` (
   `title` varchar(128) NOT NULL,
   `hiring_date` date NOT NULL,
   `function` varchar(128) NOT NULL,
-  `direct_manager` varchar(36) NOT NULL,
+  `direct_manager_id` varchar(36) DEFAULT NULL,
   `workgroup` varchar(128) NOT NULL,
   `employment_type` varchar(64) NOT NULL,
   `allocation_percentage` int(11) NOT NULL,
@@ -32,8 +32,8 @@ CREATE TABLE `employees_profiles` (
   `mobile_number` varchar(20) NOT NULL,
   `cost_center` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `manager_id_fk_idx` (`direct_manager`),
-  CONSTRAINT `manager_id_fk` FOREIGN KEY (`direct_manager`) REFERENCES `managers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `manager_id_fk_idx` (`direct_manager_id`),
+  CONSTRAINT `manager_id_fk` FOREIGN KEY (`direct_manager_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
