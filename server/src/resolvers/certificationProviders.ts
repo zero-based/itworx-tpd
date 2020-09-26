@@ -1,13 +1,16 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MoreThan } from "typeorm";
 
 import { CertificationProviders } from "../entities/CertificationProviders";
 import { CertificationProviderResponse } from "../types/responses/CertificationProviderResponse";
 import { PaginatedCertificationProviderResponse } from "../types/responses/PaginatedCertificationProviderResponse";
+import { UserRole as R } from "../types/UserRole";
+
 
 @Resolver()
 export class CertificationProvidersResolver {
   // Get Certification Providers
+  @Authorized(R.ADMIN)
   @Query(() => PaginatedCertificationProviderResponse, { nullable: true })
   async certificationsProviders(
     @Arg("limit", () => Int) limit: number,
@@ -31,6 +34,7 @@ export class CertificationProvidersResolver {
   }
 
   // Update Certification Provider
+  @Authorized(R.ADMIN)
   @Mutation(() => CertificationProviderResponse, { nullable: true })
   async updateCertificationProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number,
@@ -61,6 +65,7 @@ export class CertificationProvidersResolver {
   }
 
   // Get A Certificate Provider
+  @Authorized(R.ADMIN)
   @Query(() => CertificationProviderResponse, { nullable: true })
   async certificateProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number
@@ -83,6 +88,7 @@ export class CertificationProvidersResolver {
   }
 
   // Add Certification Provider
+  @Authorized(R.ADMIN)
   @Mutation(() => CertificationProviderResponse)
   async createCertificationProvider(
     @Arg("certificationProviderName") certificationProviderName: string
@@ -95,6 +101,7 @@ export class CertificationProvidersResolver {
   }
 
   // Delete Certification Provider
+  @Authorized(R.ADMIN)
   @Mutation(() => Boolean)
   async deleteCertificateProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number
