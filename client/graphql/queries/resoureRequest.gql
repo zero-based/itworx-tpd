@@ -1,0 +1,5 @@
+query ResourceRequest($referenceNumber: Int!) {
+  resourceRequest(referenceNumber: $referenceNumber) {
+    ...ResourceRequestResponse
+  }
+}

@@ -1,0 +1,8 @@
+fragment ResourceRequestResponse on ResourceRequestResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...ResourceRequest
+  }
+}

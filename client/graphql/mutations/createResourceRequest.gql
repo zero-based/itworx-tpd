@@ -1,0 +1,5 @@
+mutation CreateResourceRequest($input: ResourceRequestInput!) {
+  createResourceRequest(input: $input) {
+    ...ResourceRequestResponse
+  }
+}

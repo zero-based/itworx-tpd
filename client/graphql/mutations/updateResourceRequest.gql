@@ -1,0 +1,8 @@
+mutation UpdateResourceRequest(
+  $referenceNumber: Int!
+  $input: ResourceRequestInput!
+) {
+  updateResourceRequest(referenceNumber: $referenceNumber, input: $input) {
+    ...ResourceRequestResponse
+  }
+}
