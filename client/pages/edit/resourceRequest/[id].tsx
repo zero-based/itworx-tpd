@@ -1,21 +1,22 @@
-import * as React from "react";
+import React from "react";
 
+import { Spinner } from "baseui/icon";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/dist/client/router";
-import { createUrqlClient } from "../../../urql/createUrqlClient";
+
+import { MainLayout } from "../../../components/MainLayout";
+import { ResourceRequestForm } from "../../../components/ResourceRequestForm";
 import {
   useResourceRequestQuery,
   useUpdateResourceRequestMutation,
 } from "../../../generated/graphql";
-import { MainLayout } from "../../../components/MainLayout";
-import { ResourceRequestForm } from "../../../components/ResourceRequestForm";
-import { formatDate } from "../../../utils/formatDate";
+import { createUrqlClient } from "../../../urql/createUrqlClient";
 
 interface updateResourceRequestProps {}
 
 const updateResourceRequest: React.FC<updateResourceRequestProps> = () => {
-  const router = useRouter();
   const [, updateResourceRequest] = useUpdateResourceRequestMutation();
+  const router = useRouter();
 
   const id =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
@@ -29,7 +30,7 @@ const updateResourceRequest: React.FC<updateResourceRequestProps> = () => {
   if (fetching) {
     return (
       <MainLayout>
-        <div>loading...</div>
+        <Spinner />
       </MainLayout>
     );
   }
@@ -48,25 +49,15 @@ const updateResourceRequest: React.FC<updateResourceRequestProps> = () => {
   } = data?.resourceRequest?.data;
   return (
     <ResourceRequestForm
+      action="Update"
       initialValues={{
         ...formData,
       }}
-      action="Update"
       onSubmit={async (values, { setErrors }) => {
-        values.startDate =
-          values.startDate === ""
-            ? formatDate(new Date().toString())
-            : values.startDate;
-        values.endDate =
-          values.endDate === ""
-            ? formatDate(new Date().toString())
-            : values.endDate;
-
         const response = await updateResourceRequest({
           referenceNumber: referenceNumber,
           input: values,
         });
-        console.log("responseee :", response);
 
         const errors = response.data?.updateResourceRequest.errors;
         if (errors) {

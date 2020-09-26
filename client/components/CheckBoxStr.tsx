@@ -1,33 +1,31 @@
 import React from "react";
-import { useField, useFormikContext } from "formik";
-import { InputProps } from "baseui/input";
-import { Checkbox } from "baseui/checkbox";
+import { useField } from "formik";
+import { Checkbox, CheckboxProps } from "baseui/checkbox";
+import { FormControl } from "baseui/form-control";
 
-/**
- * Returns Checkbox value either "0" or "1".
- *
- * @param {string} props Initial values.
- * @return {string} Checkbox value either "0" or "1".
- */
-
-interface ChecboxStrProps extends InputProps {
+interface CheckboxStrProps extends CheckboxProps {
   label: string;
 }
 
-export const CheckBoxStr: React.FC<ChecboxStrProps> = (props) => {
-  const [field] = useField<string>(props.name!);
-  const { setFieldValue } = useFormikContext();
-  var value = field.value === "1" ? true : false;
+/**
+ * CheckBox Form Control that sets field value as "1" or "0"
+ */
+export const CheckBoxStr: React.FC<CheckboxStrProps> = (props) => {
+  const [field, { error }, { setValue }] = useField<string>(props.name!);
   return (
-    <Checkbox
-      {...field}
-      checked={value}
-      onChange={() => {
-        setFieldValue(field.name, !value ? "1" : "0");
-        field.value = !value ? "1" : "0";
-      }}
-    >
-      {props.label}
-    </Checkbox>
+    <FormControl error={!!error ? error : null}>
+      <Checkbox
+        {...field}
+        {...props}
+        error={!!error}
+        checked={field.value === "1" ? true : false}
+        onChange={() => {
+          const invertedValue = field.value === "1" ? "0" : "1";
+          setValue(invertedValue);
+        }}
+      >
+        {props.label}
+      </Checkbox>
+    </FormControl>
   );
 };

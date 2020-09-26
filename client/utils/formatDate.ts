@@ -1,11 +1,10 @@
-export function formatDate(date: string): string {
-  var d = new Date(date),
-    month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
+export function formatDate(date: Date): string {
+  const month = "" + (date.getMonth() + 1);
+  const day = "" + date.getDate();
+  const year = date.getFullYear();
 
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
+  const paddedMonth = month.length < 2 ? "0" + month : month;
+  const paddedDay = day.length < 2 ? "0" + day : day;
 
-  return [year, month, day].join("-");
+  return [year, paddedMonth, paddedDay].join("-");
 }

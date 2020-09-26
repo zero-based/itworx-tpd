@@ -7,7 +7,6 @@ import {
   ResourceRequestInput,
   useCreateResourceRequestMutation,
 } from "../../generated/graphql";
-import { formatDate } from "../../utils/formatDate";
 import { useRouter } from "next/dist/client/router";
 
 interface ResourceRequestProps {}
@@ -16,7 +15,7 @@ const ResourceRequest: React.FC<ResourceRequestProps> = () => {
   const [, createResourceRequest] = useCreateResourceRequestMutation();
   const router = useRouter();
 
-  const intialValues: ResourceRequestInput = {
+  const initialValues: ResourceRequestInput = {
     managerName: "",
     function: "",
     title: "",
@@ -36,20 +35,11 @@ const ResourceRequest: React.FC<ResourceRequestProps> = () => {
   };
   return (
     <ResourceRequestForm
-      initialValues={{ ...intialValues }}
+      action="Add"
+      initialValues={initialValues}
       onSubmit={async (values, { setErrors }) => {
-        values.startDate =
-          values.startDate === ""
-            ? formatDate(new Date().toString())
-            : values.startDate;
-        values.endDate =
-          values.endDate === ""
-            ? formatDate(new Date().toString())
-            : values.endDate;
-
         const response = await createResourceRequest({ input: values });
         const errors = response.data?.createResourceRequest.errors;
-        console.log(response);
 
         if (errors) {
           var errorMap = errorMap(errors);
@@ -58,8 +48,7 @@ const ResourceRequest: React.FC<ResourceRequestProps> = () => {
           router.push("/");
         }
       }}
-      action="Add"
-    ></ResourceRequestForm>
+    />
   );
 };
 
