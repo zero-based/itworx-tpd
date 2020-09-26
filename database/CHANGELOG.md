@@ -1,5 +1,12 @@
 # Changelog
 
+## v3
+
+1. Drop `user_role` table and add its columns to `users` table, using a direct one-to-one relation with `role` table.
+1. Drop `managers` table and use a self-reference to `employees_profile` for the `direct_manager` column.
+1. Make `user_role`'s `role_id` not nullable.
+1. Make `employees_profile`'s `direct_manager` nullable and rename it to `direct_manager_id`.
+
 ## v2
 
 1. Add AUTO_INCREMENT to `assignment`

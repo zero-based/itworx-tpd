@@ -13,11 +13,10 @@ import { EmployeeCertifications } from "./EmployeeCertifications";
 import { EmployeeSkills } from "./EmployeeSkills";
 import { EmployeeSkillsHistory } from "./EmployeeSkillsHistory";
 import { EmployeeTraining } from "./EmployeeTraining";
-import { Managers } from "./Managers";
 import { ReleaseRequests } from "./ReleaseRequests";
 
 @ObjectType()
-@Index("manager_id_fk_idx", ["directManager"], {})
+@Index("manager_id_fk_idx", ["directManagerId"], {})
 @Entity("employees_profiles", { schema: "hackathon" })
 export class EmployeesProfiles extends BaseEntity {
   @Field()
@@ -40,9 +39,9 @@ export class EmployeesProfiles extends BaseEntity {
   @Column("varchar", { name: "function", length: 128 })
   function: string;
 
-  @Field()
-  @Column("varchar", { name: "direct_manager", length: 36 })
-  directManager: string;
+  @Field(() => String, { nullable: true })
+  @Column("varchar", { name: "direct_manager_id", nullable: true, length: 36 })
+  directManagerId: string | null;
 
   @Field()
   @Column("varchar", { name: "workgroup", length: 128 })
@@ -56,7 +55,7 @@ export class EmployeesProfiles extends BaseEntity {
   @Column("int", { name: "allocation_percentage" })
   allocationPercentage: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column("date", { name: "skills_last_update_date", nullable: true })
   skillsLastUpdateDate: string | null;
 
@@ -64,7 +63,7 @@ export class EmployeesProfiles extends BaseEntity {
   @Column("varchar", { name: "employee_email", length: 320 })
   employeeEmail: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column("varchar", {
     name: "employee_profile_picture",
     nullable: true,
@@ -104,12 +103,19 @@ export class EmployeesProfiles extends BaseEntity {
   )
   employeeTrainings: EmployeeTraining[];
 
-  @ManyToOne(() => Managers, (managers) => managers.employeesProfiles, {
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
-  })
-  @JoinColumn([{ name: "direct_manager", referencedColumnName: "id" }])
-  directManager2: Managers;
+  @ManyToOne(
+    () => EmployeesProfiles,
+    (employeesProfiles) => employeesProfiles.employeesProfiles,
+    { onDelete: "NO ACTION", onUpdate: "NO ACTION" }
+  )
+  @JoinColumn([{ name: "direct_manager_id", referencedColumnName: "id" }])
+  directManager: EmployeesProfiles;
+
+  @OneToMany(
+    () => EmployeesProfiles,
+    (employeesProfiles) => employeesProfiles.directManager
+  )
+  employeesProfiles: EmployeesProfiles[];
 
   @OneToMany(
     () => ReleaseRequests,
