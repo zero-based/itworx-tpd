@@ -1,13 +1,16 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MoreThan } from "typeorm";
 
 import { Certifications } from "../entities/Certifications";
 import { CertificationResponse } from "../types/responses/CertificationResponse";
 import { PaginatedCertificationResponse } from "../types/responses/PaginatedCertificationResponse";
+import { UserRole as R } from "../types/UserRole";
+
 
 @Resolver()
 export class CertificationResolver {
   // Get Certification
+  @Authorized(R.ADMIN)
   @Query(() => PaginatedCertificationResponse, { nullable: true })
   async certifications(
     @Arg("limit", () => Int) limit: number,
@@ -31,6 +34,7 @@ export class CertificationResolver {
   }
 
   // Update Certification
+  @Authorized(R.ADMIN)
   @Mutation(() => CertificationResponse, { nullable: true })
   async updateCertification(
     @Arg("certificationId", () => Int) certificationId: number,
@@ -59,6 +63,7 @@ export class CertificationResolver {
   }
 
   // Get A Certification
+  @Authorized(R.ADMIN)
   @Query(() => CertificationResponse, { nullable: true })
   async certification(
     @Arg("certificationId", () => Int) certificationId: number
@@ -79,6 +84,7 @@ export class CertificationResolver {
   }
 
   // Add Certification
+  @Authorized(R.ADMIN)
   @Mutation(() => CertificationResponse)
   async createCertification(
     @Arg("certificationName") certificationName: string,
@@ -93,6 +99,7 @@ export class CertificationResolver {
   }
 
   // Delete Certification
+  @Authorized(R.ADMIN)
   @Mutation(() => Boolean)
   async deleteCertification(
     @Arg("certificationId", () => Int) certificationId: number

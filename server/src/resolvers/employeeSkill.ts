@@ -1,4 +1,15 @@
 import { validate } from "class-validator";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
+import { MoreThan } from "typeorm";
+
 import { EmployeeSkills } from "../entities/EmployeeSkills";
 import { Skills } from "../entities/Skills";
 import { AppContext } from "../types";
@@ -6,12 +17,11 @@ import { EmployeeSkillInput } from "../types/inputs/EmployeeSkillInput";
 import { EmployeeSkillResponse } from "../types/responses/EmployeeSkillResponse";
 import { PaginatedEmployeeSkillResponse } from "../types/responses/PaginatedEmployeeSkillResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import { MoreThan } from "typeorm";
 
 @Resolver()
 export class EmployeeSkillResolver {
   // Add EmployeeSkill
+  @Authorized()
   @Mutation(() => EmployeeSkillResponse)
   async createEmployeeSkill(
     @Arg("input") input: EmployeeSkillInput,
@@ -46,6 +56,7 @@ export class EmployeeSkillResolver {
   }
 
   // Get An EmployeeSkill
+  @Authorized()
   @Query(() => EmployeeSkillResponse, { nullable: true })
   async employeeSkill(
     @Arg("skillId", () => Int) skillId: number,
@@ -71,6 +82,7 @@ export class EmployeeSkillResolver {
   }
 
   // Get 30 EmployeeSkill
+  @Authorized()
   @Query(() => PaginatedEmployeeSkillResponse)
   async employeeSkills(
     @Arg("limit", () => Int) limit: number,
@@ -98,6 +110,7 @@ export class EmployeeSkillResolver {
   }
 
   // Update EmployeeSkill
+  @Authorized()
   @Mutation(() => EmployeeSkillResponse, { nullable: true })
   async updateEmployeeSkill(
     @Arg("skillId", () => Int) skillId: number,
@@ -152,6 +165,7 @@ export class EmployeeSkillResolver {
   }
 
   // Delete Employee Skill
+  @Authorized()
   @Mutation(() => Boolean)
   async deleteEmployeeSkill(
     @Arg("skillId", () => Int) skillId: number,

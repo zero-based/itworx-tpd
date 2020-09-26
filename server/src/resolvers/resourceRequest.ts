@@ -1,16 +1,28 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { validate } from "class-validator";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver
+} from "type-graphql";
 import { MoreThan } from "typeorm";
-import { ResourceRequestInput } from "../types/inputs/ResourceRequestInput";
+
 import { ResourceRequests } from "../entities/ResourceRequests";
 import { AppContext } from "../types";
-import { ResourceRequestResponse } from "../types/responses/ResourceRequestResponse";
-import { mapToFieldError } from "../utils/mapToFieldError";
-import { validate } from "class-validator";
+import { ResourceRequestInput } from "../types/inputs/ResourceRequestInput";
 import { PaginatedResourceRequestResponse } from "../types/responses/PaginatedResourceRequestResponse";
+import { ResourceRequestResponse } from "../types/responses/ResourceRequestResponse";
+import { UserRole as R } from "../types/UserRole";
+import { mapToFieldError } from "../utils/mapToFieldError";
+
 
 @Resolver()
 export class ResourceRequestResolver {
   // Add Resource Request
+  @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => ResourceRequestResponse)
   async createResourceRequest(
     @Arg("input") input: ResourceRequestInput
@@ -27,6 +39,7 @@ export class ResourceRequestResolver {
   }
 
   // Get A ResourceRequest
+  @Authorized(R.ADMIN, R.MANAGER)
   @Query(() => ResourceRequestResponse, { nullable: true })
   async resourceRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number
@@ -47,6 +60,7 @@ export class ResourceRequestResolver {
   }
 
   // Update ResourceRequest
+  @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => ResourceRequestResponse, { nullable: true })
   async updateResourceRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number,
@@ -68,6 +82,7 @@ export class ResourceRequestResolver {
   }
 
   // Delete Resource Request
+  @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => Boolean)
   async deleteResourceRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number
@@ -77,6 +92,7 @@ export class ResourceRequestResolver {
   }
 
   // Get 30 ResourceRequest
+  @Authorized(R.ADMIN, R.MANAGER)
   @Query(() => PaginatedResourceRequestResponse)
   async resourceRequests(
     @Arg("limit", () => Int) limit: number,
@@ -91,7 +107,7 @@ export class ResourceRequestResolver {
       order: { referenceNumber: "ASC" },
       where: {
         ...(cursor ? { referenceNumber: MoreThan(cursor) } : {}),
-        ...(userRole === "manager" ? { managerName: userName } : {}),
+        ...(userRole === R.MANAGER ? { managerName: userName } : {}),
       },
       take: fetchLimit,
     });

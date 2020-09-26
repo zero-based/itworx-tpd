@@ -1,13 +1,16 @@
-import { Skills } from "../entities/Skills";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import { SkillResponse } from "../types/responses/SkillResponse";
-import { PaginatedSkillResponse } from "../types/responses/PaginatedSkillResponse";
-import { AppContext } from "../types";
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MoreThan } from "typeorm";
+
+import { Skills } from "../entities/Skills";
+import { PaginatedSkillResponse } from "../types/responses/PaginatedSkillResponse";
+import { SkillResponse } from "../types/responses/SkillResponse";
+import { UserRole as R } from "../types/UserRole";
+
 
 @Resolver()
 export class SkillResolver {
   // Add New Skill
+  @Authorized(R.ADMIN)
   @Mutation(() => SkillResponse)
   async createSkill(
     @Arg("skillName") skillName: string
@@ -18,6 +21,7 @@ export class SkillResolver {
   }
 
   // Edit Skill
+  @Authorized(R.ADMIN)
   @Mutation(() => SkillResponse, { nullable: true })
   async updateSkill(
     @Arg("skillId", () => Int) skillId: number,
@@ -39,6 +43,7 @@ export class SkillResolver {
   }
 
   // Delete Skill
+  @Authorized(R.ADMIN)
   @Mutation(() => Boolean)
   async deleteSkill(
     @Arg("skillId", () => Int) skillId: number
@@ -48,6 +53,7 @@ export class SkillResolver {
   }
 
   // Get A Skill
+  @Authorized(R.ADMIN)
   @Query(() => SkillResponse, { nullable: true })
   async skill(
     @Arg("skillId", () => Int) skillId: number
@@ -68,6 +74,7 @@ export class SkillResolver {
   }
 
   // Get 30 Skills
+  @Authorized(R.ADMIN)
   @Query(() => PaginatedSkillResponse)
   async skills(
     @Arg("limit", () => Int) limit: number,

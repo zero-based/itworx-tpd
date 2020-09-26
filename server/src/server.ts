@@ -1,15 +1,17 @@
 require("dotenv").config();
 
-import { AppContext } from "./types";
-import { appSession } from "./middlewares/session";
-import { cors } from "./middlewares/cors";
-
 import "reflect-metadata";
 import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
+
+import { authChecker } from "./middlewares/authChecker";
+import { cors } from "./middlewares/cors";
+import { appSession } from "./middlewares/session";
+import { AppContext } from "./types";
+
 
 const main = async () => {
   await createConnection({
@@ -33,6 +35,7 @@ const main = async () => {
     schema: await buildSchema({
       resolvers: [path.join(__dirname, "./resolvers/*.[jt]s")],
       validate: false,
+      authChecker,
     }),
   });
 

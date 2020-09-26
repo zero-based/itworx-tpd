@@ -1,4 +1,7 @@
 import { validate } from "class-validator";
+import { Arg, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { MoreThan } from "typeorm";
+
 import { CertificationProviders } from "../entities/CertificationProviders";
 import { Certifications } from "../entities/Certifications";
 import { EmployeeCertifications } from "../entities/EmployeeCertifications";
@@ -7,12 +10,12 @@ import { EmployeeCertificationInput } from "../types/inputs/EmployeeCertificatio
 import { EmployeeCertificationResponse } from "../types/responses/EmployeeCertificationResponse";
 import { PaginatedEmployeeCertificationResponse } from "../types/responses/PaginatedEmployeeCertificationResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import { MoreThan } from "typeorm";
+
 
 @Resolver()
 export class EmployeeCertification {
   // Add Certification
+  @Authorized()
   @Mutation(() => EmployeeCertificationResponse)
   async createEmployeeCertification(
     @Arg("input") input: EmployeeCertificationInput,
@@ -83,6 +86,7 @@ export class EmployeeCertification {
   }
 
   // Get A CertificationProvider
+  @Authorized()
   @Query(() => EmployeeCertificationResponse, { nullable: true })
   async employeeCertification(
     @Arg("certificationId", () => Int) certificationId: number,
@@ -111,6 +115,7 @@ export class EmployeeCertification {
   }
 
   // Get 30 EmployeeCertification
+  @Authorized()
   @Query(() => PaginatedEmployeeCertificationResponse)
   async employeeCertifications(
     @Arg("limit", () => Int) limit: number,
@@ -138,6 +143,7 @@ export class EmployeeCertification {
   }
 
   // Update EmployeeCertification
+  @Authorized()
   @Mutation(() => EmployeeCertificationResponse, { nullable: true })
   async updateEmployeeCertification(
     @Arg("certificationId", () => Int) certificationId: number,
@@ -227,6 +233,7 @@ export class EmployeeCertification {
   }
 
   // Delete EmployeeCertification
+  @Authorized()
   @Mutation(() => Boolean)
   async deleteEmployeeCertification(
     @Arg("certificationId", () => Int) certificationId: number,

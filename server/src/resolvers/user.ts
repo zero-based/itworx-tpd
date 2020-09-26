@@ -1,22 +1,27 @@
-import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 import { validate } from "class-validator";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
-import { AppContext } from "../types";
 import { EmployeesProfiles } from "../entities/EmployeesProfiles";
+import { Users } from "../entities/Users";
+import { AppContext } from "../types";
 import { UserInput } from "../types/inputs/UserInput";
 import { UserResponse } from "../types/responses/UserResponse";
-import { Users } from "../entities/Users";
+import { UserRole } from "../types/UserRole";
 import { mapToFieldError } from "../utils/mapToFieldError";
 
-@Resolver(Users)
+@Resolver()
 export class UserResolver {
+  @Authorized()
   @Query(() => EmployeesProfiles, { nullable: true })
-  me(
-    @Ctx() { req }: AppContext
-  ): Promise<EmployeesProfiles | undefined> | null {
+  me(@Ctx() { req }: AppContext): Promise<EmployeesProfiles | undefined> {
     var profileId = req.session?.profileId;
-    if (!profileId) return null;
     return EmployeesProfiles.findOne(profileId);
+  }
+
+  @Authorized()
+  @Query(() => String, { nullable: true })
+  role(@Ctx() { req }: AppContext): string | undefined {
+    return req.session?.userRole;
   }
 
   @Mutation(() => UserResponse)
@@ -52,12 +57,13 @@ export class UserResolver {
 
     // Save session's data
     req.session!.profileId = profile!.id;
-    req.session!.userRole = user.role.roleName;
+    req.session!.userRole = user.role.roleName.toLowerCase() as UserRole;
     req.session!.userName = user.userName;
 
     return { data: profile };
   }
 
+  @Authorized()
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: AppContext): Promise<boolean> {
     return new Promise((resolve) =>

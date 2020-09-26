@@ -1,16 +1,20 @@
-import { ReleaseRequestInput } from "../types/inputs/ReleaseRequestInput";
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
-import { ReleaseRequestResponse } from "../types/responses/ReleaseRequestResponse";
 import { validate } from "class-validator";
-import { mapToFieldError } from "../utils/mapToFieldError";
+import { Arg, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { MoreThan } from "typeorm";
+
 import { ReleaseRequests } from "../entities/ReleaseRequests";
 import { AppContext } from "../types";
-import { MoreThan } from "typeorm";
+import { ReleaseRequestInput } from "../types/inputs/ReleaseRequestInput";
 import { PaginatedReleaseRequestResponse } from "../types/responses/PaginatedReleaseRequestResponse";
+import { ReleaseRequestResponse } from "../types/responses/ReleaseRequestResponse";
+import { UserRole as R } from "../types/UserRole";
+import { mapToFieldError } from "../utils/mapToFieldError";
+
 
 @Resolver()
 export class ReleaseRequestResolver {
   // Add Release Request
+  @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => ReleaseRequestResponse)
   async createReleaseRequest(
     @Arg("input") input: ReleaseRequestInput
@@ -43,6 +47,7 @@ export class ReleaseRequestResolver {
   }
 
   // Get A RleaseRequest
+  @Authorized(R.ADMIN, R.MANAGER)
   @Query(() => ReleaseRequestResponse, { nullable: true })
   async releaseRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number
@@ -63,6 +68,7 @@ export class ReleaseRequestResolver {
   }
 
   // Update ReleaseRequest
+  @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => ReleaseRequestResponse, { nullable: true })
   async updateReleaseRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number,
@@ -100,6 +106,7 @@ export class ReleaseRequestResolver {
   }
 
   // Delete Release Request
+  @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => Boolean)
   async deleteReleaseRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number
@@ -109,6 +116,7 @@ export class ReleaseRequestResolver {
   }
 
   // Get 30 ReleaseRequest
+  @Authorized(R.ADMIN, R.MANAGER)
   @Query(() => PaginatedReleaseRequestResponse)
   async releaseRequests(
     @Arg("limit", () => Int) limit: number,
@@ -123,7 +131,7 @@ export class ReleaseRequestResolver {
       order: { referenceNumber: "ASC" },
       where: {
         ...(cursor ? { referenceNumber: MoreThan(cursor) } : {}),
-        ...(userRole === "manager" ? { managerName: userName } : {}),
+        ...(userRole === R.MANAGER ? { managerName: userName } : {}),
       },
       take: fetchLimit,
     });
