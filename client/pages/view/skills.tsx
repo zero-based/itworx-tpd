@@ -10,10 +10,8 @@ import {
 } from "baseui/data-table";
 import { useRouter } from "next/dist/client/router";
 import { useStyletron } from "baseui";
-import { withUrqlClient } from "next-urql";
 
 import { MainLayout } from "../../components/MainLayout";
-import { createUrqlClient } from "../../urql/createUrqlClient";
 import {
   useDeleteSkillMutation,
   useSkillsQuery,
@@ -36,7 +34,7 @@ const columns = [
   }),
 ];
 
-const SkillsView: React.FC<{}> = ({}) => {
+const ViewSkills: React.FC<{}> = ({}) => {
   const [, theme] = useStyletron();
   const [, deleteSkill] = useDeleteSkillMutation();
   var router = useRouter();
@@ -126,4 +124,4 @@ const SkillsView: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(SkillsView);
+export default ViewSkills;

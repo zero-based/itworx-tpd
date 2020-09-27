@@ -11,10 +11,8 @@ import {
 } from "baseui/data-table";
 import { useRouter } from "next/dist/client/router";
 import { useStyletron } from "baseui";
-import { withUrqlClient } from "next-urql";
 
 import { MainLayout } from "../../components/MainLayout";
-import { createUrqlClient } from "../../urql/createUrqlClient";
 import {
   useCertificationsProvidersQuery,
   useDeleteCertificateProviderMutation,
@@ -32,7 +30,7 @@ const columns = [
   }),
 ];
 
-const CertificateProvider: React.FC<{}> = ({}) => {
+const ViewCertificateProviders: React.FC<{}> = ({}) => {
   const [, theme] = useStyletron();
   var router = useRouter();
   const [, deleteCertificateProvider] = useDeleteCertificateProviderMutation();
@@ -132,4 +130,4 @@ const CertificateProvider: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CertificateProvider);
+export default ViewCertificateProviders;

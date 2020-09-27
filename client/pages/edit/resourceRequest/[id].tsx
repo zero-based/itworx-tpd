@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Spinner } from "baseui/icon";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/dist/client/router";
 
 import { MainLayout } from "../../../components/MainLayout";
@@ -10,11 +9,9 @@ import {
   useResourceRequestQuery,
   useUpdateResourceRequestMutation,
 } from "../../../generated/graphql";
-import { createUrqlClient } from "../../../urql/createUrqlClient";
 
-interface updateResourceRequestProps {}
 
-const updateResourceRequest: React.FC<updateResourceRequestProps> = () => {
+const EditResourceRequest: React.FC<{}> = () => {
   const [, updateResourceRequest] = useUpdateResourceRequestMutation();
   const router = useRouter();
 
@@ -71,4 +68,4 @@ const updateResourceRequest: React.FC<updateResourceRequestProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(updateResourceRequest);
+export default EditResourceRequest;

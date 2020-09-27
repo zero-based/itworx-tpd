@@ -1,7 +1,5 @@
-import * as React from "react";
+import React from "react";
 
-import { createUrqlClient } from "../../urql/createUrqlClient";
-import { withUrqlClient } from "next-urql";
 import { ReleaseRequestForm } from "../../components/ReleaseRequestForm";
 import {
   ReleaseRequestInput,
@@ -10,9 +8,8 @@ import {
 import { useRouter } from "next/dist/client/router";
 import { toErrorMap } from "../../utils/toErrorMap";
 
-interface ReleaseRequestProps {}
 
-const ReleaseRequest: React.FC<ReleaseRequestProps> = () => {
+const CreateReleaseRequest: React.FC<{}> = () => {
   const [, createReleaseRequest] = useCreateReleaseRequestMutation();
   const router = useRouter();
 
@@ -49,4 +46,4 @@ const ReleaseRequest: React.FC<ReleaseRequestProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(ReleaseRequest);
+export default CreateReleaseRequest;

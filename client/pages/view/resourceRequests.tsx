@@ -12,7 +12,7 @@ import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
 
 import { MainLayout } from "../../components/MainLayout";
-import { createUrqlClient } from "../../urql/createUrqlClient";
+import { createUrqlClient } from "../../urql/urqlClient";
 import {
   useResourceRequestsQuery,
   ResourceRequests,
@@ -91,7 +91,7 @@ const columns = [
   }),
 ];
 
-const ResourceRequestsTable = () => {
+const ViewResourceRequests = () => {
   const router = useRouter();
 
   const [{ data }] = useResourceRequestsQuery({
@@ -148,6 +148,4 @@ const ResourceRequestsTable = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(
-  ResourceRequestsTable
-);
+export default ViewResourceRequests;

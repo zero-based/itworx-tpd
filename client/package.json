@@ -12,13 +12,10 @@
     "baseui": "^9.99.0",
     "formik": "^2.1.5",
     "graphql": "^15.3.0",
-    "isomorphic-unfetch": "^3.0.0",
     "next": "latest",
-    "next-urql": "^1.1.0",
     "react": "^16.8.0",
     "react-csv": "^2.0.3",
     "react-dom": "^16.8.0",
-    "react-is": "^16.13.1",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
     "urql": "^1.10.1"
