@@ -1,14 +1,14 @@
 import React from "react";
-
 import { useRouter } from "next/dist/client/router";
-import {
-  useReleaseRequestQuery,
-  useUpdateReleaseRequestMutation,
-} from "../../../generated/graphql";
+
+import { Loading } from "../../../components/Loading";
 import { MainLayout } from "../../../components/MainLayout";
 import { ReleaseRequestForm } from "../../../components/ReleaseRequestForm";
+import {
+  useReleaseRequestQuery,
+  useUpdateReleaseRequestMutation
+} from "../../../generated/graphql";
 import { toErrorMap } from "../../../utils/toErrorMap";
-import { Spinner } from "baseui/icon";
 
 
 const EditReleaseRequest: React.FC<{}> = () => {
@@ -27,7 +27,7 @@ const EditReleaseRequest: React.FC<{}> = () => {
   if (fetching) {
     return (
       <MainLayout>
-        <Spinner />
+        <Loading />
       </MainLayout>
     );
   }

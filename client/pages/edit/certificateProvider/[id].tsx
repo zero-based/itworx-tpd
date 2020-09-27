@@ -3,6 +3,7 @@ import { useRouter } from "next/dist/client/router";
 
 import { CertificateProviderForm } from "../../../components/CertificateProviderForm";
 import { MainLayout } from "../../../components/MainLayout";
+import { Loading } from "../../../components/Loading";
 import {
   useCertificateProviderQuery,
   useUpdateCertificationProviderMutation,
@@ -13,7 +14,7 @@ const EditCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
   const id =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
-  const [{ data }] = useCertificateProviderQuery({
+  const [{ data, fetching }] = useCertificateProviderQuery({
     variables: {
       certificationProviderId: id,
     },
@@ -23,6 +24,14 @@ const EditCertificationProvider: React.FC<{}> = () => {
     updateCertificationProvider,
   ] = useUpdateCertificationProviderMutation();
   const certificationProvider = data?.certificateProvider?.data;
+
+  if (fetching) {
+    return (
+      <MainLayout>
+        <Loading />
+      </MainLayout>
+    );
+  }
 
   if (certificationProvider === undefined) {
     return <p> Undefined </p>;
