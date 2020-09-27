@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Spinner } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
 
+import { Loading } from "../../../components/Loading";
 import { MainLayout } from "../../../components/MainLayout";
 import { ResourceRequestForm } from "../../../components/ResourceRequestForm";
 import {
   useResourceRequestQuery,
-  useUpdateResourceRequestMutation,
+  useUpdateResourceRequestMutation
 } from "../../../generated/graphql";
 
 
@@ -27,7 +26,7 @@ const EditResourceRequest: React.FC<{}> = () => {
   if (fetching) {
     return (
       <MainLayout>
-        <Spinner />
+        <Loading />
       </MainLayout>
     );
   }

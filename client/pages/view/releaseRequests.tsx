@@ -1,17 +1,21 @@
+import React from "react";
 import { Button } from "baseui/button";
 import {
   NumericalColumn,
-
-  RowActionT, StringColumn, Unstable_StatefulDataTable
+  RowActionT,
+  StringColumn,
+  Unstable_StatefulDataTable,
 } from "baseui/data-table";
 import { HeadingLevel } from "baseui/heading";
-import { Show, Spinner } from "baseui/icon";
+import { Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
 
+import { Loading } from "../../components/Loading";
 import { MainLayout } from "../../components/MainLayout";
 import {
-  ReleaseRequests, useReleaseRequestsQuery
+  ReleaseRequests,
+  useReleaseRequestsQuery,
 } from "../../generated/graphql";
 
 
@@ -97,7 +101,7 @@ const ViewReleaseRequests = () => {
     <MainLayout>
       <HeadingLevel>
         {!data ? (
-          <Spinner />
+          <Loading />
         ) : (
           <div style={{ height: "70vh", width: "95%" }}>
             <Unstable_StatefulDataTable

@@ -1,9 +1,9 @@
+import React from "react";
 import { Button } from "baseui/button";
 import { Cell, Grid } from "baseui/layout-grid";
 import { CSVLink } from "react-csv";
-import { Delete, Plus, Show, Spinner } from "baseui/icon";
+import { Delete, Plus, Show } from "baseui/icon";
 import { HeadingLevel } from "baseui/heading";
-import React from "react";
 import {
   Unstable_StatefulDataTable,
   StringColumn,
@@ -17,6 +17,7 @@ import {
   useCertificationsProvidersQuery,
   useDeleteCertificateProviderMutation,
 } from "../../generated/graphql";
+import { Loading } from "../../components/Loading";
 
 type RowDataT = {
   certificatoinProviderId: number;
@@ -69,7 +70,7 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
     <MainLayout>
       <HeadingLevel>
         {!data ? (
-          <Spinner />
+          <Loading />
         ) : (
           <>
             <div>

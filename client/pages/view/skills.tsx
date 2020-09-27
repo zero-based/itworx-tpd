@@ -1,21 +1,23 @@
-import { Button } from "baseui/button";
-import { Delete, Plus, Show, Spinner } from "baseui/icon";
-import { Grid, Cell } from "baseui/layout-grid";
-import { HeadingLevel } from "baseui/heading";
-import {
-  Unstable_StatefulDataTable,
-  NumericalColumn,
-  StringColumn,
-  RowActionT,
-} from "baseui/data-table";
-import { useRouter } from "next/dist/client/router";
+import React from "react";
 import { useStyletron } from "baseui";
+import { Button } from "baseui/button";
+import {
+  NumericalColumn,
+  RowActionT,
+  StringColumn,
+  Unstable_StatefulDataTable,
+} from "baseui/data-table";
+import { HeadingLevel } from "baseui/heading";
+import { Delete, Plus, Show } from "baseui/icon";
+import { Cell, Grid } from "baseui/layout-grid";
+import { useRouter } from "next/dist/client/router";
 
 import { MainLayout } from "../../components/MainLayout";
 import {
   useDeleteSkillMutation,
   useSkillsQuery,
 } from "../../generated/graphql";
+import { Loading } from "../../components/Loading";
 
 type RowDataT = { skillId: number; skillName: string };
 
@@ -73,7 +75,7 @@ const ViewSkills: React.FC<{}> = ({}) => {
     <MainLayout>
       <HeadingLevel>
         {!data ? (
-          <Spinner />
+          <Loading />
         ) : (
           <>
             <div>

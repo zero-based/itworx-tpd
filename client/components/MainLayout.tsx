@@ -21,6 +21,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         className={css({
           flex: 1,
           padding: "32px",
+          display: "flex",
+          flexDirection: "column",
         })}
       >
         {children}

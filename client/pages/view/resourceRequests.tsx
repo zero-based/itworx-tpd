@@ -1,21 +1,21 @@
+import React from "react";
 import { Button } from "baseui/button";
-import { CSVLink } from "react-csv";
-import { HeadingLevel } from "baseui/heading";
-import { Show, Spinner } from "baseui/icon";
 import {
-  Unstable_StatefulDataTable,
   NumericalColumn,
-  StringColumn,
   RowActionT,
+  StringColumn,
+  Unstable_StatefulDataTable,
 } from "baseui/data-table";
+import { HeadingLevel } from "baseui/heading";
+import { Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
+import { CSVLink } from "react-csv";
 
+import { Loading } from "../../components/Loading";
 import { MainLayout } from "../../components/MainLayout";
-import { createUrqlClient } from "../../urql/urqlClient";
 import {
-  useResourceRequestsQuery,
   ResourceRequests,
+  useResourceRequestsQuery,
 } from "../../generated/graphql";
 
 type RowDataT = ResourceRequests;
@@ -120,7 +120,7 @@ const ViewResourceRequests = () => {
     <MainLayout>
       <HeadingLevel>
         {!data ? (
-          <Spinner />
+          <Loading />
         ) : (
           <div style={{ height: "70vh" }}>
             <Unstable_StatefulDataTable

@@ -3,6 +3,7 @@ import { useRouter } from "next/dist/client/router";
 
 import { MainLayout } from "../../../components/MainLayout";
 import { SkillForm } from "../../../components/SkillForm";
+import { Loading } from "../../../components/Loading";
 import {
   useSkillQuery,
   useUpdateSkillMutation,
@@ -14,16 +15,25 @@ const EditSkill: React.FC<{}> = () => {
   const router = useRouter();
   const id =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
-  const [{ data }] = useSkillQuery({
+  const [{ data, fetching }] = useSkillQuery({
     variables: {
       skillId: id,
     },
   });
   const skill = data?.skill?.data;
 
+  if (fetching) {
+    return (
+      <MainLayout>
+        <Loading />
+      </MainLayout>
+    );
+  }
+
   if (skill === undefined) {
     return <p> Undefined </p>;
   }
+  
   return (
     <MainLayout>
       <SkillForm
