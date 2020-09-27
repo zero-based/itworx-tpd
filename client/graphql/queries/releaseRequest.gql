@@ -1,0 +1,5 @@
+query ReleaseRequest($referenceNumber: Int!) {
+  releaseRequest(referenceNumber: $referenceNumber) {
+    ...ReleaseRequestResponse
+  }
+}

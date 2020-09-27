@@ -1,0 +1,8 @@
+fragment ReleaseRequestResponse on ReleaseRequestResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...ReleaseRequest
+  }
+}
