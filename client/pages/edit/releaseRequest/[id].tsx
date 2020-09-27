@@ -10,6 +10,7 @@ import {
 import { MainLayout } from "../../../components/MainLayout";
 import { ReleaseRequestForm } from "../../../components/ReleaseRequestForm";
 import { toErrorMap } from "../../../utils/toErrorMap";
+import { Spinner } from "baseui/icon";
 
 interface updateReleaseRequestProps {}
 
@@ -29,7 +30,7 @@ const updateReleaseRequest: React.FC<updateReleaseRequestProps> = () => {
   if (fetching) {
     return (
       <MainLayout>
-        <div>loading...</div>
+        <Spinner />
       </MainLayout>
     );
   }
@@ -58,9 +59,8 @@ const updateReleaseRequest: React.FC<updateReleaseRequestProps> = () => {
           referenceNumber: referenceNumber,
           input: values,
         });
-
         const errors = response.data?.updateReleaseRequest.errors;
-        console.log(response);
+
         if (errors) {
           var errorMap = toErrorMap(errors);
           setErrors(errorMap);

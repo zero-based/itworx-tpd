@@ -73,6 +73,7 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
                 <TextArea
                   name="releaseReason"
                   label="Release Reason"
+                  rows={6}
                   required
                 />
               </FlexGridItem>

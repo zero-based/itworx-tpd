@@ -37,7 +37,7 @@ const ReleaseRequest: React.FC<ReleaseRequestProps> = () => {
       onSubmit={async (values, { setErrors }) => {
         const response = await createReleaseRequest({ input: values });
         const errors = response.data?.createReleaseRequest?.errors;
-        console.log(response);
+
         if (errors) {
           var errorMap = toErrorMap(errors);
           setErrors(errorMap);

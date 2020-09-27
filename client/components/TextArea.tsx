@@ -8,20 +8,10 @@ interface TextAreaProps extends TextareaProps {
 }
 
 export const TextArea: React.FC<TextAreaProps> = (props) => {
-  const [field, { error }, { setValue }] = useField<string>(props.name!);
-  console.log("ya raaaabb", field.value);
+  const [field, { error }] = useField<string>(props.name!);
   return (
     <FormControl label={() => props.label} error={!!error ? error : null}>
-      <Textarea
-        {...field}
-        {...props}
-        value={field.value}
-        rows={6}
-        onChange={(e) => {
-          field.value = e.currentTarget.value;
-          setValue(e.currentTarget.value);
-        }}
-      />
+      <Textarea {...field} {...props} />
     </FormControl>
   );
 };
