@@ -1,0 +1,8 @@
+mutation UpdateReleaseRequest(
+  $referenceNumber: Int!
+  $input: ReleaseRequestInput!
+) {
+  updateReleaseRequest(referenceNumber: $referenceNumber, input: $input) {
+    ...ReleaseRequestResponse
+  }
+}

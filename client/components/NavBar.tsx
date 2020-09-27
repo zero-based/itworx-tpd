@@ -103,7 +103,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
                     },
                     {
                       label: "Release Request",
-                      route: "/",
+                      route: "/create/releaseRequest",
                     },
                   ],
                   "Skills & Certificates": [

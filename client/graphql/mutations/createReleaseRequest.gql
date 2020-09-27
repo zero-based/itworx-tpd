@@ -1,0 +1,5 @@
+mutation CreateReleaseRequest($input: ReleaseRequestInput!) {
+  createReleaseRequest(input: $input) {
+    ...ReleaseRequestResponse
+  }
+}
