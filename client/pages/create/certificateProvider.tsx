@@ -1,15 +1,12 @@
-import * as React from "react";
+import React from "react";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
 
 import { CertificateProviderForm } from "../../components/CertificateProviderForm";
 import { MainLayout } from "../../components/MainLayout";
-import { createUrqlClient } from "../../urql/createUrqlClient";
 import { useCreateCertificationProviderMutation } from "../../generated/graphql";
 
-interface CertificationProviderProps {}
 
-const CreateCertificationProvider: React.FC<CertificationProviderProps> = () => {
+const CreateCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
   const [
     ,
@@ -33,4 +30,4 @@ const CreateCertificationProvider: React.FC<CertificationProviderProps> = () => 
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CreateCertificationProvider);
+export default CreateCertificationProvider;

@@ -1,10 +1,8 @@
-import { withUrqlClient } from "next-urql";
 import { Heading, HeadingLevel } from "baseui/heading";
 
 import { MainLayout } from "../components/MainLayout";
-import { createUrqlClient } from "../urql/createUrqlClient";
 
-const Home: React.FC = () => {
+const Home: React.FC<{}> = () => {
   return (
     <MainLayout>
       <HeadingLevel>
@@ -14,4 +12,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Home);
+export default Home;

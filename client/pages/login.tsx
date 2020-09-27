@@ -1,15 +1,13 @@
 import React from "react";
-import { styled, useStyletron } from "baseui";
+import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/dist/client/router";
 
 import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
-import { createUrqlClient } from "../urql/createUrqlClient";
 
 const Login: React.FC<{}> = ({}) => {
   const [css] = useStyletron();
@@ -80,4 +78,4 @@ const Login: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default Login;

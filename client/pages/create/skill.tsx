@@ -1,15 +1,11 @@
-import * as React from "react";
+import React from "react";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
-
 import { MainLayout } from "../../components/MainLayout";
 import { SkillForm } from "../../components/SkillForm";
-import { createUrqlClient } from "../../urql/createUrqlClient";
 import { useCreateSkillMutation } from "../../generated/graphql";
 
-interface SkillProps {}
 
-const CreateSkill: React.FC<SkillProps> = () => {
+const CreateSkill: React.FC<{}> = () => {
   const [, createSkill] = useCreateSkillMutation();
   const router = useRouter();
 
@@ -29,4 +25,4 @@ const CreateSkill: React.FC<SkillProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CreateSkill);
+export default CreateSkill;

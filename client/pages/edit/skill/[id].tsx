@@ -1,18 +1,15 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
 
 import { MainLayout } from "../../../components/MainLayout";
 import { SkillForm } from "../../../components/SkillForm";
-import { createUrqlClient } from "../../../urql/createUrqlClient";
 import {
   useSkillQuery,
   useUpdateSkillMutation,
 } from "../../../generated/graphql";
 
-interface updateSkillProps {}
 
-const updateSkillForm: React.FC<updateSkillProps> = () => {
+const EditSkill: React.FC<{}> = () => {
   const [, updateSkill] = useUpdateSkillMutation();
   const router = useRouter();
   const id =
@@ -44,4 +41,4 @@ const updateSkillForm: React.FC<updateSkillProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(updateSkillForm);
+export default EditSkill;

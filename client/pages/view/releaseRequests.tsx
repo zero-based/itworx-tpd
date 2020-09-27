@@ -1,22 +1,19 @@
 import { Button } from "baseui/button";
-import { CSVLink } from "react-csv";
+import {
+  NumericalColumn,
+
+  RowActionT, StringColumn, Unstable_StatefulDataTable
+} from "baseui/data-table";
 import { HeadingLevel } from "baseui/heading";
 import { Show, Spinner } from "baseui/icon";
-import {
-  Unstable_StatefulDataTable,
-  NumericalColumn,
-  StringColumn,
-  RowActionT,
-} from "baseui/data-table";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
+import { CSVLink } from "react-csv";
 
 import { MainLayout } from "../../components/MainLayout";
-import { createUrqlClient } from "../../urql/createUrqlClient";
 import {
-  useReleaseRequestsQuery,
-  ReleaseRequests,
+  ReleaseRequests, useReleaseRequestsQuery
 } from "../../generated/graphql";
+
 
 type RowDataT = ReleaseRequests;
 
@@ -71,7 +68,7 @@ const columns = [
   }),
 ];
 
-const ReleaseRequestsTable = () => {
+const ViewReleaseRequests = () => {
   const router = useRouter();
 
   const [{ data }] = useReleaseRequestsQuery({
@@ -128,6 +125,4 @@ const ReleaseRequestsTable = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(
-  ReleaseRequestsTable
-);
+export default ViewReleaseRequests;

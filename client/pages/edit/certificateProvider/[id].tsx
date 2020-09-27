@@ -1,18 +1,15 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
 
 import { CertificateProviderForm } from "../../../components/CertificateProviderForm";
 import { MainLayout } from "../../../components/MainLayout";
-import { createUrqlClient } from "../../../urql/createUrqlClient";
 import {
   useCertificateProviderQuery,
   useUpdateCertificationProviderMutation,
 } from "../../../generated/graphql";
 
-interface updateCertificationProviderProps {}
 
-const updateCertificationProviderForm: React.FC<updateCertificationProviderProps> = () => {
+const EditCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
   const id =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
@@ -51,6 +48,4 @@ const updateCertificationProviderForm: React.FC<updateCertificationProviderProps
   );
 };
 
-export default withUrqlClient(createUrqlClient)(
-  updateCertificationProviderForm
-);
+export default EditCertificationProvider;

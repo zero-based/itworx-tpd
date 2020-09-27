@@ -1,7 +1,5 @@
-import * as React from "react";
+import React from "react";
 
-import { createUrqlClient } from "../../urql/createUrqlClient";
-import { withUrqlClient } from "next-urql";
 import { ResourceRequestForm } from "../../components/ResourceRequestForm";
 import {
   ResourceRequestInput,
@@ -9,9 +7,8 @@ import {
 } from "../../generated/graphql";
 import { useRouter } from "next/dist/client/router";
 
-interface ResourceRequestProps {}
 
-const ResourceRequest: React.FC<ResourceRequestProps> = () => {
+const CreateResourceRequest: React.FC<{}> = () => {
   const [, createResourceRequest] = useCreateResourceRequestMutation();
   const router = useRouter();
 
@@ -52,4 +49,4 @@ const ResourceRequest: React.FC<ResourceRequestProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(ResourceRequest);
+export default CreateResourceRequest;
