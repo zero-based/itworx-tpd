@@ -1,5 +1,14 @@
 import { validate } from "class-validator";
-import { Arg, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { EmployeesProfiles } from "../entities/EmployeesProfiles";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { MoreThan } from "typeorm";
 
 import { ReleaseRequests } from "../entities/ReleaseRequests";
@@ -9,7 +18,6 @@ import { PaginatedReleaseRequestResponse } from "../types/responses/PaginatedRel
 import { ReleaseRequestResponse } from "../types/responses/ReleaseRequestResponse";
 import { UserRole as R } from "../types/UserRole";
 import { mapToFieldError } from "../utils/mapToFieldError";
-
 
 @Resolver()
 export class ReleaseRequestResolver {
@@ -26,15 +34,15 @@ export class ReleaseRequestResolver {
       };
     }
 
-    const employeeExists = await ReleaseRequests.findOne({
-      employeeId: input.employeeId,
+    const employeeExists = await EmployeesProfiles.findOne({
+      id: input.employeeId,
     });
 
     if (!employeeExists) {
       return {
         errors: [
           {
-            field: "employee_id",
+            field: "employeeId",
             message: "Incorrect Employee Id",
           },
         ],
@@ -86,15 +94,15 @@ export class ReleaseRequestResolver {
       };
     }
 
-    const employeeExists = await ReleaseRequests.findOne({
-      employeeId: input.employeeId,
+    const employeeExists = await EmployeesProfiles.findOne({
+      id: input.employeeId,
     });
 
     if (!employeeExists) {
       return {
         errors: [
           {
-            field: "employee_id",
+            field: "employeeId",
             message: "Incorrect Employee Id",
           },
         ],
