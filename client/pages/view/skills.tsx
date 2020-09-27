@@ -12,12 +12,14 @@ import { Delete, Plus, Show } from "baseui/icon";
 import { Cell, Grid } from "baseui/layout-grid";
 import { useRouter } from "next/dist/client/router";
 
+import { Loading } from "../../components/Loading";
 import { MainLayout } from "../../components/MainLayout";
 import {
   useDeleteSkillMutation,
+  UserRole,
   useSkillsQuery,
 } from "../../generated/graphql";
-import { Loading } from "../../components/Loading";
+import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = { skillId: number; skillName: string };
 
@@ -126,4 +128,4 @@ const ViewSkills: React.FC<{}> = ({}) => {
   );
 };
 
-export default ViewSkills;
+export default withAuth(ViewSkills, [UserRole.Admin]);

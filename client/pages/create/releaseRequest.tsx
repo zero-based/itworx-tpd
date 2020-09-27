@@ -4,10 +4,11 @@ import { ReleaseRequestForm } from "../../components/ReleaseRequestForm";
 import {
   ReleaseRequestInput,
   useCreateReleaseRequestMutation,
+  UserRole,
 } from "../../generated/graphql";
 import { useRouter } from "next/dist/client/router";
 import { toErrorMap } from "../../utils/toErrorMap";
-
+import { withAuth } from "../../hocs/withAuth";
 
 const CreateReleaseRequest: React.FC<{}> = () => {
   const [, createReleaseRequest] = useCreateReleaseRequestMutation();
@@ -46,4 +47,7 @@ const CreateReleaseRequest: React.FC<{}> = () => {
   );
 };
 
-export default CreateReleaseRequest;
+export default withAuth(CreateReleaseRequest, [
+  UserRole.Admin,
+  UserRole.Manager,
+]);

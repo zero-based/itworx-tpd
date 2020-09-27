@@ -6,9 +6,10 @@ import { MainLayout } from "../../../components/MainLayout";
 import { ResourceRequestForm } from "../../../components/ResourceRequestForm";
 import {
   useResourceRequestQuery,
-  useUpdateResourceRequestMutation
+  UserRole,
+  useUpdateResourceRequestMutation,
 } from "../../../generated/graphql";
-
+import { withAuth } from "../../../hocs/withAuth";
 
 const EditResourceRequest: React.FC<{}> = () => {
   const [, updateResourceRequest] = useUpdateResourceRequestMutation();
@@ -67,4 +68,7 @@ const EditResourceRequest: React.FC<{}> = () => {
   );
 };
 
-export default EditResourceRequest;
+export default withAuth(EditResourceRequest, [
+  UserRole.Admin,
+  UserRole.Manager,
+]);

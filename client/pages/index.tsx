@@ -1,15 +1,19 @@
 import { Heading, HeadingLevel } from "baseui/heading";
 
 import { MainLayout } from "../components/MainLayout";
+import { withAuth } from "../hocs/withAuth";
+import { useAuth } from "../hooks/useAuth";
 
 const Home: React.FC<{}> = () => {
+  const { role } = useAuth();
+
   return (
     <MainLayout>
       <HeadingLevel>
-        <Heading>TPD</Heading>
+        <Heading>TPD for ({role})</Heading>
       </HeadingLevel>
     </MainLayout>
   );
 };
 
-export default Home;
+export default withAuth(Home);

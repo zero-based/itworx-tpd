@@ -6,10 +6,11 @@ import { MainLayout } from "../../../components/MainLayout";
 import { ReleaseRequestForm } from "../../../components/ReleaseRequestForm";
 import {
   useReleaseRequestQuery,
-  useUpdateReleaseRequestMutation
+  UserRole,
+  useUpdateReleaseRequestMutation,
 } from "../../../generated/graphql";
+import { withAuth } from "../../../hocs/withAuth";
 import { toErrorMap } from "../../../utils/toErrorMap";
-
 
 const EditReleaseRequest: React.FC<{}> = () => {
   const [, updateReleaseRequest] = useUpdateReleaseRequestMutation();
@@ -69,4 +70,4 @@ const EditReleaseRequest: React.FC<{}> = () => {
   );
 };
 
-export default EditReleaseRequest;
+export default withAuth(EditReleaseRequest, [UserRole.Admin, UserRole.Manager]);

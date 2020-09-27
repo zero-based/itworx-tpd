@@ -6,6 +6,8 @@ import {
   MeQuery,
   MeDocument,
   LogoutMutation,
+  RoleQuery,
+  RoleDocument,
 } from "../generated/graphql";
 
 export const cacheExchangeOpts: CacheExchangeOpts = {
@@ -19,6 +21,7 @@ export const cacheExchangeOpts: CacheExchangeOpts = {
           (_result, _query) =>
             _result.login.data ? { me: _result.login.data } : _query
         );
+        cache.invalidate({ __typename: "Query" }, "role");
       },
       logout: (result, args, cache, info) => {
         updateQueryWrapper<LogoutMutation, MeQuery>(
@@ -26,6 +29,12 @@ export const cacheExchangeOpts: CacheExchangeOpts = {
           result,
           { query: MeDocument },
           () => ({ me: null })
+        );
+        updateQueryWrapper<LogoutMutation, RoleQuery>(
+          cache,
+          result,
+          { query: RoleDocument },
+          () => ({ role: null })
         );
       },
     },

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { StatefulMenu } from "baseui/menu";
 import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
 import {
@@ -12,15 +12,16 @@ import { Button } from "baseui/button";
 import { useRouter } from "next/dist/client/router";
 import { Plus } from "baseui/icon";
 
-import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { useLogoutMutation, UserRole as R } from "../generated/graphql";
 import { Block } from "baseui/block";
+import { useAuth } from "../hooks/useAuth";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = () => {
-  const [{ data }] = useMeQuery();
-  const [, logout] = useLogoutMutation();
   const router = useRouter();
+  const { role } = useAuth();
+  const [, logout] = useLogoutMutation();
 
   return (
     <HeaderNavigation>
@@ -32,58 +33,63 @@ export const NavBar: React.FC<NavBarProps> = () => {
       </StyledNavigationList>
 
       <StyledNavigationList $align={ALIGN.left}>
-        <StyledNavigationItem>
-          <StatefulPopover
-            triggerType={TRIGGER_TYPE.hover}
-            content={() => (
-              <StatefulMenu
-                onItemSelect={({ item }) => router.push(item.route)}
-                items={{
-                  __ungrouped: [],
-                  Requests: [
-                    {
-                      label: "Resource Request",
-                      route: "/view/resourceRequests",
-                    },
-                    {
-                      label: "Release Request",
-                      route: "/view/releaseRequests",
-                    },
-                  ],
-                }}
-              />
-            )}
-          >
-            <Label1>Talents</Label1>
-          </StatefulPopover>
-        </StyledNavigationItem>
-        <StyledNavigationItem>
-          <StatefulPopover
-            triggerType={TRIGGER_TYPE.hover}
-            content={() => (
-              <StatefulMenu
-                onItemSelect={({ item }) => router.push(item.route)}
-                items={{
-                  __ungrouped: [],
-                  Skills: [
-                    {
-                      label: "Skills",
-                      route: "/view/skills",
-                    },
-                  ],
-                  Certifications: [
-                    {
-                      label: "Certificate Providers",
-                      route: "/view/certificateProviders",
-                    },
-                  ],
-                }}
-              />
-            )}
-          >
-            <Label1>Skills & Certifications</Label1>
-          </StatefulPopover>
-        </StyledNavigationItem>
+        {role == R.Admin || role == R.Manager ? (
+          <StyledNavigationItem>
+            <StatefulPopover
+              triggerType={TRIGGER_TYPE.hover}
+              content={() => (
+                <StatefulMenu
+                  onItemSelect={({ item }) => router.push(item.route)}
+                  items={{
+                    __ungrouped: [],
+                    Requests: [
+                      {
+                        label: "Resource Request",
+                        route: "/view/resourceRequests",
+                      },
+                      {
+                        label: "Release Request",
+                        route: "/view/releaseRequests",
+                      },
+                    ],
+                  }}
+                />
+              )}
+            >
+              <Label1>Talents</Label1>
+            </StatefulPopover>
+          </StyledNavigationItem>
+        ) : null}
+
+        {role == R.Admin ? (
+          <StyledNavigationItem>
+            <StatefulPopover
+              triggerType={TRIGGER_TYPE.hover}
+              content={() => (
+                <StatefulMenu
+                  onItemSelect={({ item }) => router.push(item.route)}
+                  items={{
+                    __ungrouped: [],
+                    Skills: [
+                      {
+                        label: "Skills",
+                        route: "/view/skills",
+                      },
+                    ],
+                    Certifications: [
+                      {
+                        label: "Certificate Providers",
+                        route: "/view/certificateProviders",
+                      },
+                    ],
+                  }}
+                />
+              )}
+            >
+              <Label1>Skills & Certifications</Label1>
+            </StatefulPopover>
+          </StyledNavigationItem>
+        ) : null}
       </StyledNavigationList>
       <StyledNavigationList $align={ALIGN.center} />
 
@@ -96,23 +102,31 @@ export const NavBar: React.FC<NavBarProps> = () => {
                 onItemSelect={({ item }) => router.push(item.route)}
                 items={{
                   __ungrouped: [],
-                  Requests: [
-                    {
-                      label: "Resource Request",
-                      route: "/create/resourceRequest",
-                    },
-                    {
-                      label: "Release Request",
-                      route: "/create/releaseRequest",
-                    },
-                  ],
-                  "Skills & Certificates": [
-                    { label: "Skill", route: "/create/skill" },
-                    {
-                      label: "Certificate Provider",
-                      route: "/create/certificateProvider",
-                    },
-                  ],
+                  ...(role == R.Admin || role == R.Manager
+                    ? {
+                        Requests: [
+                          {
+                            label: "Resource Request",
+                            route: "/create/resourceRequest",
+                          },
+                          {
+                            label: "Release Request",
+                            route: "/create/releaseRequest",
+                          },
+                        ],
+                      }
+                    : {}),
+                  ...(role == R.Admin
+                    ? {
+                        Lists: [
+                          { label: "Skill", route: "/create/skill" },
+                          {
+                            label: "Certificate Provider",
+                            route: "/create/certificateProvider",
+                          },
+                        ],
+                      }
+                    : {}),
                 }}
               />
             )}
@@ -121,7 +135,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
           </StatefulPopover>
         </StyledNavigationItem>
         <StyledNavigationItem>
-          {!data?.me ? (
+          {!role ? (
             <Button onClick={() => router.push("/login")}>Login</Button>
           ) : (
             <Button

@@ -1,14 +1,15 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
+import { Loading } from "../../../components/Loading";
 import { MainLayout } from "../../../components/MainLayout";
 import { SkillForm } from "../../../components/SkillForm";
-import { Loading } from "../../../components/Loading";
 import {
+  UserRole,
   useSkillQuery,
   useUpdateSkillMutation,
 } from "../../../generated/graphql";
-
+import { withAuth } from "../../../hocs/withAuth";
 
 const EditSkill: React.FC<{}> = () => {
   const [, updateSkill] = useUpdateSkillMutation();
@@ -33,7 +34,7 @@ const EditSkill: React.FC<{}> = () => {
   if (skill === undefined) {
     return <p> Undefined </p>;
   }
-  
+
   return (
     <MainLayout>
       <SkillForm
@@ -51,4 +52,4 @@ const EditSkill: React.FC<{}> = () => {
   );
 };
 
-export default EditSkill;
+export default withAuth(EditSkill, [UserRole.Admin]);

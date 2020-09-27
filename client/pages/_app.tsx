@@ -8,6 +8,7 @@ import "../styles/global.css";
 import { ItworxTheme } from "../styles/theme";
 import { debug, styletron } from "../styletron";
 import { urqlClient } from "../urql/urqlClient";
+import { AuthProvider } from "../components/providers/AuthProvider";
 
 
 export default class MainApp extends App {
@@ -15,11 +16,17 @@ export default class MainApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <UrqlProvider value={urqlClient}>
-        <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
-          <BaseProvider theme={ItworxTheme}>
-            <Component {...pageProps} />
-          </BaseProvider>
-        </StyletronProvider>
+        <AuthProvider>
+          <StyletronProvider
+            value={styletron}
+            debug={debug}
+            debugAfterHydration
+          >
+            <BaseProvider theme={ItworxTheme}>
+              <Component {...pageProps} />
+            </BaseProvider>
+          </StyletronProvider>
+        </AuthProvider>
       </UrqlProvider>
     );
   }

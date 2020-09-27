@@ -2,8 +2,8 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 import { MainLayout } from "../../components/MainLayout";
 import { SkillForm } from "../../components/SkillForm";
-import { useCreateSkillMutation } from "../../generated/graphql";
-
+import { useCreateSkillMutation, UserRole } from "../../generated/graphql";
+import { withAuth } from "../../hocs/withAuth";
 
 const CreateSkill: React.FC<{}> = () => {
   const [, createSkill] = useCreateSkillMutation();
@@ -25,4 +25,4 @@ const CreateSkill: React.FC<{}> = () => {
   );
 };
 
-export default CreateSkill;
+export default withAuth(CreateSkill, [UserRole.Admin]);
