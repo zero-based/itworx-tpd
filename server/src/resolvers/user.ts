@@ -19,8 +19,8 @@ export class UserResolver {
   }
 
   @Authorized()
-  @Query(() => String, { nullable: true })
-  role(@Ctx() { req }: AppContext): string | undefined {
+  @Query(() => UserRole, { nullable: true })
+  role(@Ctx() { req }: AppContext): UserRole | undefined {
     return req.session?.userRole;
   }
 
