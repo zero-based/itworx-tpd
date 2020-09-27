@@ -11,7 +11,7 @@ import { authChecker } from "./middlewares/authChecker";
 import { cors } from "./middlewares/cors";
 import { appSession } from "./middlewares/session";
 import { AppContext } from "./types";
-
+import { registerTypes } from "./utils/registerTypes";
 
 const main = async () => {
   await createConnection({
@@ -29,6 +29,8 @@ const main = async () => {
 
   app.use(cors);
   app.use(appSession);
+
+  registerTypes();
 
   const server = new ApolloServer({
     context: ({ req, res }): AppContext => ({ req, res }),
