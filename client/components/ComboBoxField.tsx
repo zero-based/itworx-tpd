@@ -1,12 +1,11 @@
 import React from "react";
 import { useField } from "formik";
-import { Combobox } from "baseui/ComboBox";
-import { InputProps } from "baseui/input";
+import { Combobox, PropsT } from "baseui/ComboBox";
 import { FormControl } from "baseui/form-control";
+import { PartialBy } from "../utils/typeUtil";
 
-interface ComboboxProps extends InputProps {
+interface ComboboxProps extends PartialBy<PropsT, "value"> {
   label: string;
-  options: { label: string }[];
 }
 
 export const ComboboxField: React.FC<ComboboxProps> = (props) => {
@@ -17,7 +16,6 @@ export const ComboboxField: React.FC<ComboboxProps> = (props) => {
         {...field}
         {...props}
         value={field.value}
-        mapOptionToString={(option) => option.label}
         onChange={(nextValue) => {
           setValue(nextValue);
         }}

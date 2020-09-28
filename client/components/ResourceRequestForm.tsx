@@ -1,19 +1,21 @@
 import React from "react";
+import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Heading, HeadingLevel } from "baseui/heading";
 import { Form, Formik, FormikConfig } from "formik";
 
 import {
+  EmployeesProfiles,
   ResourceRequestInput,
   useManagersNamesQuery,
 } from "../generated/graphql";
 import { CheckBoxStr } from "./CheckBoxStr";
+import { ComboboxField } from "./ComboBoxField";
 import { DatePickerStr } from "./DatePickerStr";
 import { InputField } from "./InputField";
+import { Loading } from "./Loading";
 import { MainLayout } from "./MainLayout";
-import { useStyletron } from "baseui";
-import { ComboboxField } from "./ComboBox";
 
 interface ResourceRequestProps extends FormikConfig<ResourceRequestInput> {
   action: string;
@@ -25,11 +27,8 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
 }) => {
   const [css, theme] = useStyletron();
 
-  const [{ data }] = useManagersNamesQuery();
-
-  const managerMappedData = data?.managers?.map((manager) => ({
-    label: manager.name,
-  }));
+  const [{ data, fetching }] = useManagersNamesQuery();
+  if (fetching || !data) return <Loading />;
 
   return (
     <MainLayout>
@@ -60,12 +59,8 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
                 <ComboboxField
                   name="managerName"
                   label="Manager Name"
-                  options={
-                    managerMappedData === undefined
-                      ? [{ label: "" }]
-                      : managerMappedData
-                  }
-                  required
+                  options={data.managers}
+                  mapOptionToString={(option: EmployeesProfiles) => option.name}
                 />
 
                 <InputField name="function" label="Function" required />
