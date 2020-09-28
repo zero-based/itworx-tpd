@@ -1,6 +1,6 @@
 import { Heading, HeadingLevel } from "baseui/heading";
 
-import { MainLayout } from "../components/MainLayout";
+import { MainLayout } from "../components/common/MainLayout";
 import { withAuth } from "../hocs/withAuth";
 import { useAuth } from "../hooks/useAuth";
 

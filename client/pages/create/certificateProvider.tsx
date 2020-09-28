@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { CertificateProviderForm } from "../../components/CertificateProviderForm";
-import { MainLayout } from "../../components/MainLayout";
+import { MainLayout } from "../../components/common/MainLayout";
+import { CertificateProviderForm } from "../../components/forms/CertificateProviderForm";
 import {
   useCreateCertificationProviderMutation,
   UserRole,

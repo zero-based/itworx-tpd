@@ -5,7 +5,7 @@ import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 
-import { InputField } from "../components/InputField";
+import { InputField } from "../components/fields/InputField";
 import { useLoginMutation } from "../graphql/types";
 import { toErrorMap } from "../utils/toErrorMap";
 

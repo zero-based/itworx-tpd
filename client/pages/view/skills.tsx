@@ -12,8 +12,8 @@ import { Delete, Plus, Show } from "baseui/icon";
 import { Cell, Grid } from "baseui/layout-grid";
 import { useRouter } from "next/dist/client/router";
 
-import { Loading } from "../../components/Loading";
-import { MainLayout } from "../../components/MainLayout";
+import { Loading } from "../../components/common/Loading";
+import { MainLayout } from "../../components/common/MainLayout";
 import {
   useDeleteSkillMutation,
   UserRole,

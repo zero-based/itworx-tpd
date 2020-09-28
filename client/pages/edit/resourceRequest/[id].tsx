@@ -1,9 +1,9 @@
 import React from "react";
-
 import { useRouter } from "next/dist/client/router";
-import { Loading } from "../../../components/Loading";
-import { MainLayout } from "../../../components/MainLayout";
-import { ResourceRequestForm } from "../../../components/ResourceRequestForm";
+
+import { Loading } from "../../../components/common/Loading";
+import { MainLayout } from "../../../components/common/MainLayout";
+import { ResourceRequestForm } from "../../../components/forms/ResourceRequestForm";
 import {
   useResourceRequestQuery,
   UserRole,

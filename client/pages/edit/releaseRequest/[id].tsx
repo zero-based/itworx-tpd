@@ -1,9 +1,9 @@
 import React from "react";
-
 import { useRouter } from "next/dist/client/router";
-import { Loading } from "../../../components/Loading";
-import { MainLayout } from "../../../components/MainLayout";
-import { ReleaseRequestForm } from "../../../components/ReleaseRequestForm";
+
+import { Loading } from "../../../components/common/Loading";
+import { MainLayout } from "../../../components/common/MainLayout";
+import { ReleaseRequestForm } from "../../../components/forms/ReleaseRequestForm";
 import {
   useReleaseRequestQuery,
   UserRole,

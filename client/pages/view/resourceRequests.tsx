@@ -10,8 +10,8 @@ import { HeadingLevel } from "baseui/heading";
 import { Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
-import { Loading } from "../../components/Loading";
-import { MainLayout } from "../../components/MainLayout";
+import { Loading } from "../../components/common/Loading";
+import { MainLayout } from "../../components/common/MainLayout";
 import {
   ResourceRequests,
   useResourceRequestsQuery,

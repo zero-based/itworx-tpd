@@ -6,21 +6,20 @@ import { Heading, HeadingLevel } from "baseui/heading";
 import { Form, Formik, FormikConfig } from "formik";
 import {
   EmployeesProfiles,
-  ReleaseRequestInput,
+  ResourceRequestInput,
   useManagersNamesQuery,
-} from "../graphql/types";
-import { CheckBoxStr } from "./CheckBoxStr";
-import { ComboboxField } from "./ComboBoxField";
-import { DatePickerStr } from "./DatePickerStr";
-import { InputField } from "./InputField";
-import { Loading } from "./Loading";
-import { TextArea } from "./TextArea";
+} from "../../graphql/types";
+import { Loading } from "../common/Loading";
+import { CheckBoxStrField } from "../fields/CheckBoxStrField";
+import { ComboboxField } from "../fields/ComboBoxField";
+import { DatePickerStrField } from "../fields/DatePickerStrField";
+import { InputField } from "../fields/InputField";
 
-interface ReleaseRequestProps extends FormikConfig<ReleaseRequestInput> {
+interface ResourceRequestProps extends FormikConfig<ResourceRequestInput> {
   action: string;
 }
 
-export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
+export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
   action,
   ...props
 }) => {
@@ -44,7 +43,7 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
                 color: theme.colors.primary,
               }}
             >
-              Release Request
+              Resource Request
             </Heading>
           </HeadingLevel>
 
@@ -61,49 +60,63 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
                 mapOptionToString={(option: EmployeesProfiles) => option.name}
               />
 
-              <InputField name="employeeName" label="Employee Name" required />
-              <InputField name="employeeId" label="Employee ID" required />
-              <DatePickerStr
-                name="releaseDate"
-                label="Release Date"
-                required
-              ></DatePickerStr>
-            </FlexGridItem>
-
-            <FlexGridItem display="flex" flexDirection="column">
-              <InputField
-                name="employeeTitle"
-                label="Employee Title"
-                required
-              />
               <InputField name="function" label="Function" required />
-              <TextArea
-                name="releaseReason"
-                label="Release Reason"
-                rows={6}
+              <InputField name="title" label="Title" required />
+              <DatePickerStrField
+                label="Start Date"
+                name="startDate"
                 required
               />
+              <DatePickerStrField label="End Date" name="endDate" required />
             </FlexGridItem>
 
             <FlexGridItem display="flex" flexDirection="column">
               <InputField
                 name="propability"
                 label="Propability"
+                required
                 type="number"
+              />
+
+              <InputField
+                name="percentage"
+                label="Percentage"
+                required
+                type="number"
+              />
+              <InputField name="status" label="Status" required />
+              <InputField
+                name="assignedResource"
+                label="Assigned Resource"
                 required
               />
               <InputField
-                name="releasePercentage"
-                label="Release Percentage"
-                type="number"
+                name="actualPercentage"
+                label="Actual Percentage"
                 required
+                type="number"
+              />
+            </FlexGridItem>
+
+            <FlexGridItem display="flex" flexDirection="column">
+              <InputField name="replacementFor" label="Replacement For" />
+              <InputField
+                name="requestsCount"
+                label="Requests Count"
+                type="number"
               />
               <InputField
-                name="requestStatus"
-                label="Request Status"
-                required
+                name="relatedOpportunity"
+                label="Related Opportunity"
               />
-              <CheckBoxStr label="Leaving" name="leaving" />
+              <InputField name="comments" label="Comments" />
+              <br />
+              <CheckBoxStrField
+                label="Core Team Member"
+                name="coreTeamMember"
+              />
+              <CheckBoxStrField label="Replacenement" name="replacenement" />
+
               <Button
                 type="submit"
                 isLoading={isSubmitting}

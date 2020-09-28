@@ -1,24 +1,20 @@
-import * as React from "react";
+import React from "react";
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Form, Formik, FormikConfig } from "formik";
 import { HeadingLevel, Heading } from "baseui/heading";
 
-import { InputField } from "./InputField";
+import { InputField } from "../fields/InputField";
 
-type CertificateProviderInput = {
-  certificationProviderName: string;
+type SkillInput = {
+  skillName: string;
 };
 
-interface CertificateProviderFormProps
-  extends FormikConfig<CertificateProviderInput> {
+interface SkillFormProps extends FormikConfig<SkillInput> {
   action: string;
 }
 
-export const CertificateProviderForm: React.FC<CertificateProviderFormProps> = ({
-  action,
-  ...props
-}) => {
+export const SkillForm: React.FC<SkillFormProps> = ({ action, ...props }) => {
   return (
     <Formik {...props}>
       {({ isSubmitting }) => (
@@ -32,7 +28,7 @@ export const CertificateProviderForm: React.FC<CertificateProviderFormProps> = (
                 color: "#C63527",
               }}
             >
-              {action} Certification Provider
+              {action} Skill
             </Heading>
           </HeadingLevel>
 
@@ -52,11 +48,7 @@ export const CertificateProviderForm: React.FC<CertificateProviderFormProps> = (
                 marginBlock: "10%",
               }}
             >
-              <InputField
-                name="certificationProviderName"
-                label="CertificationProvider Name"
-                required
-              />
+              <InputField name="skillName" label="Skill Name" required />
             </FlexGridItem>
 
             <FlexGridItem

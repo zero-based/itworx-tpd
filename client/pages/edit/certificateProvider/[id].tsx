@@ -1,9 +1,9 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { CertificateProviderForm } from "../../../components/CertificateProviderForm";
-import { Loading } from "../../../components/Loading";
-import { MainLayout } from "../../../components/MainLayout";
+import { CertificateProviderForm } from "../../../components/forms/CertificateProviderForm";
+import { Loading } from "../../../components/common/Loading";
+import { MainLayout } from "../../../components/common/MainLayout";
 import {
   useCertificateProviderQuery,
   UserRole,
