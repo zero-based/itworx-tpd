@@ -9,9 +9,10 @@ import { createConnection } from "typeorm";
 
 import { authChecker } from "./middlewares/authChecker";
 import { cors } from "./middlewares/cors";
-import { appSession } from "./middlewares/session";
+import { session } from "./middlewares/session";
 import { AppContext } from "./types";
 import { registerTypes } from "./utils/registerTypes";
+import { IS_PROD } from "./utils/constants";
 
 const main = async () => {
   await createConnection({
@@ -20,15 +21,15 @@ const main = async () => {
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     host: process.env.DB_HOST,
-    logging: true,
-    debug: true,
+    logging: !IS_PROD,
+    debug: !IS_PROD,
     entities: [path.join(__dirname, "./entities/*.[jt]s")],
   });
 
   const app = express();
 
   app.use(cors);
-  app.use(appSession);
+  app.use(session);
 
   registerTypes();
 
@@ -43,8 +44,9 @@ const main = async () => {
 
   server.applyMiddleware({ app, cors: false });
 
-  app.listen(process.env.PORT, () => {
-    const url = `http://localhost:${process.env.PORT}`;
+  const port = process.env.PORT;
+  app.listen(port, () => {
+    const url = `http://localhost:${port}`;
     console.log(`server started on ${url}`);
     console.log(`playground ready on ${url}${server.graphqlPath}`);
   });
