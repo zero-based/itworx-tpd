@@ -7,13 +7,12 @@
     "server"
   ],
   "scripts": {
-    "client": "yarn workspace @tpd/client dev",
-    "server": "yarn workspace @tpd/server dev",
-    "dev": "concurrently --kill-others-on-fail yarn:server yarn:client",
-    "build": "yarn workspaces run build",
+    "dev": "lerna run dev --parallel",
+    "build": "lerna run build --since master",
     "deploy": "pm2 start ecosystem.config.js --env production"
   },
   "devDependencies": {
-    "concurrently": "^5.3.0"
+    "lerna": "^3.22.1",
+    "pm2": "^4.4.1"
   }
 }
