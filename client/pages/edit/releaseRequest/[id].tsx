@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 
 import { Loading } from "../../../components/common/Loading";
-import { MainLayout } from "../../../components/common/MainLayout";
 import { ReleaseRequestForm } from "../../../components/forms/ReleaseRequestForm";
 import {
   useReleaseRequestQuery,
@@ -26,19 +25,11 @@ const EditReleaseRequest: React.FC<{}> = () => {
   });
 
   if (fetching) {
-    return (
-      <MainLayout>
-        <Loading />
-      </MainLayout>
-    );
+    return <Loading />;
   }
 
   if (!data?.releaseRequest?.data) {
-    return (
-      <MainLayout>
-        <p>Could Not Find Release Request</p>
-      </MainLayout>
-    );
+    return <p>Could Not Find Release Request</p>;
   }
   const {
     referenceNumber,
@@ -47,28 +38,26 @@ const EditReleaseRequest: React.FC<{}> = () => {
   } = data?.releaseRequest?.data;
 
   return (
-    <MainLayout>
-      <ReleaseRequestForm
-        initialValues={{
-          ...formData,
-        }}
-        action="Update"
-        onSubmit={async (values, { setErrors }) => {
-          const response = await updateReleaseRequest({
-            referenceNumber: referenceNumber,
-            input: values,
-          });
-          const errors = response.data?.updateReleaseRequest?.errors;
+    <ReleaseRequestForm
+      initialValues={{
+        ...formData,
+      }}
+      action="Update"
+      onSubmit={async (values, { setErrors }) => {
+        const response = await updateReleaseRequest({
+          referenceNumber: referenceNumber,
+          input: values,
+        });
+        const errors = response.data?.updateReleaseRequest?.errors;
 
-          if (errors) {
-            var errorMap = toErrorMap(errors);
-            setErrors(errorMap);
-          } else {
-            router.push("/");
-          }
-        }}
-      ></ReleaseRequestForm>
-    </MainLayout>
+        if (errors) {
+          var errorMap = toErrorMap(errors);
+          setErrors(errorMap);
+        } else {
+          router.push("/");
+        }
+      }}
+    />
   );
 };
 

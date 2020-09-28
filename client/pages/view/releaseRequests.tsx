@@ -12,7 +12,6 @@ import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
 
 import { Loading } from "../../components/common/Loading";
-import { MainLayout } from "../../components/common/MainLayout";
 import {
   ReleaseRequests,
   useReleaseRequestsQuery,
@@ -99,8 +98,7 @@ const ViewReleaseRequests = () => {
   ];
 
   return (
-    <MainLayout>
-      <HeadingLevel>
+      <>
         {!data ? (
           <Loading />
         ) : (
@@ -125,8 +123,7 @@ const ViewReleaseRequests = () => {
             </div>
           </div>
         )}
-      </HeadingLevel>
-    </MainLayout>
+      </>
   );
 };
 
