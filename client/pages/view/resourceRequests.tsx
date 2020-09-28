@@ -11,7 +11,6 @@ import { Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
 import { Loading } from "../../components/common/Loading";
-import { MainLayout } from "../../components/common/MainLayout";
 import {
   ResourceRequests,
   useResourceRequestsQuery,
@@ -118,34 +117,32 @@ const ViewResourceRequests = () => {
   ];
 
   return (
-    <MainLayout>
-      <HeadingLevel>
-        {!data ? (
-          <Loading />
-        ) : (
-          <div style={{ height: "70vh" }}>
-            <Unstable_StatefulDataTable
-              columns={columns}
-              rows={rows}
-              searchable={true}
-              loadingMessage="Loading table data.."
-              rowActions={rowActions}
-            />
-            <div style={{ textAlign: "end" }}>
-              <Button $style={{ textAlign: "end", marginTop: "1%" }}>
-                <CSVLink
-                  data={data?.resourceRequests?.data?.items!}
-                  filename="releaseRequests.csv"
-                  style={{ color: "white", textDecoration: "none" }}
-                >
-                  Export
-                </CSVLink>
-              </Button>
-            </div>
+    <>
+      {!data ? (
+        <Loading />
+      ) : (
+        <div style={{ height: "70vh" }}>
+          <Unstable_StatefulDataTable
+            columns={columns}
+            rows={rows}
+            searchable={true}
+            loadingMessage="Loading table data.."
+            rowActions={rowActions}
+          />
+          <div style={{ textAlign: "end" }}>
+            <Button $style={{ textAlign: "end", marginTop: "1%" }}>
+              <CSVLink
+                data={data?.resourceRequests?.data?.items!}
+                filename="releaseRequests.csv"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Export
+              </CSVLink>
+            </Button>
           </div>
-        )}
-      </HeadingLevel>
-    </MainLayout>
+        </div>
+      )}
+    </>
   );
 };
 

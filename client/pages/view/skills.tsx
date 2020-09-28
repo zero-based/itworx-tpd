@@ -13,7 +13,6 @@ import { Cell, Grid } from "baseui/layout-grid";
 import { useRouter } from "next/dist/client/router";
 
 import { Loading } from "../../components/common/Loading";
-import { MainLayout } from "../../components/common/MainLayout";
 import {
   useDeleteSkillMutation,
   UserRole,
@@ -74,57 +73,55 @@ const ViewSkills: React.FC<{}> = ({}) => {
   ];
 
   return (
-    <MainLayout>
-      <HeadingLevel>
-        {!data ? (
-          <Loading />
-        ) : (
-          <>
-            <div>
-              <Grid>
-                <Cell span={2}>
-                  <div
-                    style={{
-                      color: theme.colors.accent,
-                      fontWeight: "bold",
-                      fontSize: "x-large",
+    <>
+      {!data ? (
+        <Loading />
+      ) : (
+        <>
+          <div>
+            <Grid>
+              <Cell span={2}>
+                <div
+                  style={{
+                    color: theme.colors.accent,
+                    fontWeight: "bold",
+                    fontSize: "x-large",
+                  }}
+                >
+                  Skills
+                </div>
+              </Cell>
+              <Cell skip={[1, 4, 7]} span={[1, 2, 3]}>
+                <div style={{ textAlignLast: "end" }}>
+                  <Button
+                    type="submit"
+                    startEnhancer={() => <Plus />}
+                    onClick={() => {
+                      router.push("../create/skill");
                     }}
                   >
-                    Skills
-                  </div>
-                </Cell>
-                <Cell skip={[1, 4, 7]} span={[1, 2, 3]}>
-                  <div style={{ textAlignLast: "end" }}>
-                    <Button
-                      type="submit"
-                      startEnhancer={() => <Plus />}
-                      onClick={() => {
-                        router.push("../create/skill");
-                      }}
-                    >
-                      Add New
-                    </Button>
-                  </div>
-                </Cell>
-              </Grid>
-            </div>
-            <div
-              style={{
-                height: "70vh",
-                width: "fit-content",
-                marginLeft: "5%",
-              }}
-            >
-              <Unstable_StatefulDataTable
-                columns={columns}
-                rows={rows}
-                rowActions={rowActions}
-              />
-            </div>
-          </>
-        )}
-      </HeadingLevel>
-    </MainLayout>
+                    Add New
+                  </Button>
+                </div>
+              </Cell>
+            </Grid>
+          </div>
+          <div
+            style={{
+              height: "70vh",
+              width: "fit-content",
+              marginLeft: "5%",
+            }}
+          >
+            <Unstable_StatefulDataTable
+              columns={columns}
+              rows={rows}
+              rowActions={rowActions}
+            />
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

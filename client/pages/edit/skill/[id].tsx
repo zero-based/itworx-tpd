@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 
 import { Loading } from "../../../components/common/Loading";
-import { MainLayout } from "../../../components/common/MainLayout";
 import { SkillForm } from "../../../components/forms/SkillForm";
 import {
   UserRole,
@@ -23,35 +22,27 @@ const EditSkill: React.FC<{}> = () => {
   });
 
   if (fetching) {
-    return (
-      <MainLayout>
-        <Loading />
-      </MainLayout>
-    );
+    return <Loading />;
   }
 
   if (!data?.skill?.data) {
-    <MainLayout>
-      <p>Could Not Find Skill</p>
-    </MainLayout>;
+    return <p>Could Not Find Skill</p>;
   }
 
   const skill = data?.skill?.data!;
 
   return (
-    <MainLayout>
-      <SkillForm
-        action="Update"
-        initialValues={{ skillName: skill.skillName }}
-        onSubmit={async (values) => {
-          await updateSkill({
-            skillId: skill?.skillId,
-            skillName: values.skillName,
-          });
-          router.push("/view/skills");
-        }}
-      ></SkillForm>
-    </MainLayout>
+    <SkillForm
+      action="Update"
+      initialValues={{ skillName: skill.skillName }}
+      onSubmit={async (values) => {
+        await updateSkill({
+          skillId: skill?.skillId,
+          skillName: values.skillName,
+        });
+        router.push("/view/skills");
+      }}
+    />
   );
 };
 

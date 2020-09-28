@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 
 import { Loading } from "../../../components/common/Loading";
-import { MainLayout } from "../../../components/common/MainLayout";
 import { ResourceRequestForm } from "../../../components/forms/ResourceRequestForm";
 import {
   useResourceRequestQuery,
@@ -26,19 +25,11 @@ const EditResourceRequest: React.FC<{}> = () => {
   });
 
   if (fetching) {
-    return (
-      <MainLayout>
-        <Loading />
-      </MainLayout>
-    );
+    return <Loading />;
   }
 
   if (!data?.resourceRequest?.data) {
-    return (
-      <MainLayout>
-        <p>Could Not Find Resource Request</p>
-      </MainLayout>
-    );
+    return <p>Could Not Find Resource Request</p>;
   }
 
   const {
@@ -47,28 +38,26 @@ const EditResourceRequest: React.FC<{}> = () => {
     ...formData
   } = data?.resourceRequest?.data;
   return (
-    <MainLayout>
-      <ResourceRequestForm
-        action="Update"
-        initialValues={{
-          ...formData,
-        }}
-        onSubmit={async (values, { setErrors }) => {
-          const response = await updateResourceRequest({
-            referenceNumber: referenceNumber,
-            input: values,
-          });
+    <ResourceRequestForm
+      action="Update"
+      initialValues={{
+        ...formData,
+      }}
+      onSubmit={async (values, { setErrors }) => {
+        const response = await updateResourceRequest({
+          referenceNumber: referenceNumber,
+          input: values,
+        });
 
-          const errors = response.data?.updateResourceRequest?.errors;
-          if (errors) {
-            var errorMap = toErrorMap(errors);
-            setErrors(errorMap);
-          } else {
-            router.push("/");
-          }
-        }}
-      ></ResourceRequestForm>
-    </MainLayout>
+        const errors = response.data?.updateResourceRequest?.errors;
+        if (errors) {
+          var errorMap = toErrorMap(errors);
+          setErrors(errorMap);
+        } else {
+          router.push("/");
+        }
+      }}
+    />
   );
 };
 

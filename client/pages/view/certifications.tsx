@@ -1,49 +1,62 @@
-import React from "react";
-import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
-import {
-  RowActionT,
-  StringColumn,
-  Unstable_StatefulDataTable,
-} from "baseui/data-table";
-import { HeadingLevel } from "baseui/heading";
-import { Delete, Plus, Show } from "baseui/icon";
 import { Cell, Grid } from "baseui/layout-grid";
-import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
-
-import { Loading } from "../../components/common/Loading";
+import { Delete, Plus, Show, Spinner } from "baseui/icon";
+import React from "react";
 import {
-  useCertificationsProvidersQuery,
-  useDeleteCertificateProviderMutation,
-  UserRole,
+  Unstable_StatefulDataTable,
+  StringColumn,
+  RowActionT,
+} from "baseui/data-table";
+import { useRouter } from "next/dist/client/router";
+import { useStyletron } from "baseui";
+
+import { CertificationProviders } from "../../../server/src/entities/CertificationProviders";
+import { EmployeeCertifications } from "../../../server/src/entities/EmployeeCertifications";
+import {
+  useCertificationsQuery,
+  useDeleteCertificationMutation,
 } from "../../graphql/types";
+import { UserRole } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
+import { Loading } from "../../components/common/Loading";
 
 type RowDataT = {
-  certificatoinProviderId: number;
-  certificationProviderName: string;
+  certificatoinId: number;
+  certificationName: string;
+  certificationProvider: CertificationProviders;
+  talentsCount: number;
+  employeeCertifications: EmployeeCertifications[];
 };
 
 const columns = [
   StringColumn({
-    title: "Certificate Provider Name",
-    mapDataToValue: (data: RowDataT) => data.certificationProviderName,
+    title: "Certification Name",
+    mapDataToValue: (data: RowDataT) => data.certificationName,
+  }),
+  StringColumn({
+    title: "Certification Provider",
+    mapDataToValue: (data: RowDataT) =>
+      data.certificationProvider.certificationProviderName,
+  }),
+  StringColumn({
+    title: "Talents Count",
+    mapDataToValue: (data: RowDataT) => data.employeeCertifications?.length,
   }),
 ];
 
-const ViewCertificateProviders: React.FC<{}> = ({}) => {
+const Certifications: React.FC<{}> = ({}) => {
   const [, theme] = useStyletron();
   var router = useRouter();
-  const [, deleteCertificateProvider] = useDeleteCertificateProviderMutation();
-  const [{ data }] = useCertificationsProvidersQuery({
+  const [, deleteCertificates] = useDeleteCertificationMutation();
+  const [{ data }] = useCertificationsQuery({
     variables: {
       limit: 30,
       cursor: null,
     },
   });
-  var rows = data?.certificationsProviders?.data?.items.map((s) => ({
-    id: s.certificatoinProviderId,
+  var rows = data?.certifications?.data?.items.map((s) => ({
+    id: s.certificationId,
     data: s,
   }));
 
@@ -51,15 +64,15 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/certificateProvider/${row.id}`);
+        router.push(`/edit/certification/${row.id}`);
       },
       renderIcon: Show,
     },
     {
       label: "Delete",
       onClick: async ({ row }) => {
-        await deleteCertificateProvider({
-          certificationProviderId: parseInt(row.id.toString(), 10),
+        await deleteCertificates({
+          certificationId: parseInt(row.id.toString(), 10),
         });
         window.location.reload();
       },
@@ -69,13 +82,14 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
 
   return (
     <>
+      {" "}
       {!data ? (
         <Loading />
       ) : (
         <>
           <div>
             <Grid>
-              <Cell span={3}>
+              <Cell span={2}>
                 <div
                   style={{
                     color: theme.colors.accent,
@@ -83,16 +97,16 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
                     fontSize: "x-large",
                   }}
                 >
-                  Certificates Provider
+                  Certificates
                 </div>
               </Cell>
-              <Cell skip={[4, 7]} span={[1, 2]}>
+              <Cell skip={[1, 4, 7]} span={[1, 2, 3]}>
                 <div>
                   <Button
                     type="submit"
                     startEnhancer={() => <Plus />}
                     onClick={() => {
-                      router.push("../create/certificateProvider");
+                      router.push("../create/certification");
                     }}
                   >
                     Add New
@@ -103,8 +117,8 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
           </div>
           <div
             style={{
-              height: "70vh",
-              width: "50%",
+              height: "50vh",
+              width: "52%",
             }}
           >
             <Unstable_StatefulDataTable
@@ -116,8 +130,8 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
           <div style={{ textAlign: "end" }}>
             <Button $style={{ textAlign: "end", marginTop: "1%" }}>
               <CSVLink
-                data={data?.certificationsProviders?.data?.items!}
-                filename="CertificateProviders.csv"
+                data={data?.certifications?.data?.items!}
+                filename="Certifications.csv"
                 style={{ color: "white", textDecoration: "none" }}
               >
                 Export
@@ -130,4 +144,4 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
   );
 };
 
-export default withAuth(ViewCertificateProviders, [UserRole.Admin]);
+export default withAuth(Certifications, [UserRole.Admin]);

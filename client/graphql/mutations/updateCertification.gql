@@ -1,0 +1,19 @@
+mutation UpdateCertification(
+  $certificationId: Int!
+  $certificationProviderName: String!
+  $certificationName: String!
+) {
+  updateCertification(
+    certificationId: $certificationId
+    certificationProviderName: $certificationProviderName
+    certificationName: $certificationName
+  ) {
+    errors {
+      field
+      message
+    }
+    data {
+      ...certfication
+    }
+  }
+}

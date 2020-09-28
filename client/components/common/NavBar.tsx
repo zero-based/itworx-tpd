@@ -27,7 +27,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
   const [, logout] = useLogoutMutation();
 
   const role = data?.role!;
-  
+
   return (
     <HeaderNavigation>
       <StyledNavigationList $align={ALIGN.left}>
@@ -83,6 +83,10 @@ export const NavBar: React.FC<NavBarProps> = () => {
                     ],
                     Certifications: [
                       {
+                        label: "Certifications",
+                        route: "/view/certifications",
+                      },
+                      {
                         label: "Certificate Providers",
                         route: "/view/certificateProviders",
                       },
@@ -125,6 +129,10 @@ export const NavBar: React.FC<NavBarProps> = () => {
                     ? {
                         Lists: [
                           { label: "Skill", route: "/create/skill" },
+                          {
+                            label: "Certification",
+                            route: "/create/certification",
+                          },
                           {
                             label: "Certificate Provider",
                             route: "/create/certificateProvider",

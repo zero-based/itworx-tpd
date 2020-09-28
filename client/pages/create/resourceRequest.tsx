@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { MainLayout } from "../../components/common/MainLayout";
 import { ResourceRequestForm } from "../../components/forms/ResourceRequestForm";
 import {
   ResourceRequestInput,
@@ -34,23 +33,21 @@ const CreateResourceRequest: React.FC<{}> = () => {
     actualPercentage: 0,
   };
   return (
-    <MainLayout>
-      <ResourceRequestForm
-        action="Add"
-        initialValues={initialValues}
-        onSubmit={async (values, { setErrors }) => {
-          const response = await createResourceRequest({ input: values });
-          const errors = response.data?.createResourceRequest.errors;
+    <ResourceRequestForm
+      action="Add"
+      initialValues={initialValues}
+      onSubmit={async (values, { setErrors }) => {
+        const response = await createResourceRequest({ input: values });
+        const errors = response.data?.createResourceRequest.errors;
 
-          if (errors) {
-            var errorMap = toErrorMap(errors);
-            setErrors(errorMap);
-          } else {
-            router.push("/");
-          }
-        }}
-      />
-    </MainLayout>
+        if (errors) {
+          var errorMap = toErrorMap(errors);
+          setErrors(errorMap);
+        } else {
+          router.push("/");
+        }
+      }}
+    />
   );
 };
 
