@@ -1,16 +1,16 @@
 import { Heading, HeadingLevel } from "baseui/heading";
 
 import { MainLayout } from "../components/common/MainLayout";
+import { useRoleQuery } from "../graphql/types";
 import { withAuth } from "../hocs/withAuth";
-import { useAuth } from "../hooks/useAuth";
 
 const Home: React.FC<{}> = () => {
-  const { role } = useAuth();
+  const [{ data }] = useRoleQuery();
 
   return (
     <MainLayout>
       <HeadingLevel>
-        <Heading>TPD for ({role})</Heading>
+        <Heading>TPD for ({data?.role!})</Heading>
       </HeadingLevel>
     </MainLayout>
   );
