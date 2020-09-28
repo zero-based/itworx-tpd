@@ -8,7 +8,7 @@ import {
   UserRole,
   useSkillQuery,
   useUpdateSkillMutation,
-} from "../../../generated/graphql";
+} from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 
 const EditSkill: React.FC<{}> = () => {

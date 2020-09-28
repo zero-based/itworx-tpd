@@ -18,7 +18,7 @@ import {
   useDeleteSkillMutation,
   UserRole,
   useSkillsQuery,
-} from "../../generated/graphql";
+} from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = { skillId: number; skillName: string };

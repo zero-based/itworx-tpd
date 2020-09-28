@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useRoleQuery } from "../../generated/graphql";
+import { useRoleQuery } from "../../graphql/types";
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [{ data, fetching }] = useRoleQuery();

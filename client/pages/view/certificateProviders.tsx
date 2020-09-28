@@ -18,7 +18,7 @@ import {
   useCertificationsProvidersQuery,
   useDeleteCertificateProviderMutation,
   UserRole,
-} from "../../generated/graphql";
+} from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = {

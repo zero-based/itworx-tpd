@@ -12,7 +12,7 @@ import { Button } from "baseui/button";
 import { useRouter } from "next/dist/client/router";
 import { Plus } from "baseui/icon";
 
-import { useLogoutMutation, UserRole as R } from "../generated/graphql";
+import { useLogoutMutation, UserRole as R } from "../graphql/types";
 import { Block } from "baseui/block";
 import { useAuth } from "../hooks/useAuth";
 

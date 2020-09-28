@@ -8,7 +8,7 @@ import {
   LogoutMutation,
   RoleQuery,
   RoleDocument,
-} from "../generated/graphql";
+} from "../graphql/types";
 
 export const cacheExchangeOpts: CacheExchangeOpts = {
   updates: {

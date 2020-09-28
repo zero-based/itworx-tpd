@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 import { MainLayout } from "../../components/MainLayout";
 import { SkillForm } from "../../components/SkillForm";
-import { useCreateSkillMutation, UserRole } from "../../generated/graphql";
+import { useCreateSkillMutation, UserRole } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
 const CreateSkill: React.FC<{}> = () => {

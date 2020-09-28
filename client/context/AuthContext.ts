@@ -1,5 +1,5 @@
 import React from "react";
-import { UserRole } from "../generated/graphql";
+import { UserRole } from "../graphql/types";
 
 export interface IAuthContext {
   isLoading: boolean;

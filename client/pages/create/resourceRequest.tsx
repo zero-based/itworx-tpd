@@ -7,7 +7,7 @@ import {
   ResourceRequestInput,
   useCreateResourceRequestMutation,
   UserRole,
-} from "../../generated/graphql";
+} from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 
