@@ -1,6 +1,6 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
 
+import { useRouter } from "next/dist/client/router";
 import { Loading } from "../../../components/Loading";
 import { MainLayout } from "../../../components/MainLayout";
 import { ReleaseRequestForm } from "../../../components/ReleaseRequestForm";
@@ -47,26 +47,28 @@ const EditReleaseRequest: React.FC<{}> = () => {
   } = data?.releaseRequest?.data;
 
   return (
-    <ReleaseRequestForm
-      initialValues={{
-        ...formData,
-      }}
-      action="Update"
-      onSubmit={async (values, { setErrors }) => {
-        const response = await updateReleaseRequest({
-          referenceNumber: referenceNumber,
-          input: values,
-        });
-        const errors = response.data?.updateReleaseRequest.errors;
+    <MainLayout>
+      <ReleaseRequestForm
+        initialValues={{
+          ...formData,
+        }}
+        action="Update"
+        onSubmit={async (values, { setErrors }) => {
+          const response = await updateReleaseRequest({
+            referenceNumber: referenceNumber,
+            input: values,
+          });
+          const errors = response.data?.updateReleaseRequest?.errors;
 
-        if (errors) {
-          var errorMap = toErrorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-    ></ReleaseRequestForm>
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      ></ReleaseRequestForm>
+    </MainLayout>
   );
 };
 

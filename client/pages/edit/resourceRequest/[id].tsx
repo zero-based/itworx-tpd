@@ -1,6 +1,6 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
 
+import { useRouter } from "next/dist/client/router";
 import { Loading } from "../../../components/Loading";
 import { MainLayout } from "../../../components/MainLayout";
 import { ResourceRequestForm } from "../../../components/ResourceRequestForm";
@@ -10,6 +10,7 @@ import {
   useUpdateResourceRequestMutation,
 } from "../../../generated/graphql";
 import { withAuth } from "../../../hocs/withAuth";
+import { toErrorMap } from "../../../utils/toErrorMap";
 
 const EditResourceRequest: React.FC<{}> = () => {
   const [, updateResourceRequest] = useUpdateResourceRequestMutation();
@@ -39,32 +40,35 @@ const EditResourceRequest: React.FC<{}> = () => {
       </MainLayout>
     );
   }
+
   const {
     referenceNumber,
     __typename,
     ...formData
   } = data?.resourceRequest?.data;
   return (
-    <ResourceRequestForm
-      action="Update"
-      initialValues={{
-        ...formData,
-      }}
-      onSubmit={async (values, { setErrors }) => {
-        const response = await updateResourceRequest({
-          referenceNumber: referenceNumber,
-          input: values,
-        });
+    <MainLayout>
+      <ResourceRequestForm
+        action="Update"
+        initialValues={{
+          ...formData,
+        }}
+        onSubmit={async (values, { setErrors }) => {
+          const response = await updateResourceRequest({
+            referenceNumber: referenceNumber,
+            input: values,
+          });
 
-        const errors = response.data?.updateResourceRequest.errors;
-        if (errors) {
-          var errorMap = errorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-    ></ResourceRequestForm>
+          const errors = response.data?.updateResourceRequest?.errors;
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      ></ResourceRequestForm>
+    </MainLayout>
   );
 };
 

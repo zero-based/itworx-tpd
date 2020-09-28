@@ -1,5 +1,7 @@
 import React from "react";
+
 import { useRouter } from "next/dist/client/router";
+import { MainLayout } from "../../components/MainLayout";
 import { ResourceRequestForm } from "../../components/ResourceRequestForm";
 import {
   ResourceRequestInput,
@@ -7,6 +9,7 @@ import {
   UserRole,
 } from "../../generated/graphql";
 import { withAuth } from "../../hocs/withAuth";
+import { toErrorMap } from "../../utils/toErrorMap";
 
 const CreateResourceRequest: React.FC<{}> = () => {
   const [, createResourceRequest] = useCreateResourceRequestMutation();
@@ -31,21 +34,23 @@ const CreateResourceRequest: React.FC<{}> = () => {
     actualPercentage: 0,
   };
   return (
-    <ResourceRequestForm
-      action="Add"
-      initialValues={initialValues}
-      onSubmit={async (values, { setErrors }) => {
-        const response = await createResourceRequest({ input: values });
-        const errors = response.data?.createResourceRequest.errors;
+    <MainLayout>
+      <ResourceRequestForm
+        action="Add"
+        initialValues={initialValues}
+        onSubmit={async (values, { setErrors }) => {
+          const response = await createResourceRequest({ input: values });
+          const errors = response.data?.createResourceRequest.errors;
 
-        if (errors) {
-          var errorMap = errorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-    />
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      />
+    </MainLayout>
   );
 };
 
