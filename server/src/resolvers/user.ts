@@ -8,6 +8,7 @@ import { UserInput } from "../types/inputs/UserInput";
 import { UserResponse } from "../types/responses/UserResponse";
 import { UserRole } from "../types/UserRole";
 import { mapToFieldError } from "../utils/mapToFieldError";
+import { SESSION_COOKIE_NAME } from "../utils/constants";
 
 @Resolver()
 export class UserResolver {
@@ -68,7 +69,7 @@ export class UserResolver {
   logout(@Ctx() { req, res }: AppContext): Promise<boolean> {
     return new Promise((resolve) =>
       req.session!.destroy((err) => {
-        res.clearCookie("qid");
+        res.clearCookie(SESSION_COOKIE_NAME);
         if (err) {
           resolve(false);
           return;
