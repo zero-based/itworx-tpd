@@ -102,7 +102,7 @@ const ViewResourceRequests = () => {
     },
   });
 
-  var rows = data?.resourceRequests.data.items.map((r) => ({
+  var rows = data?.resourceRequests?.data?.items.map((r) => ({
     id: r.referenceNumber,
     data: r,
   }));
@@ -134,7 +134,7 @@ const ViewResourceRequests = () => {
             <div style={{ textAlign: "end" }}>
               <Button $style={{ textAlign: "end", marginTop: "1%" }}>
                 <CSVLink
-                  data={data?.resourceRequests.data.items}
+                  data={data?.resourceRequests?.data?.items!}
                   filename="releaseRequests.csv"
                   style={{ color: "white", textDecoration: "none" }}
                 >

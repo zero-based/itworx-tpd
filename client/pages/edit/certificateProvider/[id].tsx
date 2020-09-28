@@ -24,7 +24,6 @@ const EditCertificationProvider: React.FC<{}> = () => {
     ,
     updateCertificationProvider,
   ] = useUpdateCertificationProviderMutation();
-  const certificationProvider = data?.certificateProvider?.data;
 
   if (fetching) {
     return (
@@ -34,9 +33,14 @@ const EditCertificationProvider: React.FC<{}> = () => {
     );
   }
 
-  if (certificationProvider === undefined) {
-    return <p> Undefined </p>;
+  if (!data?.certificateProvider?.data) {
+    <MainLayout>
+      <p>Could Not Find Certification Provider</p>
+    </MainLayout>;
   }
+
+  const certificationProvider = data?.certificateProvider?.data!;
+
   return (
     <MainLayout>
       <CertificateProviderForm
