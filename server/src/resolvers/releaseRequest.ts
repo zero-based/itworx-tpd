@@ -1,5 +1,4 @@
 import { validate } from "class-validator";
-import { EmployeesProfiles } from "../entities/EmployeesProfiles";
 import {
   Arg,
   Authorized,
@@ -11,6 +10,7 @@ import {
 } from "type-graphql";
 import { MoreThan } from "typeorm";
 
+import { EmployeesProfiles } from "../entities/EmployeesProfiles";
 import { ReleaseRequests } from "../entities/ReleaseRequests";
 import { AppContext } from "../types";
 import { ReleaseRequestInput } from "../types/inputs/ReleaseRequestInput";
@@ -34,6 +34,23 @@ export class ReleaseRequestResolver {
       };
     }
 
+    const manager = await EmployeesProfiles.find({
+      where: {
+        name: input.managerName,
+        directManagerId: null,
+      },
+    });
+
+    if (manager.length === 0) {
+      return {
+        errors: [
+          {
+            field: "managerName",
+            message: "Please Enter A Valid Manager Name",
+          },
+        ],
+      };
+    }
     const employeeExists = await EmployeesProfiles.findOne({
       id: input.employeeId,
     });
@@ -94,6 +111,23 @@ export class ReleaseRequestResolver {
       };
     }
 
+    const manager = await EmployeesProfiles.find({
+      where: {
+        name: input.managerName,
+        directManagerId: null,
+      },
+    });
+
+    if (manager.length === 0) {
+      return {
+        errors: [
+          {
+            field: "managerName",
+            message: "Please Enter A Valid Manager Name",
+          },
+        ],
+      };
+    }
     const employeeExists = await EmployeesProfiles.findOne({
       id: input.employeeId,
     });
