@@ -2,6 +2,7 @@ import React from "react";
 import { Block } from "baseui/block";
 import { useRouter } from "next/dist/client/router";
 import { Loading } from "../components/common/Loading";
+import { MainLayout } from "../components/common/MainLayout";
 import { useRoleQuery, UserRole } from "../graphql/types";
 
 /**
@@ -41,7 +42,11 @@ export const withAuth = (
       return <></>;
     }
 
-    return <WrappedComponent {...props} />;
+    return (
+      <MainLayout>
+        <WrappedComponent {...props} />
+      </MainLayout>
+    );
   };
 
   return WithAuthWrapper;

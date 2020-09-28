@@ -3,7 +3,6 @@ import { useRouter } from "next/dist/client/router";
 
 import { CertificateProviderForm } from "../../../components/forms/CertificateProviderForm";
 import { Loading } from "../../../components/common/Loading";
-import { MainLayout } from "../../../components/common/MainLayout";
 import {
   useCertificateProviderQuery,
   UserRole,
@@ -26,39 +25,31 @@ const EditCertificationProvider: React.FC<{}> = () => {
   ] = useUpdateCertificationProviderMutation();
 
   if (fetching) {
-    return (
-      <MainLayout>
-        <Loading />
-      </MainLayout>
-    );
+    return <Loading />;
   }
 
   if (!data?.certificateProvider?.data) {
-    <MainLayout>
-      <p>Could Not Find Certification Provider</p>
-    </MainLayout>;
+    return <p>Could Not Find Certification Provider</p>;
   }
 
   const certificationProvider = data?.certificateProvider?.data!;
 
   return (
-    <MainLayout>
-      <CertificateProviderForm
-        initialValues={{
-          certificationProviderName:
-            certificationProvider.certificationProviderName,
-        }}
-        action="Update"
-        onSubmit={async (values) => {
-          await updateCertificationProvider({
-            certificationProviderId:
-              certificationProvider.certificatoinProviderId,
-            certificationProviderName: values.certificationProviderName,
-          });
-          router.push("/view/certificateProviders");
-        }}
-      ></CertificateProviderForm>
-    </MainLayout>
+    <CertificateProviderForm
+      initialValues={{
+        certificationProviderName:
+          certificationProvider.certificationProviderName,
+      }}
+      action="Update"
+      onSubmit={async (values) => {
+        await updateCertificationProvider({
+          certificationProviderId:
+            certificationProvider.certificatoinProviderId,
+          certificationProviderName: values.certificationProviderName,
+        });
+        router.push("/view/certificateProviders");
+      }}
+    />
   );
 };
 

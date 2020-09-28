@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { MainLayout } from "../../components/common/MainLayout";
 import { ReleaseRequestForm } from "../../components/forms/ReleaseRequestForm";
 import {
   ReleaseRequestInput,
@@ -30,23 +29,21 @@ const CreateReleaseRequest: React.FC<{}> = () => {
   };
 
   return (
-    <MainLayout>
-      <ReleaseRequestForm
-        initialValues={{ ...initialValues }}
-        action="Add"
-        onSubmit={async (values, { setErrors }) => {
-          const response = await createReleaseRequest({ input: values });
-          const errors = response.data?.createReleaseRequest?.errors;
+    <ReleaseRequestForm
+      initialValues={{ ...initialValues }}
+      action="Add"
+      onSubmit={async (values, { setErrors }) => {
+        const response = await createReleaseRequest({ input: values });
+        const errors = response.data?.createReleaseRequest?.errors;
 
-          if (errors) {
-            var errorMap = toErrorMap(errors);
-            setErrors(errorMap);
-          } else {
-            router.push("/");
-          }
-        }}
-      ></ReleaseRequestForm>
-    </MainLayout>
+        if (errors) {
+          var errorMap = toErrorMap(errors);
+          setErrors(errorMap);
+        } else {
+          router.push("/");
+        }
+      }}
+    />
   );
 };
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { MainLayout } from "../../components/common/MainLayout";
 import { CertificateProviderForm } from "../../components/forms/CertificateProviderForm";
 import {
   useCreateCertificationProviderMutation,
@@ -16,20 +15,16 @@ const CreateCertificationProvider: React.FC<{}> = () => {
     createCertificationProvider,
   ] = useCreateCertificationProviderMutation();
   return (
-    <MainLayout>
-      <CertificateProviderForm
-        initialValues={{ certificationProviderName: "" }}
-        action="Add"
-        onSubmit={async (values) => {
-          await createCertificationProvider({
-            certificationProviderName: values.certificationProviderName,
-          });
-          router.push("/view/certificateProviders");
-        }}
-      >
-        {" "}
-      </CertificateProviderForm>
-    </MainLayout>
+    <CertificateProviderForm
+      initialValues={{ certificationProviderName: "" }}
+      action="Add"
+      onSubmit={async (values) => {
+        await createCertificationProvider({
+          certificationProviderName: values.certificationProviderName,
+        });
+        router.push("/view/certificateProviders");
+      }}
+    />
   );
 };
 
