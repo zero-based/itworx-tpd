@@ -4,12 +4,16 @@ import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Heading, HeadingLevel } from "baseui/heading";
 import { Form, Formik, FormikConfig } from "formik";
 
-import { ResourceRequestInput } from "../generated/graphql";
+import {
+  ResourceRequestInput,
+  useManagersNamesQuery,
+} from "../generated/graphql";
 import { CheckBoxStr } from "./CheckBoxStr";
 import { DatePickerStr } from "./DatePickerStr";
 import { InputField } from "./InputField";
 import { MainLayout } from "./MainLayout";
 import { useStyletron } from "baseui";
+import { ComboboxField } from "./ComboBox";
 
 interface ResourceRequestProps extends FormikConfig<ResourceRequestInput> {
   action: string;
@@ -20,6 +24,13 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
   ...props
 }) => {
   const [css, theme] = useStyletron();
+
+  const [{ data }] = useManagersNamesQuery();
+
+  const managerMappedData = data?.managers?.map((manager) => ({
+    label: manager.name,
+  }));
+
   return (
     <MainLayout>
       <Formik {...props}>
@@ -46,7 +57,17 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
               flexGridColumnCount={[1, 1, 2, 3]}
             >
               <FlexGridItem display="flex" flexDirection="column">
-                <InputField name="managerName" label="Manager Name" required />
+                <ComboboxField
+                  name="managerName"
+                  label="Manager Name"
+                  options={
+                    managerMappedData === undefined
+                      ? [{ label: "" }]
+                      : managerMappedData
+                  }
+                  required
+                />
+
                 <InputField name="function" label="Function" required />
                 <InputField name="title" label="Title" required />
                 <DatePickerStr label="Start Date" name="startDate" required />

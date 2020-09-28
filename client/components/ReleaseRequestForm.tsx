@@ -6,13 +6,17 @@ import { Heading, HeadingLevel } from "baseui/heading";
 import { Form, Formik, FormikConfig } from "formik";
 import * as React from "react";
 
-import { ReleaseRequestInput } from "../generated/graphql";
+import {
+  ReleaseRequestInput,
+  useManagersNamesQuery,
+} from "../generated/graphql";
 import { CheckBoxStr } from "./CheckBoxStr";
 import { DatePickerStr } from "./DatePickerStr";
 import { TextArea } from "./TextArea";
 
 import { InputField } from "./InputField";
 import { MainLayout } from "./MainLayout";
+import { ComboboxField } from "./ComboBox";
 
 interface ReleaseRequestProps extends FormikConfig<ReleaseRequestInput> {
   action: string;
@@ -23,6 +27,12 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
   ...props
 }) => {
   const [css, theme] = useStyletron();
+  const [{ data }] = useManagersNamesQuery();
+
+  const managerMappedData = data?.managers?.map((manager) => ({
+    label: manager.name,
+  }));
+
   return (
     <MainLayout>
       <Formik {...props}>
@@ -49,7 +59,17 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
               flexGridColumnCount={[1, 1, 2, 3]}
             >
               <FlexGridItem display="flex" flexDirection="column">
-                <InputField name="managerName" label="Manager Name" required />
+                <ComboboxField
+                  name="managerName"
+                  label="Manager Name"
+                  options={
+                    managerMappedData === undefined
+                      ? [{ label: "" }]
+                      : managerMappedData
+                  }
+                  required
+                />
+
                 <InputField
                   name="employeeName"
                   label="Employee Name"
