@@ -83,7 +83,7 @@ const ViewReleaseRequests = () => {
     },
   });
 
-  var rows = data?.releaseRequests.data.items.map((r) => ({
+  var rows = data?.releaseRequests?.data?.items.map((r) => ({
     id: r.referenceNumber,
     data: r,
   }));
@@ -115,7 +115,7 @@ const ViewReleaseRequests = () => {
             <div style={{ textAlign: "end" }}>
               <Button $style={{ textAlign: "end", marginTop: "1%" }}>
                 <CSVLink
-                  data={data?.releaseRequests.data.items}
+                  data={data?.releaseRequests?.data?.items!}
                   filename="releaseRequests.csv"
                   style={{ color: "white", textDecoration: "none" }}
                 >

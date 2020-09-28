@@ -118,7 +118,7 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
             <div style={{ textAlign: "end" }}>
               <Button $style={{ textAlign: "end", marginTop: "1%" }}>
                 <CSVLink
-                  data={data?.certificationsProviders?.data?.items}
+                  data={data?.certificationsProviders?.data?.items!}
                   filename="CertificateProviders.csv"
                   style={{ color: "white", textDecoration: "none" }}
                 >

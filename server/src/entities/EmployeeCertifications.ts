@@ -7,7 +7,6 @@ import {
   JoinColumn,
   ManyToOne,
 } from "typeorm";
-import { CertificationProviders } from "./CertificationProviders";
 import { Certifications } from "./Certifications";
 import { EmployeesProfiles } from "./EmployeesProfiles";
 

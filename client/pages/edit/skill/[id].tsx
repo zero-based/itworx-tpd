@@ -21,7 +21,6 @@ const EditSkill: React.FC<{}> = () => {
       skillId: id,
     },
   });
-  const skill = data?.skill?.data;
 
   if (fetching) {
     return (
@@ -31,9 +30,13 @@ const EditSkill: React.FC<{}> = () => {
     );
   }
 
-  if (skill === undefined) {
-    return <p> Undefined </p>;
+  if (!data?.skill?.data) {
+    <MainLayout>
+      <p>Could Not Find Skill</p>
+    </MainLayout>;
   }
+
+  const skill = data?.skill?.data!;
 
   return (
     <MainLayout>
