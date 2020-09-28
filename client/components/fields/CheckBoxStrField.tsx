@@ -3,14 +3,14 @@ import { useField } from "formik";
 import { Checkbox, CheckboxProps } from "baseui/checkbox";
 import { FormControl } from "baseui/form-control";
 
-interface CheckboxStrProps extends CheckboxProps {
+interface CheckBoxStrFieldProps extends CheckboxProps {
   label: string;
 }
 
 /**
  * CheckBox Form Control that sets field value as "1" or "0"
  */
-export const CheckBoxStr: React.FC<CheckboxStrProps> = (props) => {
+export const CheckBoxStrField: React.FC<CheckBoxStrFieldProps> = (props) => {
   const [field, { error }, { setValue }] = useField<string>(props.name!);
   return (
     <FormControl error={!!error ? error : null}>

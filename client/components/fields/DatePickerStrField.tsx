@@ -3,9 +3,9 @@ import { FormControl } from "baseui/form-control";
 import { DatePicker, DatepickerProps } from "baseui/datepicker";
 import { useField } from "formik";
 
-import { formatDate } from "../utils/formatDate";
+import { formatDate } from "../../utils/formatDate";
 
-interface DatePickerStrProps extends DatepickerProps {
+interface DatePickerStrFieldProps extends DatepickerProps {
   name: string;
   label: string;
 }
@@ -13,7 +13,7 @@ interface DatePickerStrProps extends DatepickerProps {
 /**
  * Form Control for dates that sets field value as a date string ""YYYY-MM-DD"
  */
-export const DatePickerStr: React.FC<DatePickerStrProps> = (props) => {
+export const DatePickerStrField: React.FC<DatePickerStrFieldProps> = (props) => {
   const [field, { error }, { setValue }] = useField<string>(props.name!);
 
   return (

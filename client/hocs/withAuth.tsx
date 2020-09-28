@@ -1,6 +1,6 @@
 import { Block } from "baseui/block";
 import { useRouter } from "next/dist/client/router";
-import { Loading } from "../components/Loading";
+import { Loading } from "../components/common/Loading";
 import { UserRole } from "../graphql/types";
 import { useAuth } from "../hooks/useAuth";
 

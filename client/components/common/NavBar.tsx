@@ -1,20 +1,20 @@
 import React from "react";
+import { Block } from "baseui/block";
+import { Button } from "baseui/button";
+import {
+  ALIGN,
+  HeaderNavigation,
+  StyledNavigationItem,
+  StyledNavigationList,
+} from "baseui/header-navigation";
+import { Plus } from "baseui/icon";
 import { StatefulMenu } from "baseui/menu";
 import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationList,
-  StyledNavigationItem,
-} from "baseui/header-navigation";
 import { Label1 } from "baseui/typography";
-import { Button } from "baseui/button";
 import { useRouter } from "next/dist/client/router";
-import { Plus } from "baseui/icon";
 
-import { useLogoutMutation, UserRole as R } from "../graphql/types";
-import { Block } from "baseui/block";
-import { useAuth } from "../hooks/useAuth";
+import { useLogoutMutation, UserRole as R } from "../../graphql/types";
+import { useAuth } from "../../hooks/useAuth";
 
 interface NavBarProps {}
 

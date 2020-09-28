@@ -1,8 +1,8 @@
 import React from "react";
-
 import { useRouter } from "next/dist/client/router";
-import { MainLayout } from "../../components/MainLayout";
-import { ResourceRequestForm } from "../../components/ResourceRequestForm";
+
+import { MainLayout } from "../../components/common/MainLayout";
+import { ResourceRequestForm } from "../../components/forms/ResourceRequestForm";
 import {
   ResourceRequestInput,
   useCreateResourceRequestMutation,
