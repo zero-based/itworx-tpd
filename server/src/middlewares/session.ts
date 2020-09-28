@@ -2,7 +2,7 @@ import connectRedis from "connect-redis";
 import sessionInit from "express-session";
 import redis from "redis";
 
-import { IS_PROD, SESSION_COOKIE_NAME } from "../utils/constants";
+import { IS_PROD, IS_SECURE, SESSION_COOKIE_NAME } from "../utils/constants";
 
 export const RedisStore = connectRedis(sessionInit);
 export const redisClient = redis.createClient();
@@ -17,10 +17,10 @@ export const session = sessionInit({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
     httpOnly: true,
-    secure: IS_PROD,
+    secure: IS_PROD && IS_SECURE,
     sameSite: "lax",
   },
   saveUninitialized: false,
-  secret: process.env.SESSION_SECRET as string,
+  secret: process.env.SESSION_SECRET,
   resave: false,
 });
