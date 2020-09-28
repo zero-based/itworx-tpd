@@ -6,10 +6,11 @@ import {
   Int,
   Mutation,
   Query,
-  Resolver
+  Resolver,
 } from "type-graphql";
-import { MoreThan } from "typeorm";
 
+import { MoreThan } from "typeorm";
+import { EmployeesProfiles } from "../entities/EmployeesProfiles";
 import { ResourceRequests } from "../entities/ResourceRequests";
 import { AppContext } from "../types";
 import { ResourceRequestInput } from "../types/inputs/ResourceRequestInput";
@@ -17,7 +18,6 @@ import { PaginatedResourceRequestResponse } from "../types/responses/PaginatedRe
 import { ResourceRequestResponse } from "../types/responses/ResourceRequestResponse";
 import { UserRole as R } from "../types/UserRole";
 import { mapToFieldError } from "../utils/mapToFieldError";
-
 
 @Resolver()
 export class ResourceRequestResolver {
@@ -31,6 +31,24 @@ export class ResourceRequestResolver {
     if (validationErrors.length > 0) {
       return {
         errors: mapToFieldError(validationErrors),
+      };
+    }
+
+    const manager = await EmployeesProfiles.find({
+      where: {
+        name: input.managerName,
+        directManagerId: null,
+      },
+    });
+
+    if (manager.length === 0) {
+      return {
+        errors: [
+          {
+            field: "managerName",
+            message: "Please Enter A Valid Manager Name",
+          },
+        ],
       };
     }
     return {
@@ -73,6 +91,24 @@ export class ResourceRequestResolver {
           {
             field: "referenceNumber",
             message: "Resource Request does not exist",
+          },
+        ],
+      };
+    }
+
+    const manager = await EmployeesProfiles.find({
+      where: {
+        name: input.managerName,
+        directManagerId: null,
+      },
+    });
+
+    if (manager.length === 0) {
+      return {
+        errors: [
+          {
+            field: "managerName",
+            message: "Please Enter A Valid Manager Name",
           },
         ],
       };
