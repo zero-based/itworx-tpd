@@ -10,13 +10,14 @@ import { HeadingLevel } from "baseui/heading";
 import { Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
-
 import { Loading } from "../../components/Loading";
 import { MainLayout } from "../../components/MainLayout";
 import {
   ResourceRequests,
   useResourceRequestsQuery,
+  UserRole,
 } from "../../generated/graphql";
+import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = ResourceRequests;
 
@@ -148,4 +149,7 @@ const ViewResourceRequests = () => {
   );
 };
 
-export default ViewResourceRequests;
+export default withAuth(ViewResourceRequests, [
+  UserRole.Admin,
+  UserRole.Manager,
+]);

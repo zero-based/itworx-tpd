@@ -3,8 +3,11 @@ import { useRouter } from "next/dist/client/router";
 
 import { CertificateProviderForm } from "../../components/CertificateProviderForm";
 import { MainLayout } from "../../components/MainLayout";
-import { useCreateCertificationProviderMutation } from "../../generated/graphql";
-
+import {
+  useCreateCertificationProviderMutation,
+  UserRole,
+} from "../../generated/graphql";
+import { withAuth } from "../../hocs/withAuth";
 
 const CreateCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
@@ -30,4 +33,4 @@ const CreateCertificationProvider: React.FC<{}> = () => {
   );
 };
 
-export default CreateCertificationProvider;
+export default withAuth(CreateCertificationProvider, [UserRole.Admin]);

@@ -16,8 +16,9 @@ import { MainLayout } from "../../components/MainLayout";
 import {
   ReleaseRequests,
   useReleaseRequestsQuery,
+  UserRole,
 } from "../../generated/graphql";
-
+import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = ReleaseRequests;
 
@@ -129,4 +130,7 @@ const ViewReleaseRequests = () => {
   );
 };
 
-export default ViewReleaseRequests;
+export default withAuth(ViewReleaseRequests, [
+  UserRole.Admin,
+  UserRole.Manager,
+]);

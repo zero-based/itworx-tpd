@@ -2,13 +2,14 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 
 import { CertificateProviderForm } from "../../../components/CertificateProviderForm";
-import { MainLayout } from "../../../components/MainLayout";
 import { Loading } from "../../../components/Loading";
+import { MainLayout } from "../../../components/MainLayout";
 import {
   useCertificateProviderQuery,
+  UserRole,
   useUpdateCertificationProviderMutation,
 } from "../../../generated/graphql";
-
+import { withAuth } from "../../../hocs/withAuth";
 
 const EditCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
@@ -57,4 +58,4 @@ const EditCertificationProvider: React.FC<{}> = () => {
   );
 };
 
-export default EditCertificationProvider;
+export default withAuth(EditCertificationProvider, [UserRole.Admin]);

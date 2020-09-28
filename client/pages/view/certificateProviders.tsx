@@ -1,23 +1,25 @@
 import React from "react";
-import { Button } from "baseui/button";
-import { Cell, Grid } from "baseui/layout-grid";
-import { CSVLink } from "react-csv";
-import { Delete, Plus, Show } from "baseui/icon";
-import { HeadingLevel } from "baseui/heading";
-import {
-  Unstable_StatefulDataTable,
-  StringColumn,
-  RowActionT,
-} from "baseui/data-table";
-import { useRouter } from "next/dist/client/router";
 import { useStyletron } from "baseui";
+import { Button } from "baseui/button";
+import {
+  RowActionT,
+  StringColumn,
+  Unstable_StatefulDataTable,
+} from "baseui/data-table";
+import { HeadingLevel } from "baseui/heading";
+import { Delete, Plus, Show } from "baseui/icon";
+import { Cell, Grid } from "baseui/layout-grid";
+import { useRouter } from "next/dist/client/router";
+import { CSVLink } from "react-csv";
 
+import { Loading } from "../../components/Loading";
 import { MainLayout } from "../../components/MainLayout";
 import {
   useCertificationsProvidersQuery,
   useDeleteCertificateProviderMutation,
+  UserRole,
 } from "../../generated/graphql";
-import { Loading } from "../../components/Loading";
+import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = {
   certificatoinProviderId: number;
@@ -131,4 +133,4 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
   );
 };
 
-export default ViewCertificateProviders;
+export default withAuth(ViewCertificateProviders, [UserRole.Admin]);

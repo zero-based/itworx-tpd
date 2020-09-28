@@ -1,12 +1,12 @@
 import React from "react";
-
+import { useRouter } from "next/dist/client/router";
 import { ResourceRequestForm } from "../../components/ResourceRequestForm";
 import {
   ResourceRequestInput,
   useCreateResourceRequestMutation,
+  UserRole,
 } from "../../generated/graphql";
-import { useRouter } from "next/dist/client/router";
-
+import { withAuth } from "../../hocs/withAuth";
 
 const CreateResourceRequest: React.FC<{}> = () => {
   const [, createResourceRequest] = useCreateResourceRequestMutation();
@@ -49,4 +49,7 @@ const CreateResourceRequest: React.FC<{}> = () => {
   );
 };
 
-export default CreateResourceRequest;
+export default withAuth(CreateResourceRequest, [
+  UserRole.Admin,
+  UserRole.Manager,
+]);
