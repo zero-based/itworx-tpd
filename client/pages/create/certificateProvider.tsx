@@ -6,7 +6,7 @@ import { MainLayout } from "../../components/MainLayout";
 import {
   useCreateCertificationProviderMutation,
   UserRole,
-} from "../../generated/graphql";
+} from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
 const CreateCertificationProvider: React.FC<{}> = () => {

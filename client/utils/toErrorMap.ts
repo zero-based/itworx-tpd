@@ -1,4 +1,4 @@
-import { FieldError } from "../generated/graphql";
+import { FieldError } from "../graphql/types";
 
 type ErrorMap = { [key: string]: string };
 

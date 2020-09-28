@@ -8,7 +8,7 @@ import {
   useCertificateProviderQuery,
   UserRole,
   useUpdateCertificationProviderMutation,
-} from "../../../generated/graphql";
+} from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 
 const EditCertificationProvider: React.FC<{}> = () => {

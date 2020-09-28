@@ -8,7 +8,7 @@ import {
   EmployeesProfiles,
   ReleaseRequestInput,
   useManagersNamesQuery,
-} from "../generated/graphql";
+} from "../graphql/types";
 import { CheckBoxStr } from "./CheckBoxStr";
 import { ComboboxField } from "./ComboBoxField";
 import { DatePickerStr } from "./DatePickerStr";

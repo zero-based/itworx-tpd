@@ -20,6 +20,3 @@
 
 # vercel
 .vercel
-
-# Generated GraphQL Types
-generated/
