@@ -13,16 +13,21 @@ import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
 import { Label1 } from "baseui/typography";
 import { useRouter } from "next/dist/client/router";
 
-import { useLogoutMutation, UserRole as R } from "../../graphql/types";
-import { useAuth } from "../../hooks/useAuth";
+import {
+  useLogoutMutation,
+  useRoleQuery,
+  UserRole as R,
+} from "../../graphql/types";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = () => {
   const router = useRouter();
-  const { role } = useAuth();
+  const [{ data }] = useRoleQuery();
   const [, logout] = useLogoutMutation();
 
+  const role = data?.role!;
+  
   return (
     <HeaderNavigation>
       <StyledNavigationList $align={ALIGN.left}>

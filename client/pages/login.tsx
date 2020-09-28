@@ -19,7 +19,7 @@ const Login: React.FC<{}> = ({}) => {
       <FlexGridItem>
         <div
           className={css({
-            backgroundImage: `url('./assets/cover-login.jpg')`,
+            backgroundImage: `url('/assets/cover-login.jpg')`,
             minHeight: "100vh",
             backgroundPositionX: "right",
             backgroundPositionY: "center",
