@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsIn, IsNotEmpty } from "class-validator";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
@@ -8,6 +8,7 @@ export class EmployeeSkillInput {
   skillName: string;
 
   @IsNotEmpty({ message: "required field" })
+  @IsIn(["Beginner", "Intermediate", "Expert"])
   @Field()
   experienceLevel: string;
 
