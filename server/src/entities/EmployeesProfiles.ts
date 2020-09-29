@@ -103,6 +103,7 @@ export class EmployeesProfiles extends BaseEntity {
   )
   employeeTrainings: EmployeeTraining[];
 
+  @Field(() => EmployeesProfiles, { nullable: true })
   @ManyToOne(
     () => EmployeesProfiles,
     (employeesProfiles) => employeesProfiles.employeesProfiles,
