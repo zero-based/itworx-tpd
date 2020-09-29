@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "baseui/button";
 import {
+  CategoricalColumn,
   NumericalColumn,
   RowActionT,
   StringColumn,
@@ -25,68 +26,72 @@ const columns = [
     title: "Reference Number",
     mapDataToValue: (data: RowDataT) => data.referenceNumber,
   }),
-  StringColumn({
-    title: "managerName",
+  CategoricalColumn({
+    title: "Manager Name",
     mapDataToValue: (data: RowDataT) => data.managerName,
   }),
-  StringColumn({
-    title: "function",
+  CategoricalColumn({
+    title: "Function",
     mapDataToValue: (data: RowDataT) => data.function,
   }),
-  StringColumn({
-    title: "title",
+  CategoricalColumn({
+    title: "Title",
     mapDataToValue: (data: RowDataT) => data.title,
   }),
   StringColumn({
-    title: "startDate",
+    title: "Start Date",
     mapDataToValue: (data: RowDataT) => data.startDate,
   }),
   StringColumn({
-    title: "endDate",
+    title: "End Date",
     mapDataToValue: (data: RowDataT) => data.endDate,
   }),
   NumericalColumn({
-    title: "propability",
+    title: "Probability",
+    filterable: false,
     mapDataToValue: (data: RowDataT) => data.propability,
   }),
   NumericalColumn({
-    title: "percentage",
+    title: "Percentage",
+    filterable: false,
     mapDataToValue: (data: RowDataT) => data.percentage,
   }),
-  StringColumn({
-    title: "status",
+  CategoricalColumn({
+    title: "Status",
     mapDataToValue: (data: RowDataT) => data.status,
   }),
   StringColumn({
-    title: "coreTeamMember",
+    title: "Core Team Member",
     mapDataToValue: (data: RowDataT) => data.coreTeamMember,
   }),
   StringColumn({
-    title: "replacenement",
+    title: "Replacement",
     mapDataToValue: (data: RowDataT) => data.replacenement,
   }),
   StringColumn({
-    title: "replacementFor",
+    title: "Replacement For",
     mapDataToValue: (data: RowDataT) => data.replacementFor,
   }),
   NumericalColumn({
-    title: "requestsCount",
+    title: "Requests Count",
+    filterable: false,
     mapDataToValue: (data: RowDataT) => data.requestsCount,
   }),
   StringColumn({
-    title: "relatedOpportunity",
+    title: "Related Opportunity",
     mapDataToValue: (data: RowDataT) => data.relatedOpportunity,
   }),
   StringColumn({
-    title: "comments",
+    title: "Comments",
     mapDataToValue: (data: RowDataT) => data.comments,
   }),
   StringColumn({
-    title: "assignedResource",
+    title: "Assigned Resource",
     mapDataToValue: (data: RowDataT) => data.assignedResource,
   }),
   NumericalColumn({
-    title: "actualPercentage",
+    title: "Actual Percentage",
+    filterable: false,
     mapDataToValue: (data: RowDataT) => data.actualPercentage,
   }),
 ];
@@ -116,6 +121,26 @@ const ViewResourceRequests = () => {
     },
   ];
 
+  const csvHeaders = [
+    { label: "Reference Number", key: "referenceNumber" },
+    { label: "Manager Name", key: "managerName" },
+    { label: "Function", key: "function" },
+    { label: "Title", key: "title" },
+    { label: "Start Date", key: "startDate" },
+    { label: "End Date", key: "endDate" },
+    { label: "Probability", key: "propability" },
+    { label: "Percentage", key: "percentage" },
+    { label: "Status", key: "status" },
+    { label: "Core Team Member", key: "coreTeamMember" },
+    { label: "Replacement", key: "replacenement" },
+    { label: "Replacement For", key: "replacementFor" },
+    { label: "Requests Count", key: "requestsCount" },
+    { label: "Related Opportunity", key: "relatedOpportunity" },
+    { label: "Comments", key: "comments" },
+    { label: "Assigned Resource", key: "assignedResource" },
+    { label: "Actual Percentage", key: "actualPercentage" },
+  ];
+
   return (
     <>
       {!data ? (
@@ -130,11 +155,12 @@ const ViewResourceRequests = () => {
             rowActions={rowActions}
           />
           <div style={{ textAlign: "end" }}>
-            <Button $style={{ textAlign: "end", marginTop: "1%" }}>
+            <Button $style={{ marginTop: "1%" }}>
               <CSVLink
                 data={data?.resourceRequests?.data?.items!}
-                filename="releaseRequests.csv"
+                filename="resourceRequests.csv"
                 style={{ color: "white", textDecoration: "none" }}
+                headers={csvHeaders}
               >
                 Export
               </CSVLink>
