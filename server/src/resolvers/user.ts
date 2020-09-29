@@ -16,7 +16,9 @@ export class UserResolver {
   @Query(() => EmployeesProfiles, { nullable: true })
   me(@Ctx() { req }: AppContext): Promise<EmployeesProfiles | undefined> {
     var profileId = req.session?.profileId;
-    return EmployeesProfiles.findOne(profileId);
+    return EmployeesProfiles.findOne(profileId, {
+      relations: ["directManager"],
+    });
   }
 
   @Authorized()
