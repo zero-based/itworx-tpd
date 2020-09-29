@@ -2,10 +2,10 @@ import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MoreThan } from "typeorm";
 
 import { Certifications } from "../entities/Certifications";
+import { CertificationProviders } from "../entities/CertificationProviders";
 import { CertificationResponse } from "../types/responses/CertificationResponse";
 import { PaginatedCertificationResponse } from "../types/responses/PaginatedCertificationResponse";
 import { UserRole as R } from "../types/UserRole";
-
 
 @Resolver()
 export class CertificationResolver {
@@ -23,6 +23,7 @@ export class CertificationResolver {
       where: {
         ...(cursor ? { certificatoinId: MoreThan(cursor) } : {}),
       },
+      relations: ["employeeCertifications"],
       take: fetchLimit,
     });
     return {
@@ -38,8 +39,23 @@ export class CertificationResolver {
   @Mutation(() => CertificationResponse, { nullable: true })
   async updateCertification(
     @Arg("certificationId", () => Int) certificationId: number,
-    @Arg("certificationName") certificationName: string
+    @Arg("certificationName") certificationName: string,
+    @Arg("certificationProviderName")
+    certificationProviderName: string
   ): Promise<CertificationResponse | undefined> {
+    const provider = await CertificationProviders.findOne({
+      where: { certificationProviderName: certificationProviderName },
+    });
+    if (!provider) {
+      return {
+        errors: [
+          {
+            field: "certificationProviderName",
+            message: "Certification Provider does not exist",
+          },
+        ],
+      };
+    }
     const certification = await Certifications.findOne(certificationId);
     if (!certification) {
       return {
@@ -53,6 +69,7 @@ export class CertificationResolver {
     }
     await Certifications.update(certificationId, {
       certificationName,
+      certificationProviderId: provider.certificatoinProviderId,
     });
     return {
       data: {
@@ -84,16 +101,30 @@ export class CertificationResolver {
   }
 
   // Add Certification
-  @Authorized(R.ADMIN)
+  @Authorized()
   @Mutation(() => CertificationResponse)
   async createCertification(
     @Arg("certificationName") certificationName: string,
-    @Arg("certificationProviderId", () => Int) certificationProviderId: number
+    @Arg("certificationProviderName")
+    certificationProviderName: string
   ): Promise<CertificationResponse> {
+    const provider = await CertificationProviders.findOne({
+      where: { certificationProviderName: certificationProviderName },
+    });
+    if (!provider) {
+      return {
+        errors: [
+          {
+            field: "certificationProviderName",
+            message: "Certification Provider does not exist",
+          },
+        ],
+      };
+    }
     return {
       data: await Certifications.create({
         certificationName,
-        certificationProviderId,
+        certificationProviderId: provider.certificatoinProviderId,
       }).save(),
     };
   }
