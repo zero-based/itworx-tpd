@@ -9,11 +9,11 @@ export const Footer: React.FC<FooterProps> = () => {
   return (
     <footer
       className={css({
-        padding: "32px",
-        textAlign: "center",
+        padding: "24px 32px",
+        backgroundColor: theme.colors.mono1000,
       })}
     >
-      <Label3> © 2020 ITWorx All rights reserved</Label3>
+      <Label3 color="white"> © 2020 ITWorx All rights reserved</Label3>
     </footer>
   );
 };
