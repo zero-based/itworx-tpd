@@ -42,6 +42,7 @@ export class Certifications extends BaseEntity {
   ])
   certificationProvider: CertificationProviders;
 
+  @Field(() => [EmployeeCertifications], { nullable: true })
   @OneToMany(
     () => EmployeeCertifications,
     (employeeCertifications) => employeeCertifications.certification
