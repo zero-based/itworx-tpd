@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "baseui/button";
 import {
+  CategoricalColumn,
   NumericalColumn,
   RowActionT,
   StringColumn,
@@ -24,17 +25,14 @@ type RowDataT = ReleaseRequests;
 const columns = [
   NumericalColumn({
     title: "Reference Number",
+    filterable: false,
     mapDataToValue: (data: RowDataT) => data.referenceNumber,
   }),
-  StringColumn({
-    title: "managerName",
+  CategoricalColumn({
+    title: "Manager Name",
     mapDataToValue: (data: RowDataT) => data.managerName,
   }),
-  StringColumn({
-    title: "function",
-    mapDataToValue: (data: RowDataT) => data.function,
-  }),
-  StringColumn({
+  CategoricalColumn({
     title: "Employee Name",
     mapDataToValue: (data: RowDataT) => data.employeeName,
   }),
@@ -42,20 +40,26 @@ const columns = [
     title: "Employee ID",
     mapDataToValue: (data: RowDataT) => data.employeeId,
   }),
-  StringColumn({
+  CategoricalColumn({
     title: "Employee Title",
     mapDataToValue: (data: RowDataT) => data.employeeTitle,
   }),
-  NumericalColumn({
-    title: "propability",
-    mapDataToValue: (data: RowDataT) => data.propability,
+  CategoricalColumn({
+    title: "Function",
+    mapDataToValue: (data: RowDataT) => data.function,
   }),
   StringColumn({
     title: "Release Date",
     mapDataToValue: (data: RowDataT) => data.releaseDate,
   }),
   NumericalColumn({
+    title: "Probability",
+    filterable: false,
+    mapDataToValue: (data: RowDataT) => data.propability,
+  }),
+  NumericalColumn({
     title: "Release Percentage",
+    filterable: false,
     mapDataToValue: (data: RowDataT) => data.releasePercentage,
   }),
   StringColumn({
@@ -66,7 +70,7 @@ const columns = [
     title: "Leaving",
     mapDataToValue: (data: RowDataT) => data.leaving,
   }),
-  StringColumn({
+  CategoricalColumn({
     title: "Request Status",
     mapDataToValue: (data: RowDataT) => data.requestStatus,
   }),
@@ -97,33 +101,49 @@ const ViewReleaseRequests = () => {
     },
   ];
 
+  const csvHeaders = [
+    { label: "Reference Number", key: "referenceNumber" },
+    { label: "Manager Name", key: "managerName" },
+    { label: "Employee Name", key: "employeeName" },
+    { label: "Employee ID", key: "employeeId" },
+    { label: "Employee Title", key: "employeeTitle" },
+    { label: "Function", key: "function" },
+    { label: "Release Date", key: "releaseDate" },
+    { label: "Probability", key: "propability" },
+    { label: "Release Percentage", key: "releasePercentage" },
+    { label: "Release Reason", key: "releaseReason" },
+    { label: "Leaving", key: "leaving" },
+    { label: "Request Status", key: "requestStatus" },
+  ];
+
   return (
-      <>
-        {!data ? (
-          <Loading />
-        ) : (
-          <div style={{ height: "70vh", width: "95%" }}>
-            <Unstable_StatefulDataTable
-              columns={columns}
-              rows={rows}
-              searchable={true}
-              loadingMessage="Loading table data.."
-              rowActions={rowActions}
-            />
-            <div style={{ textAlign: "end" }}>
-              <Button $style={{ textAlign: "end", marginTop: "1%" }}>
-                <CSVLink
-                  data={data?.releaseRequests?.data?.items!}
-                  filename="releaseRequests.csv"
-                  style={{ color: "white", textDecoration: "none" }}
-                >
-                  Export
-                </CSVLink>
-              </Button>
-            </div>
+    <>
+      {!data ? (
+        <Loading />
+      ) : (
+        <div style={{ height: "70vh" }}>
+          <Unstable_StatefulDataTable
+            columns={columns}
+            rows={rows}
+            searchable={true}
+            loadingMessage="Loading table data.."
+            rowActions={rowActions}
+          />
+          <div style={{ textAlign: "end" }}>
+            <Button $style={{ marginTop: "1%" }}>
+              <CSVLink
+                data={data?.releaseRequests?.data?.items!}
+                filename="releaseRequests.csv"
+                style={{ color: "white", textDecoration: "none" }}
+                headers={csvHeaders}
+              >
+                Export
+              </CSVLink>
+            </Button>
           </div>
-        )}
-      </>
+        </div>
+      )}
+    </>
   );
 };
 
