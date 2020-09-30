@@ -1,0 +1,8 @@
+fragment EmployeeSkillResponse on EmployeeSkillResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...EmployeeSkill
+  }
+}
