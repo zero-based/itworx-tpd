@@ -1,0 +1,5 @@
+mutation CreateEmployeeSkill($input: EmployeeSkillInput!) {
+  createEmployeeSkill(input: $input) {
+    ...EmployeeSkillResponse
+  }
+}

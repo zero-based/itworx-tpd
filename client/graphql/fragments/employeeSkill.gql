@@ -1,0 +1,9 @@
+fragment EmployeeSkill on EmployeeSkills {
+  employeeId
+  skillId
+  experienceLevel
+  lastUsedDate
+  skill {
+    skillName
+  }
+}

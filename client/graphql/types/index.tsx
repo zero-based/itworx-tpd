@@ -24,6 +24,7 @@ export type Certifications = {
   certificationProviderId: Scalars['Float'];
   certificationName: Scalars['String'];
   certificationProvider: CertificationProviders;
+  employeeCertifications?: Maybe<Array<EmployeeCertifications>>;
 };
 
 export type EmployeeCertifications = {
@@ -102,6 +103,7 @@ export type EmployeesProfiles = {
   employeeProfilePicture?: Maybe<Scalars['String']>;
   mobileNumber: Scalars['String'];
   costCenter: Scalars['String'];
+  directManager?: Maybe<EmployeesProfiles>;
 };
 
 export type FieldError = {
@@ -182,6 +184,24 @@ export type PaginatedEmployeeSkillResponse = {
   data?: Maybe<EmployeeSkillsPage>;
 };
 
+export type SkillsPage = {
+  __typename?: 'SkillsPage';
+  hasMore: Scalars['Boolean'];
+  items: Array<Skills>;
+};
+
+export type PaginatedSkillResponse = {
+  __typename?: 'PaginatedSkillResponse';
+  errors?: Maybe<Array<FieldError>>;
+  data?: Maybe<SkillsPage>;
+};
+
+export type SkillResponse = {
+  __typename?: 'SkillResponse';
+  errors?: Maybe<Array<FieldError>>;
+  data?: Maybe<Skills>;
+};
+
 export type ReleaseRequestsPage = {
   __typename?: 'ReleaseRequestsPage';
   hasMore: Scalars['Boolean'];
@@ -216,24 +236,6 @@ export type ResourceRequestResponse = {
   __typename?: 'ResourceRequestResponse';
   errors?: Maybe<Array<FieldError>>;
   data?: Maybe<ResourceRequests>;
-};
-
-export type SkillsPage = {
-  __typename?: 'SkillsPage';
-  hasMore: Scalars['Boolean'];
-  items: Array<Skills>;
-};
-
-export type PaginatedSkillResponse = {
-  __typename?: 'PaginatedSkillResponse';
-  errors?: Maybe<Array<FieldError>>;
-  data?: Maybe<SkillsPage>;
-};
-
-export type SkillResponse = {
-  __typename?: 'SkillResponse';
-  errors?: Maybe<Array<FieldError>>;
-  data?: Maybe<Skills>;
 };
 
 export type UserResponse = {
@@ -301,14 +303,14 @@ export type Query = {
   managers: Array<EmployeesProfiles>;
   employeeCertification?: Maybe<EmployeeCertificationResponse>;
   employeeCertifications: PaginatedEmployeeCertificationResponse;
+  skill?: Maybe<SkillResponse>;
+  skills: PaginatedSkillResponse;
   employeeSkill?: Maybe<EmployeeSkillResponse>;
   employeeSkills: PaginatedEmployeeSkillResponse;
   releaseRequest?: Maybe<ReleaseRequestResponse>;
   releaseRequests: PaginatedReleaseRequestResponse;
   resourceRequest?: Maybe<ResourceRequestResponse>;
   resourceRequests: PaginatedResourceRequestResponse;
-  skill?: Maybe<SkillResponse>;
-  skills: PaginatedSkillResponse;
   me?: Maybe<EmployeesProfiles>;
   role?: Maybe<UserRole>;
 };
@@ -347,6 +349,17 @@ export type QueryEmployeeCertificationsArgs = {
 };
 
 
+export type QuerySkillArgs = {
+  skillId: Scalars['Int'];
+};
+
+
+export type QuerySkillsArgs = {
+  cursor?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
 export type QueryEmployeeSkillArgs = {
   skillId: Scalars['Int'];
 };
@@ -379,17 +392,6 @@ export type QueryResourceRequestsArgs = {
   limit: Scalars['Int'];
 };
 
-
-export type QuerySkillArgs = {
-  skillId: Scalars['Int'];
-};
-
-
-export type QuerySkillsArgs = {
-  cursor?: Maybe<Scalars['Int']>;
-  limit: Scalars['Int'];
-};
-
 export enum UserRole {
   Admin = 'ADMIN',
   Manager = 'MANAGER',
@@ -407,6 +409,9 @@ export type Mutation = {
   createEmployeeCertification: EmployeeCertificationResponse;
   updateEmployeeCertification?: Maybe<EmployeeCertificationResponse>;
   deleteEmployeeCertification: Scalars['Boolean'];
+  createSkill: SkillResponse;
+  updateSkill?: Maybe<SkillResponse>;
+  deleteSkill: Scalars['Boolean'];
   createEmployeeSkill: EmployeeSkillResponse;
   updateEmployeeSkill?: Maybe<EmployeeSkillResponse>;
   deleteEmployeeSkill: Scalars['Boolean'];
@@ -416,9 +421,6 @@ export type Mutation = {
   createResourceRequest: ResourceRequestResponse;
   updateResourceRequest?: Maybe<ResourceRequestResponse>;
   deleteResourceRequest: Scalars['Boolean'];
-  createSkill: SkillResponse;
-  updateSkill?: Maybe<SkillResponse>;
-  deleteSkill: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
@@ -441,13 +443,14 @@ export type MutationDeleteCertificateProviderArgs = {
 
 
 export type MutationUpdateCertificationArgs = {
+  certificationProviderName: Scalars['String'];
   certificationName: Scalars['String'];
   certificationId: Scalars['Int'];
 };
 
 
 export type MutationCreateCertificationArgs = {
-  certificationProviderId: Scalars['Int'];
+  certificationProviderName: Scalars['String'];
   certificationName: Scalars['String'];
 };
 
@@ -470,6 +473,22 @@ export type MutationUpdateEmployeeCertificationArgs = {
 
 export type MutationDeleteEmployeeCertificationArgs = {
   certificationId: Scalars['Int'];
+};
+
+
+export type MutationCreateSkillArgs = {
+  skillName: Scalars['String'];
+};
+
+
+export type MutationUpdateSkillArgs = {
+  skillName: Scalars['String'];
+  skillId: Scalars['Int'];
+};
+
+
+export type MutationDeleteSkillArgs = {
+  skillId: Scalars['Int'];
 };
 
 
@@ -521,22 +540,6 @@ export type MutationDeleteResourceRequestArgs = {
 };
 
 
-export type MutationCreateSkillArgs = {
-  skillName: Scalars['String'];
-};
-
-
-export type MutationUpdateSkillArgs = {
-  skillName: Scalars['String'];
-  skillId: Scalars['Int'];
-};
-
-
-export type MutationDeleteSkillArgs = {
-  skillId: Scalars['Int'];
-};
-
-
 export type MutationLoginArgs = {
   input: UserInput;
 };
@@ -544,6 +547,26 @@ export type MutationLoginArgs = {
 export type EmployeeProfileFragment = (
   { __typename?: 'EmployeesProfiles' }
   & Pick<EmployeesProfiles, 'id' | 'name' | 'title' | 'hiringDate' | 'function' | 'directManagerId' | 'workgroup' | 'employmentType' | 'allocationPercentage' | 'employeeEmail' | 'mobileNumber' | 'costCenter'>
+);
+
+export type EmployeeSkillFragment = (
+  { __typename?: 'EmployeeSkills' }
+  & Pick<EmployeeSkills, 'employeeId' | 'skillId' | 'experienceLevel' | 'lastUsedDate'>
+  & { skill: (
+    { __typename?: 'Skills' }
+    & Pick<Skills, 'skillName'>
+  ) }
+);
+
+export type EmployeeSkillResponseFragment = (
+  { __typename?: 'EmployeeSkillResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>>, data?: Maybe<(
+    { __typename?: 'EmployeeSkills' }
+    & EmployeeSkillFragment
+  )> }
 );
 
 export type ErrorFragment = (
@@ -610,6 +633,19 @@ export type CreateCertificationProviderMutation = (
       { __typename?: 'CertificationProviders' }
       & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
     )> }
+  ) }
+);
+
+export type CreateEmployeeSkillMutationVariables = Exact<{
+  input: EmployeeSkillInput;
+}>;
+
+
+export type CreateEmployeeSkillMutation = (
+  { __typename?: 'Mutation' }
+  & { createEmployeeSkill: (
+    { __typename?: 'EmployeeSkillResponse' }
+    & EmployeeSkillResponseFragment
   ) }
 );
 
@@ -720,6 +756,20 @@ export type UpdateCertificationProviderMutation = (
   )> }
 );
 
+export type UpdateEmployeeSkillMutationVariables = Exact<{
+  input: EmployeeSkillInput;
+  skillId: Scalars['Int'];
+}>;
+
+
+export type UpdateEmployeeSkillMutation = (
+  { __typename?: 'Mutation' }
+  & { updateEmployeeSkill?: Maybe<(
+    { __typename?: 'EmployeeSkillResponse' }
+    & EmployeeSkillResponseFragment
+  )> }
+);
+
 export type UpdateReleaseRequestMutationVariables = Exact<{
   referenceNumber: Scalars['Int'];
   input: ReleaseRequestInput;
@@ -808,6 +858,19 @@ export type CertificationsProvidersQuery = (
         & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
       )> }
     )> }
+  )> }
+);
+
+export type EmployeeSkillQueryVariables = Exact<{
+  skillId: Scalars['Int'];
+}>;
+
+
+export type EmployeeSkillQuery = (
+  { __typename?: 'Query' }
+  & { employeeSkill?: Maybe<(
+    { __typename?: 'EmployeeSkillResponse' }
+    & EmployeeSkillResponseFragment
   )> }
 );
 
@@ -964,6 +1027,28 @@ export const ErrorFragmentDoc = gql`
   message
 }
     `;
+export const EmployeeSkillFragmentDoc = gql`
+    fragment EmployeeSkill on EmployeeSkills {
+  employeeId
+  skillId
+  experienceLevel
+  lastUsedDate
+  skill {
+    skillName
+  }
+}
+    `;
+export const EmployeeSkillResponseFragmentDoc = gql`
+    fragment EmployeeSkillResponse on EmployeeSkillResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...EmployeeSkill
+  }
+}
+    ${ErrorFragmentDoc}
+${EmployeeSkillFragmentDoc}`;
 export const EmployeeProfileFragmentDoc = gql`
     fragment EmployeeProfile on EmployeesProfiles {
   id
@@ -1067,6 +1152,17 @@ export const CreateCertificationProviderDocument = gql`
 export function useCreateCertificationProviderMutation() {
   return Urql.useMutation<CreateCertificationProviderMutation, CreateCertificationProviderMutationVariables>(CreateCertificationProviderDocument);
 };
+export const CreateEmployeeSkillDocument = gql`
+    mutation CreateEmployeeSkill($input: EmployeeSkillInput!) {
+  createEmployeeSkill(input: $input) {
+    ...EmployeeSkillResponse
+  }
+}
+    ${EmployeeSkillResponseFragmentDoc}`;
+
+export function useCreateEmployeeSkillMutation() {
+  return Urql.useMutation<CreateEmployeeSkillMutation, CreateEmployeeSkillMutationVariables>(CreateEmployeeSkillDocument);
+};
 export const CreateReleaseRequestDocument = gql`
     mutation CreateReleaseRequest($input: ReleaseRequestInput!) {
   createReleaseRequest(input: $input) {
@@ -1161,6 +1257,17 @@ export const UpdateCertificationProviderDocument = gql`
 export function useUpdateCertificationProviderMutation() {
   return Urql.useMutation<UpdateCertificationProviderMutation, UpdateCertificationProviderMutationVariables>(UpdateCertificationProviderDocument);
 };
+export const UpdateEmployeeSkillDocument = gql`
+    mutation UpdateEmployeeSkill($input: EmployeeSkillInput!, $skillId: Int!) {
+  updateEmployeeSkill(input: $input, skillId: $skillId) {
+    ...EmployeeSkillResponse
+  }
+}
+    ${EmployeeSkillResponseFragmentDoc}`;
+
+export function useUpdateEmployeeSkillMutation() {
+  return Urql.useMutation<UpdateEmployeeSkillMutation, UpdateEmployeeSkillMutationVariables>(UpdateEmployeeSkillDocument);
+};
 export const UpdateReleaseRequestDocument = gql`
     mutation UpdateReleaseRequest($referenceNumber: Int!, $input: ReleaseRequestInput!) {
   updateReleaseRequest(referenceNumber: $referenceNumber, input: $input) {
@@ -1237,6 +1344,17 @@ export const CertificationsProvidersDocument = gql`
 
 export function useCertificationsProvidersQuery(options: Omit<Urql.UseQueryArgs<CertificationsProvidersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificationsProvidersQuery>({ query: CertificationsProvidersDocument, ...options });
+};
+export const EmployeeSkillDocument = gql`
+    query EmployeeSkill($skillId: Int!) {
+  employeeSkill(skillId: $skillId) {
+    ...EmployeeSkillResponse
+  }
+}
+    ${EmployeeSkillResponseFragmentDoc}`;
+
+export function useEmployeeSkillQuery(options: Omit<Urql.UseQueryArgs<EmployeeSkillQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EmployeeSkillQuery>({ query: EmployeeSkillDocument, ...options });
 };
 export const ManagersNamesDocument = gql`
     query ManagersNames {

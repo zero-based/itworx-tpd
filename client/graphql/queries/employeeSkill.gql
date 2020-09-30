@@ -1,0 +1,5 @@
+query EmployeeSkill($skillId: Int!) {
+  employeeSkill(skillId: $skillId) {
+    ...EmployeeSkillResponse
+  }
+}
