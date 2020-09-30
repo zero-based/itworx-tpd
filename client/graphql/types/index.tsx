@@ -556,6 +556,10 @@ export type CertficationFragment = (
 export type EmployeeProfileFragment = (
   { __typename?: 'EmployeesProfiles' }
   & Pick<EmployeesProfiles, 'id' | 'name' | 'title' | 'hiringDate' | 'function' | 'directManagerId' | 'workgroup' | 'employmentType' | 'allocationPercentage' | 'employeeEmail' | 'mobileNumber' | 'costCenter'>
+  & { directManager?: Maybe<(
+    { __typename?: 'EmployeesProfiles' }
+    & Pick<EmployeesProfiles, 'id' | 'name'>
+  )> }
 );
 
 export type EmployeeSkillFragment = (
@@ -1184,6 +1188,10 @@ export const EmployeeProfileFragmentDoc = gql`
   employeeEmail
   mobileNumber
   costCenter
+  directManager {
+    id
+    name
+  }
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
