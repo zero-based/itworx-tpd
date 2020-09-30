@@ -36,9 +36,11 @@ const EditCertification: React.FC<updateCertificationProps> = () => {
       action="Update"
       onSubmit={async (values) => {
         await updateCertification({
+          input: {
+            certificationName: values.certificationName,
+            certificationProviderName: values.certificateProviderName,
+          },
           certificationId: certification?.certificationId!,
-          certificationName: values.certificationName,
-          certificationProviderName: values.certificateProviderName,
         });
         router.push("/view/certifications");
       }}

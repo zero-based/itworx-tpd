@@ -37,8 +37,10 @@ const EditSkill: React.FC<{}> = () => {
       initialValues={{ skillName: skill.skillName }}
       onSubmit={async (values) => {
         await updateSkill({
+          input: {
+            skillName: values.skillName,
+          },
           skillId: skill?.skillId,
-          skillName: values.skillName,
         });
         router.push("/view/skills");
       }}

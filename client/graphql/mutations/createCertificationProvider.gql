@@ -1,7 +1,5 @@
-mutation CreateCertificationProvider($certificationProviderName: String!) {
-  createCertificationProvider(
-    certificationProviderName: $certificationProviderName
-  ) {
+mutation CreateCertificationProvider($input: CertificationProviderInput!) {
+  createCertificationProvider(input: $input) {
     errors {
       ...Error
     }

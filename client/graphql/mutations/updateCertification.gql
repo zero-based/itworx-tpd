@@ -1,13 +1,8 @@
 mutation UpdateCertification(
   $certificationId: Int!
-  $certificationProviderName: String!
-  $certificationName: String!
+  $input: CertificationInput!
 ) {
-  updateCertification(
-    certificationId: $certificationId
-    certificationProviderName: $certificationProviderName
-    certificationName: $certificationName
-  ) {
+  updateCertification(certificationId: $certificationId, input: $input) {
     errors {
       ...Error
     }

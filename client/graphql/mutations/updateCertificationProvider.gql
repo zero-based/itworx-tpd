@@ -1,10 +1,10 @@
 mutation UpdateCertificationProvider(
   $certificationProviderId: Int!
-  $certificationProviderName: String!
+  $input: CertificationProviderInput!
 ) {
   updateCertificationProvider(
     certificationProviderId: $certificationProviderId
-    certificationProviderName: $certificationProviderName
+    input: $input
   ) {
     errors {
       ...Error
