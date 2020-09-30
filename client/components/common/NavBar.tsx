@@ -73,7 +73,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         />
 
         <AuthorizedNavMenu
-          label="Skills & Certifications"
+          label="Lists"
           currentRole={role}
           authorizedFor={[R.Admin]}
           groups={[
@@ -89,6 +89,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
             {
               title: "Certifications",
               items: [
+                { label: "Certifications", route: "/view/certifications" },
                 {
                   label: "Certificate Providers",
                   route: "/view/certificateProviders",

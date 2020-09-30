@@ -1,0 +1,23 @@
+query Certifications($cursor: String, $limit: Int!) {
+  certifications(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        certificationId
+        certificationName
+        certificationProvider {
+          certificatoinProviderId
+          certificationProviderName
+        }
+        employeeCertifications {
+          employeeId
+          certificationId
+          expirationDate
+        }
+      }
+    }
+  }
+}
