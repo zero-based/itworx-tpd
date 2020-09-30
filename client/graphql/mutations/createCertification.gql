@@ -1,0 +1,16 @@
+mutation CreateCertification(
+  $certificationProviderName: String!
+  $certificationName: String!
+) {
+  createCertification(
+    certificationProviderName: $certificationProviderName
+    certificationName: $certificationName
+  ) {
+    errors {
+      ...Error
+    }
+    data {
+      ...certfication
+    }
+  }
+}

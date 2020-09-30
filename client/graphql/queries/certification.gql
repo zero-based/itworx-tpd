@@ -1,0 +1,10 @@
+query Certification($certificationId: Int!) {
+  certification(certificationId: $certificationId) {
+    errors {
+      ...Error
+    }
+    data {
+      ...certfication
+    }
+  }
+}
