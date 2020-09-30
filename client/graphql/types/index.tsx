@@ -317,7 +317,7 @@ export type Query = {
 
 
 export type QueryCertificationsProvidersArgs = {
-  cursor?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
 };
 
@@ -328,7 +328,7 @@ export type QueryCertificateProviderArgs = {
 
 
 export type QueryCertificationsArgs = {
-  cursor?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
 };
 
@@ -838,7 +838,7 @@ export type CertificateProviderQuery = (
 );
 
 export type CertificationsProvidersQueryVariables = Exact<{
-  cursor?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
 }>;
 
@@ -1325,7 +1325,7 @@ export function useCertificateProviderQuery(options: Omit<Urql.UseQueryArgs<Cert
   return Urql.useQuery<CertificateProviderQuery>({ query: CertificateProviderDocument, ...options });
 };
 export const CertificationsProvidersDocument = gql`
-    query CertificationsProviders($cursor: Int, $limit: Int!) {
+    query CertificationsProviders($cursor: String, $limit: Int!) {
   certificationsProviders(cursor: $cursor, limit: $limit) {
     errors {
       field

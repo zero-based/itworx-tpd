@@ -6,7 +6,6 @@ import { CertificationProviderResponse } from "../types/responses/CertificationP
 import { PaginatedCertificationProviderResponse } from "../types/responses/PaginatedCertificationProviderResponse";
 import { UserRole as R } from "../types/UserRole";
 
-
 @Resolver()
 export class CertificationProvidersResolver {
   // Get Certification Providers
@@ -14,14 +13,15 @@ export class CertificationProvidersResolver {
   @Query(() => PaginatedCertificationProviderResponse, { nullable: true })
   async certificationsProviders(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
   ): Promise<PaginatedCertificationProviderResponse | undefined> {
     const requestLimit = Math.min(30, limit);
     const fetchLimit = requestLimit + 1;
 
     const certificatesProviders = await CertificationProviders.find({
+      order: { certificationProviderName: "ASC" },
       where: {
-        ...(cursor ? { certificatoinProviderId: MoreThan(cursor) } : {}),
+        ...(cursor ? { certificationProviderName: MoreThan(cursor) } : {}),
       },
       take: fetchLimit,
     });

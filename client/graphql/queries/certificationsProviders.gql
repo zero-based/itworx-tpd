@@ -1,4 +1,4 @@
-query CertificationsProviders($cursor: Int, $limit: Int!) {
+query CertificationsProviders($cursor: String, $limit: Int!) {
   certificationsProviders(cursor: $cursor, limit: $limit) {
     errors {
       field

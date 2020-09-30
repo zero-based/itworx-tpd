@@ -14,14 +14,15 @@ export class CertificationResolver {
   @Query(() => PaginatedCertificationResponse, { nullable: true })
   async certifications(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
   ): Promise<PaginatedCertificationResponse | undefined> {
     const requestLimit = Math.min(30, limit);
     const fetchLimit = requestLimit + 1;
 
     const certificates = await Certifications.find({
+      order: { certificationName: "ASC" },
       where: {
-        ...(cursor ? { certificatoinId: MoreThan(cursor) } : {}),
+        ...(cursor ? { certificationName: MoreThan(cursor) } : {}),
       },
       relations: ["employeeCertifications"],
       take: fetchLimit,
