@@ -7,7 +7,7 @@ const primitives: Partial<ThemePrimitives> = {
   accent: "#171C8F", // ITWorx Blue
   accent700: "#101464",
   mono500: "#D0D3D4", // ITWorx Grey
-  mono1000: "#101820" // ITWorx Black
+  mono1000: "#101820", // ITWorx Black
 };
 
 const overrides = {
@@ -17,7 +17,8 @@ const overrides = {
     buttonSecondaryHover: primitives.accent700,
     buttonMinimalFill: "#FFF",
     buttonMinimalText: primitives.primary700,
-    buttonMinimalHover: "#EEE"
+    buttonMinimalHover: "#EEE",
+    borderSelected: primitives.primary,
   },
 };
 

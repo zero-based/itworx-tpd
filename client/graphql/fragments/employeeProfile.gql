@@ -11,4 +11,8 @@ fragment EmployeeProfile on EmployeesProfiles {
   employeeEmail
   mobileNumber
   costCenter
+  directManager {
+    id
+    name
+  }
 }
