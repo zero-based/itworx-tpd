@@ -1,0 +1,4 @@
+fragment Skill on Skills {
+  skillId
+  skillName
+}

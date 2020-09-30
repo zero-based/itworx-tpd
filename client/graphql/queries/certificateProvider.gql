@@ -4,8 +4,7 @@ query CertificateProvider($certificationProviderId: Int!) {
       ...Error
     }
     data {
-      certificatoinProviderId
-      certificationProviderName
+      ...CertificationProvider
     }
   }
 }

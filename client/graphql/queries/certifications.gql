@@ -6,16 +6,9 @@ query Certifications($cursor: String, $limit: Int!) {
     data {
       hasMore
       items {
-        certificationId
-        certificationName
-        certificationProvider {
-          certificatoinProviderId
-          certificationProviderName
-        }
+        ...Certfication
         employeeCertifications {
           employeeId
-          certificationId
-          expirationDate
         }
       }
     }

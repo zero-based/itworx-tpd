@@ -6,8 +6,7 @@ query Skills($cursor: Int, $limit: Int!) {
     data {
       hasMore
       items {
-        skillId
-        skillName
+        ...Skill
       }
     }
   }

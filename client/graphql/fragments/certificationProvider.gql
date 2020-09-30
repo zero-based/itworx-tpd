@@ -1,0 +1,4 @@
+fragment CertificationProvider on CertificationProviders {
+  certificatoinProviderId
+  certificationProviderName
+}

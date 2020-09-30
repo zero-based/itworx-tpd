@@ -549,8 +549,18 @@ export type CertficationFragment = (
   & Pick<Certifications, 'certificationId' | 'certificationProviderId' | 'certificationName'>
   & { certificationProvider: (
     { __typename?: 'CertificationProviders' }
-    & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+    & CertificationProviderFragment
   ) }
+);
+
+export type CertificationProviderFragment = (
+  { __typename?: 'CertificationProviders' }
+  & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+);
+
+export type EmployeeCertificationFragment = (
+  { __typename?: 'EmployeeCertifications' }
+  & Pick<EmployeeCertifications, 'employeeId' | 'certificationId' | 'expirationDate'>
 );
 
 export type EmployeeProfileFragment = (
@@ -630,6 +640,11 @@ export type ResourceRequestResponseFragment = (
   )> }
 );
 
+export type SkillFragment = (
+  { __typename?: 'Skills' }
+  & Pick<Skills, 'skillId' | 'skillName'>
+);
+
 export type CreateCertificationMutationVariables = Exact<{
   certificationProviderName: Scalars['String'];
   certificationName: Scalars['String'];
@@ -664,7 +679,7 @@ export type CreateCertificationProviderMutation = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'CertificationProviders' }
-      & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+      & CertificationProviderFragment
     )> }
   ) }
 );
@@ -722,7 +737,7 @@ export type CreateSkillMutation = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'Skills' }
-      & Pick<Skills, 'skillId' | 'skillName'>
+      & SkillFragment
     )> }
   ) }
 );
@@ -815,7 +830,7 @@ export type UpdateCertificationProviderMutation = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'CertificationProviders' }
-      & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+      & CertificationProviderFragment
     )> }
   )> }
 );
@@ -877,7 +892,7 @@ export type UpdateSkillMutation = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'Skills' }
-      & Pick<Skills, 'skillId' | 'skillName'>
+      & SkillFragment
     )> }
   )> }
 );
@@ -896,7 +911,7 @@ export type CertificateProviderQuery = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'CertificationProviders' }
-      & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+      & CertificationProviderFragment
     )> }
   )> }
 );
@@ -938,14 +953,11 @@ export type CertificationsQuery = (
       & Pick<CertificationsPage, 'hasMore'>
       & { items: Array<(
         { __typename?: 'Certifications' }
-        & Pick<Certifications, 'certificationId' | 'certificationName'>
-        & { certificationProvider: (
-          { __typename?: 'CertificationProviders' }
-          & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
-        ), employeeCertifications?: Maybe<Array<(
+        & { employeeCertifications?: Maybe<Array<(
           { __typename?: 'EmployeeCertifications' }
-          & Pick<EmployeeCertifications, 'employeeId' | 'certificationId' | 'expirationDate'>
+          & Pick<EmployeeCertifications, 'employeeId'>
         )>> }
+        & CertficationFragment
       )> }
     )> }
   )> }
@@ -969,7 +981,7 @@ export type CertificationsProvidersQuery = (
       & Pick<CertificationProvidersPage, 'hasMore'>
       & { items: Array<(
         { __typename?: 'CertificationProviders' }
-        & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+        & CertificationProviderFragment
       )> }
     )> }
   )> }
@@ -1106,7 +1118,7 @@ export type SkillQuery = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'Skills' }
-      & Pick<Skills, 'skillId' | 'skillName'>
+      & SkillFragment
     )> }
   )> }
 );
@@ -1129,21 +1141,33 @@ export type SkillsQuery = (
       & Pick<SkillsPage, 'hasMore'>
       & { items: Array<(
         { __typename?: 'Skills' }
-        & Pick<Skills, 'skillId' | 'skillName'>
+        & SkillFragment
       )> }
     )> }
   ) }
 );
 
+export const CertificationProviderFragmentDoc = gql`
+    fragment CertificationProvider on CertificationProviders {
+  certificatoinProviderId
+  certificationProviderName
+}
+    `;
 export const CertficationFragmentDoc = gql`
-    fragment certfication on Certifications {
+    fragment Certfication on Certifications {
   certificationId
   certificationProviderId
   certificationName
   certificationProvider {
-    certificatoinProviderId
-    certificationProviderName
+    ...CertificationProvider
   }
+}
+    ${CertificationProviderFragmentDoc}`;
+export const EmployeeCertificationFragmentDoc = gql`
+    fragment EmployeeCertification on EmployeeCertifications {
+  employeeId
+  certificationId
+  expirationDate
 }
     `;
 export const ErrorFragmentDoc = gql`
@@ -1264,6 +1288,12 @@ export const ResourceRequestResponseFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${ResourceRequestFragmentDoc}`;
+export const SkillFragmentDoc = gql`
+    fragment Skill on Skills {
+  skillId
+  skillName
+}
+    `;
 export const CreateCertificationDocument = gql`
     mutation CreateCertification($certificationProviderName: String!, $certificationName: String!) {
   createCertification(certificationProviderName: $certificationProviderName, certificationName: $certificationName) {
@@ -1271,7 +1301,7 @@ export const CreateCertificationDocument = gql`
       ...Error
     }
     data {
-      ...certfication
+      ...Certfication
     }
   }
 }
@@ -1288,12 +1318,12 @@ export const CreateCertificationProviderDocument = gql`
       ...Error
     }
     data {
-      certificatoinProviderId
-      certificationProviderName
+      ...CertificationProvider
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${CertificationProviderFragmentDoc}`;
 
 export function useCreateCertificationProviderMutation() {
   return Urql.useMutation<CreateCertificationProviderMutation, CreateCertificationProviderMutationVariables>(CreateCertificationProviderDocument);
@@ -1338,12 +1368,12 @@ export const CreateSkillDocument = gql`
       ...Error
     }
     data {
-      skillId
-      skillName
+      ...Skill
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${SkillFragmentDoc}`;
 
 export function useCreateSkillMutation() {
   return Urql.useMutation<CreateSkillMutation, CreateSkillMutationVariables>(CreateSkillDocument);
@@ -1402,7 +1432,7 @@ export const UpdateCertificationDocument = gql`
       ...Error
     }
     data {
-      ...certfication
+      ...Certfication
     }
   }
 }
@@ -1419,12 +1449,12 @@ export const UpdateCertificationProviderDocument = gql`
       ...Error
     }
     data {
-      certificatoinProviderId
-      certificationProviderName
+      ...CertificationProvider
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${CertificationProviderFragmentDoc}`;
 
 export function useUpdateCertificationProviderMutation() {
   return Urql.useMutation<UpdateCertificationProviderMutation, UpdateCertificationProviderMutationVariables>(UpdateCertificationProviderDocument);
@@ -1469,12 +1499,12 @@ export const UpdateSkillDocument = gql`
       ...Error
     }
     data {
-      skillId
-      skillName
+      ...Skill
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${SkillFragmentDoc}`;
 
 export function useUpdateSkillMutation() {
   return Urql.useMutation<UpdateSkillMutation, UpdateSkillMutationVariables>(UpdateSkillDocument);
@@ -1486,12 +1516,12 @@ export const CertificateProviderDocument = gql`
       ...Error
     }
     data {
-      certificatoinProviderId
-      certificationProviderName
+      ...CertificationProvider
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${CertificationProviderFragmentDoc}`;
 
 export function useCertificateProviderQuery(options: Omit<Urql.UseQueryArgs<CertificateProviderQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificateProviderQuery>({ query: CertificateProviderDocument, ...options });
@@ -1503,7 +1533,7 @@ export const CertificationDocument = gql`
       ...Error
     }
     data {
-      ...certfication
+      ...Certfication
     }
   }
 }
@@ -1522,22 +1552,16 @@ export const CertificationsDocument = gql`
     data {
       hasMore
       items {
-        certificationId
-        certificationName
-        certificationProvider {
-          certificatoinProviderId
-          certificationProviderName
-        }
+        ...Certfication
         employeeCertifications {
           employeeId
-          certificationId
-          expirationDate
         }
       }
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${CertficationFragmentDoc}`;
 
 export function useCertificationsQuery(options: Omit<Urql.UseQueryArgs<CertificationsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificationsQuery>({ query: CertificationsDocument, ...options });
@@ -1552,13 +1576,12 @@ export const CertificationsProvidersDocument = gql`
     data {
       hasMore
       items {
-        certificatoinProviderId
-        certificationProviderName
+        ...CertificationProvider
       }
     }
   }
 }
-    `;
+    ${CertificationProviderFragmentDoc}`;
 
 export function useCertificationsProvidersQuery(options: Omit<Urql.UseQueryArgs<CertificationsProvidersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificationsProvidersQuery>({ query: CertificationsProvidersDocument, ...options });
@@ -1674,12 +1697,12 @@ export const SkillDocument = gql`
       ...Error
     }
     data {
-      skillId
-      skillName
+      ...Skill
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${SkillFragmentDoc}`;
 
 export function useSkillQuery(options: Omit<Urql.UseQueryArgs<SkillQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<SkillQuery>({ query: SkillDocument, ...options });
@@ -1693,13 +1716,13 @@ export const SkillsDocument = gql`
     data {
       hasMore
       items {
-        skillId
-        skillName
+        ...Skill
       }
     }
   }
 }
-    ${ErrorFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${SkillFragmentDoc}`;
 
 export function useSkillsQuery(options: Omit<Urql.UseQueryArgs<SkillsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<SkillsQuery>({ query: SkillsDocument, ...options });

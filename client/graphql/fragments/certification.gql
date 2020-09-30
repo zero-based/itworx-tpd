@@ -1,9 +1,8 @@
-fragment certfication on Certifications {
+fragment Certfication on Certifications {
   certificationId
   certificationProviderId
   certificationName
   certificationProvider {
-    certificatoinProviderId
-    certificationProviderName
+    ...CertificationProvider
   }
 }

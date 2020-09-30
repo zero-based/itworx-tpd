@@ -10,8 +10,7 @@ mutation UpdateCertificationProvider(
       ...Error
     }
     data {
-      certificatoinProviderId
-      certificationProviderName
+      ...CertificationProvider
     }
   }
 }

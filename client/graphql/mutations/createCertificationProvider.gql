@@ -6,8 +6,7 @@ mutation CreateCertificationProvider($certificationProviderName: String!) {
       ...Error
     }
     data {
-      certificatoinProviderId
-      certificationProviderName
+      ...CertificationProvider
     }
   }
 }

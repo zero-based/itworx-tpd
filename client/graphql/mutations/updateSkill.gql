@@ -4,8 +4,7 @@ mutation UpdateSkill($skillId: Int!, $skillName: String!) {
       ...Error
     }
     data {
-      skillId
-      skillName
+      ...Skill
     }
   }
 }
