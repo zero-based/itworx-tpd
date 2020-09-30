@@ -12,7 +12,7 @@ mutation UpdateCertification(
       ...Error
     }
     data {
-      ...certfication
+      ...Certfication
     }
   }
 }

@@ -4,8 +4,7 @@ mutation CreateSkill($skillName: String!) {
       ...Error
     }
     data {
-      skillId
-      skillName
+      ...Skill
     }
   }
 }

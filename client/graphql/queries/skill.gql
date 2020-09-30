@@ -4,8 +4,7 @@ query skill($skillId: Int!) {
       ...Error
     }
     data {
-      skillId
-      skillName
+      ...Skill
     }
   }
 }

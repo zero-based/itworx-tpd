@@ -10,7 +10,7 @@ mutation CreateCertification(
       ...Error
     }
     data {
-      ...certfication
+      ...Certfication
     }
   }
 }
