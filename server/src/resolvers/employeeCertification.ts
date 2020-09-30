@@ -1,7 +1,14 @@
 import { validate } from "class-validator";
-import { Arg, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { MoreThan } from "typeorm";
-
 import { CertificationProviders } from "../entities/CertificationProviders";
 import { Certifications } from "../entities/Certifications";
 import { EmployeeCertifications } from "../entities/EmployeeCertifications";
@@ -10,11 +17,11 @@ import { EmployeeCertificationInput } from "../types/inputs/EmployeeCertificatio
 import { EmployeeCertificationResponse } from "../types/responses/EmployeeCertificationResponse";
 import { PaginatedEmployeeCertificationResponse } from "../types/responses/PaginatedEmployeeCertificationResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
-
+import { CertificationResolver } from "./certifications";
 
 @Resolver()
 export class EmployeeCertification {
-  // Add Certification
+  // Add Employee Certification
   @Authorized()
   @Mutation(() => EmployeeCertificationResponse)
   async createEmployeeCertification(
@@ -25,23 +32,6 @@ export class EmployeeCertification {
     if (validationErrors.length > 0) {
       return {
         errors: mapToFieldError(validationErrors),
-      };
-    }
-
-    // Get Certification Id
-    const certification = await Certifications.findOne({
-      where: {
-        certificationName: input.certificationName,
-      },
-    });
-    if (!certification) {
-      return {
-        errors: [
-          {
-            field: "certificationName",
-            message: "Can not find this certification",
-          },
-        ],
       };
     }
 
@@ -62,25 +52,25 @@ export class EmployeeCertification {
       };
     }
 
-    if (
-      certification.certificationProviderId !==
-      certificationProvider.certificatoinProviderId
-    ) {
-      return {
-        errors: [
-          {
-            field: "certificationName",
-            message: "Invalid Certification",
-          },
-        ],
-      };
+    var certification = await Certifications.findOne({
+      certificationName: input.certificationName,
+    });
+    if (!certification) {
+      const certificationResolver = new CertificationResolver();
+      certification = (
+        await certificationResolver.createCertification(
+          input.certificationName,
+          certificationProvider.certificationProviderName
+        )
+      ).data;
     }
 
     return {
       data: await EmployeeCertifications.create({
         employeeId: req.session!.profileId,
-        certificationId: certification.certificationId,
+        certificationId: certification?.certificationId,
         expirationDate: input.expirationDate,
+        certification: certification,
       }).save(),
     };
   }
@@ -168,21 +158,6 @@ export class EmployeeCertification {
       };
     }
 
-    const certification = await Certifications.findOne({
-      certificationName: input.certificationName,
-    });
-
-    if (!certification) {
-      return {
-        errors: [
-          {
-            field: "certificationName",
-            message: "Can not find this certification",
-          },
-        ],
-      };
-    }
-
     // Get Certification Provider Id
     const certificationProvider = await CertificationProviders.findOne({
       where: {
@@ -200,18 +175,17 @@ export class EmployeeCertification {
       };
     }
 
-    if (
-      certification.certificationProviderId !==
-      certificationProvider.certificatoinProviderId
-    ) {
-      return {
-        errors: [
-          {
-            field: "certificationName",
-            message: "Invalid Certification",
-          },
-        ],
-      };
+    var certification = await Certifications.findOne({
+      certificationName: input.certificationName,
+    });
+    if (!certification) {
+      const certificationResolver = new CertificationResolver();
+      certification = (
+        await certificationResolver.createCertification(
+          input.certificationName,
+          certificationProvider.certificationProviderName
+        )
+      ).data;
     }
 
     const updated = {
@@ -222,7 +196,7 @@ export class EmployeeCertification {
     await EmployeeCertifications.update(
       {
         employeeId: req.session!.profileId,
-        certificationId: certification.certificationId,
+        certificationId: certification?.certificationId,
       },
       { ...updated }
     );

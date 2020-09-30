@@ -9,7 +9,6 @@ import {
   Resolver,
 } from "type-graphql";
 import { MoreThan } from "typeorm";
-
 import { EmployeeSkills } from "../entities/EmployeeSkills";
 import { Skills } from "../entities/Skills";
 import { AppContext } from "../types";
@@ -17,6 +16,7 @@ import { EmployeeSkillInput } from "../types/inputs/EmployeeSkillInput";
 import { EmployeeSkillResponse } from "../types/responses/EmployeeSkillResponse";
 import { PaginatedEmployeeSkillResponse } from "../types/responses/PaginatedEmployeeSkillResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
+import { SkillResolver } from "./skill";
 
 @Resolver()
 export class EmployeeSkillResolver {
@@ -34,16 +34,10 @@ export class EmployeeSkillResolver {
       };
     }
 
-    const skill = await Skills.findOne({ skillName: input.skillName });
+    var skill = await Skills.findOne({ skillName: input.skillName });
     if (!skill) {
-      return {
-        errors: [
-          {
-            field: "skillName",
-            message: "Can not find this skill",
-          },
-        ],
-      };
+      const skillResolver = new SkillResolver();
+      skill = (await skillResolver.createSkill(input.skillName)).data;
     }
     return {
       data: await EmployeeSkills.create({
@@ -51,6 +45,7 @@ export class EmployeeSkillResolver {
         skillId: skill?.skillId,
         experienceLevel: input.experienceLevel,
         lastUsedDate: input.lastUsedDate,
+        skill: skill,
       }).save(),
     };
   }
@@ -78,6 +73,7 @@ export class EmployeeSkillResolver {
         ],
       };
     }
+
     return { data: employeeSkill };
   }
 
@@ -123,7 +119,6 @@ export class EmployeeSkillResolver {
         skillId: skillId,
       },
     });
-
     if (!employeeSkill) {
       return {
         errors: [
@@ -135,29 +130,20 @@ export class EmployeeSkillResolver {
       };
     }
 
-    const skill = await Skills.findOne({
-      skillName: input.skillName,
-    });
-
+    var skill = await Skills.findOne({ skillName: input.skillName });
     if (!skill) {
-      return {
-        errors: [
-          {
-            field: "skillName",
-            message: "Can not find this skill",
-          },
-        ],
-      };
+      const skillResolver = new SkillResolver();
+      skill = (await skillResolver.createSkill(input.skillName)).data;
     }
 
     const updated = {
-      skillId: skill.skillId,
+      skillId: skill?.skillId,
       experienceLevel: input.experienceLevel,
       lastUsedDate: input.lastUsedDate,
     };
 
     await EmployeeSkills.update(
-      { employeeId: req.session!.profileId, skillId: skill.skillId },
+      { employeeId: req.session!.profileId, skillId: skill?.skillId },
       { ...updated }
     );
 
