@@ -1,5 +1,5 @@
-mutation UpdateSkill($skillId: Int!, $skillName: String!) {
-  updateSkill(skillId: $skillId, skillName: $skillName) {
+mutation UpdateSkill($skillId: Int!, $input: SkillInput!) {
+  updateSkill(skillId: $skillId, input: $input) {
     errors {
       ...Error
     }

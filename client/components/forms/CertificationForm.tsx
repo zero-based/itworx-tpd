@@ -5,15 +5,14 @@ import { Form, Formik, FormikConfig } from "formik";
 import { HeadingLevel, Heading } from "baseui/heading";
 import { useStyletron } from "baseui";
 
+import { Loading } from "../common/Loading";
 import { ComboboxField } from "../fields/ComboBoxField";
 import { InputField } from "../fields/InputField";
-import { useCertificationsProvidersQuery } from "../../graphql/types";
-import { Loading } from "../common/Loading";
+import {
+  CertificationInput,
+  useCertificationsProvidersQuery,
+} from "../../graphql/types";
 
-type CertificationInput = {
-  certificationName: string;
-  certificateProviderName: string;
-};
 
 interface CertificationFormProps extends FormikConfig<CertificationInput> {
   action: string;

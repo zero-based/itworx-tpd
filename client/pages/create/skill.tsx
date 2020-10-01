@@ -14,7 +14,7 @@ const CreateSkill: React.FC<{}> = () => {
       initialValues={{ skillName: "" }}
       action="Add"
       onSubmit={async (values) => {
-        await createSkill({ skillName: values.skillName });
+        await createSkill({ input: { skillName: values.skillName } });
         router.push("/view/skills");
       }}
     />

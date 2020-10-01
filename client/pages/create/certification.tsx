@@ -13,14 +13,16 @@ const CreateCertification: React.FC<CertificationProps> = () => {
   return (
     <CertificationForm
       initialValues={{
-        certificateProviderName: "",
+        certificationProviderName: "",
         certificationName: "",
       }}
       action="Add"
       onSubmit={async (values) => {
         await createCertification({
-          certificationName: values.certificationName,
-          certificationProviderName: values.certificateProviderName,
+          input: {
+            certificationName: values.certificationName,
+            certificationProviderName: values.certificationProviderName,
+          },
         });
         router.push("/view/certifications");
       }}

@@ -2,21 +2,19 @@ import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MoreThan } from "typeorm";
 
 import { Skills } from "../entities/Skills";
+import { SkillInput } from "../types/inputs/SkillInput";
 import { PaginatedSkillResponse } from "../types/responses/PaginatedSkillResponse";
 import { SkillResponse } from "../types/responses/SkillResponse";
 import { UserRole as R } from "../types/UserRole";
-
 
 @Resolver()
 export class SkillResolver {
   // Add New Skill
   @Authorized(R.ADMIN)
   @Mutation(() => SkillResponse)
-  async createSkill(
-    @Arg("skillName") skillName: string
-  ): Promise<SkillResponse> {
+  async createSkill(@Arg("input") input: SkillInput): Promise<SkillResponse> {
     return {
-      data: await Skills.create({ skillName: skillName }).save(),
+      data: await Skills.create({ skillName: input.skillName }).save(),
     };
   }
 
@@ -25,7 +23,7 @@ export class SkillResolver {
   @Mutation(() => SkillResponse, { nullable: true })
   async updateSkill(
     @Arg("skillId", () => Int) skillId: number,
-    @Arg("skillName") skillName: string
+    @Arg("input") input: SkillInput
   ): Promise<SkillResponse | undefined> {
     const skill = await Skills.findOne(skillId);
     if (!skill) {
@@ -38,8 +36,8 @@ export class SkillResolver {
         ],
       };
     }
-    await Skills.update(skillId, { skillName });
-    return { data: { ...skill, skillName } as Skills };
+    await Skills.update(skillId, { skillName: input.skillName });
+    return { data: { ...skill, skillName: input.skillName } as Skills };
   }
 
   // Delete Skill

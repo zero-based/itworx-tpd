@@ -2,6 +2,7 @@ import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import { MoreThan } from "typeorm";
 
 import { CertificationProviders } from "../entities/CertificationProviders";
+import { CertificationProviderInput } from "../types/inputs/CertificationProviderInput";
 import { CertificationProviderResponse } from "../types/responses/CertificationProviderResponse";
 import { PaginatedCertificationProviderResponse } from "../types/responses/PaginatedCertificationProviderResponse";
 import { UserRole as R } from "../types/UserRole";
@@ -38,7 +39,7 @@ export class CertificationProvidersResolver {
   @Mutation(() => CertificationProviderResponse, { nullable: true })
   async updateCertificationProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number,
-    @Arg("certificationProviderName") certificationProviderName: string
+    @Arg("input") input: CertificationProviderInput
   ): Promise<CertificationProviderResponse | undefined> {
     const certificationProvider = await CertificationProviders.findOne(
       certificationProviderId
@@ -54,12 +55,12 @@ export class CertificationProvidersResolver {
       };
     }
     await CertificationProviders.update(certificationProviderId, {
-      certificationProviderName,
+      certificationProviderName: input.certificationProviderName,
     });
     return {
       data: {
         ...certificationProvider,
-        certificationProviderName,
+        certificationProviderName: input.certificationProviderName,
       } as CertificationProviders,
     };
   }
@@ -91,11 +92,11 @@ export class CertificationProvidersResolver {
   @Authorized(R.ADMIN)
   @Mutation(() => CertificationProviderResponse)
   async createCertificationProvider(
-    @Arg("certificationProviderName") certificationProviderName: string
+    @Arg("input") input: CertificationProviderInput
   ): Promise<CertificationProviderResponse> {
     return {
       data: await CertificationProviders.create({
-        certificationProviderName,
+        certificationProviderName: input.certificationProviderName,
       }).save(),
     };
   }
