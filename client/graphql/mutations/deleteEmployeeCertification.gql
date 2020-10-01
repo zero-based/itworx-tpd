@@ -1,0 +1,3 @@
+mutation DeleteEmployeeCertification($certificationId: Int!) {
+  deleteEmployeeCertification(certificationId: $certificationId)
+}

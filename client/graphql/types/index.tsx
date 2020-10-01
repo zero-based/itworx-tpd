@@ -572,6 +572,25 @@ export type CertificationProviderFragment = (
 export type EmployeeCertificationFragment = (
   { __typename?: 'EmployeeCertifications' }
   & Pick<EmployeeCertifications, 'employeeId' | 'certificationId' | 'expirationDate'>
+  & { certification: (
+    { __typename?: 'Certifications' }
+    & Pick<Certifications, 'certificationName'>
+    & { certificationProvider: (
+      { __typename?: 'CertificationProviders' }
+      & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+    ) }
+  ) }
+);
+
+export type EmployeeCertificationResponseFragment = (
+  { __typename?: 'EmployeeCertificationResponse' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  )>>, data?: Maybe<(
+    { __typename?: 'EmployeeCertifications' }
+    & EmployeeCertificationFragment
+  )> }
 );
 
 export type EmployeeProfileFragment = (
@@ -654,6 +673,11 @@ export type ResourceRequestResponseFragment = (
 export type SkillFragment = (
   { __typename?: 'Skills' }
   & Pick<Skills, 'skillId' | 'skillName'>
+);
+
+export type SkillsFragment = (
+  { __typename?: 'Skills' }
+  & Pick<Skills, 'skillName'>
 );
 
 export type CreateCertificationMutationVariables = Exact<{
@@ -770,6 +794,26 @@ export type DeleteCertificationMutationVariables = Exact<{
 export type DeleteCertificationMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteCertification'>
+);
+
+export type DeleteEmployeeCertificationMutationVariables = Exact<{
+  certificationId: Scalars['Int'];
+}>;
+
+
+export type DeleteEmployeeCertificationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteEmployeeCertification'>
+);
+
+export type DeleteEmployeeSkillMutationVariables = Exact<{
+  skillId: Scalars['Int'];
+}>;
+
+
+export type DeleteEmployeeSkillMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteEmployeeSkill'>
 );
 
 export type DeleteSkillMutationVariables = Exact<{
@@ -996,6 +1040,30 @@ export type CertificationsProvidersQuery = (
   )> }
 );
 
+export type EmployeeCertificationsQueryVariables = Exact<{
+  cursor?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+}>;
+
+
+export type EmployeeCertificationsQuery = (
+  { __typename?: 'Query' }
+  & { employeeCertifications: (
+    { __typename?: 'PaginatedEmployeeCertificationResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & ErrorFragment
+    )>>, data?: Maybe<(
+      { __typename?: 'EmployeeCertificationsPage' }
+      & Pick<EmployeeCertificationsPage, 'hasMore'>
+      & { items: Array<(
+        { __typename?: 'EmployeeCertifications' }
+        & EmployeeCertificationFragment
+      )> }
+    )> }
+  ) }
+);
+
 export type EmployeeSkillQueryVariables = Exact<{
   skillId: Scalars['Int'];
 }>;
@@ -1007,6 +1075,30 @@ export type EmployeeSkillQuery = (
     { __typename?: 'EmployeeSkillResponse' }
     & EmployeeSkillResponseFragment
   )> }
+);
+
+export type EmployeeSkillsQueryVariables = Exact<{
+  cursor?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+}>;
+
+
+export type EmployeeSkillsQuery = (
+  { __typename?: 'Query' }
+  & { employeeSkills: (
+    { __typename?: 'PaginatedEmployeeSkillResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & ErrorFragment
+    )>>, data?: Maybe<(
+      { __typename?: 'EmployeeSkillsPage' }
+      & Pick<EmployeeSkillsPage, 'hasMore'>
+      & { items: Array<(
+        { __typename?: 'EmployeeSkills' }
+        & EmployeeSkillFragment
+      )> }
+    )> }
+  ) }
 );
 
 export type ManagersNamesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1172,19 +1264,37 @@ export const CertficationFragmentDoc = gql`
   }
 }
     ${CertificationProviderFragmentDoc}`;
-export const EmployeeCertificationFragmentDoc = gql`
-    fragment EmployeeCertification on EmployeeCertifications {
-  employeeId
-  certificationId
-  expirationDate
-}
-    `;
 export const ErrorFragmentDoc = gql`
     fragment Error on FieldError {
   field
   message
 }
     `;
+export const EmployeeCertificationFragmentDoc = gql`
+    fragment EmployeeCertification on EmployeeCertifications {
+  employeeId
+  certificationId
+  expirationDate
+  certification {
+    certificationName
+    certificationProvider {
+      certificatoinProviderId
+      certificationProviderName
+    }
+  }
+}
+    `;
+export const EmployeeCertificationResponseFragmentDoc = gql`
+    fragment EmployeeCertificationResponse on EmployeeCertificationResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...EmployeeCertification
+  }
+}
+    ${ErrorFragmentDoc}
+${EmployeeCertificationFragmentDoc}`;
 export const EmployeeSkillFragmentDoc = gql`
     fragment EmployeeSkill on EmployeeSkills {
   employeeId
@@ -1303,6 +1413,11 @@ export const SkillFragmentDoc = gql`
   skillName
 }
     `;
+export const SkillsFragmentDoc = gql`
+    fragment Skills on Skills {
+  skillName
+}
+    `;
 export const CreateCertificationDocument = gql`
     mutation CreateCertification($input: CertificationInput!) {
   createCertification(input: $input) {
@@ -1404,6 +1519,24 @@ export const DeleteCertificationDocument = gql`
 
 export function useDeleteCertificationMutation() {
   return Urql.useMutation<DeleteCertificationMutation, DeleteCertificationMutationVariables>(DeleteCertificationDocument);
+};
+export const DeleteEmployeeCertificationDocument = gql`
+    mutation DeleteEmployeeCertification($certificationId: Int!) {
+  deleteEmployeeCertification(certificationId: $certificationId)
+}
+    `;
+
+export function useDeleteEmployeeCertificationMutation() {
+  return Urql.useMutation<DeleteEmployeeCertificationMutation, DeleteEmployeeCertificationMutationVariables>(DeleteEmployeeCertificationDocument);
+};
+export const DeleteEmployeeSkillDocument = gql`
+    mutation DeleteEmployeeSkill($skillId: Int!) {
+  deleteEmployeeSkill(skillId: $skillId)
+}
+    `;
+
+export function useDeleteEmployeeSkillMutation() {
+  return Urql.useMutation<DeleteEmployeeSkillMutation, DeleteEmployeeSkillMutationVariables>(DeleteEmployeeSkillDocument);
 };
 export const DeleteSkillDocument = gql`
     mutation DeleteSkill($skillId: Int!) {
@@ -1595,6 +1728,26 @@ export const CertificationsProvidersDocument = gql`
 export function useCertificationsProvidersQuery(options: Omit<Urql.UseQueryArgs<CertificationsProvidersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificationsProvidersQuery>({ query: CertificationsProvidersDocument, ...options });
 };
+export const EmployeeCertificationsDocument = gql`
+    query EmployeeCertifications($cursor: Int, $limit: Int!) {
+  employeeCertifications(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        ...EmployeeCertification
+      }
+    }
+  }
+}
+    ${ErrorFragmentDoc}
+${EmployeeCertificationFragmentDoc}`;
+
+export function useEmployeeCertificationsQuery(options: Omit<Urql.UseQueryArgs<EmployeeCertificationsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EmployeeCertificationsQuery>({ query: EmployeeCertificationsDocument, ...options });
+};
 export const EmployeeSkillDocument = gql`
     query EmployeeSkill($skillId: Int!) {
   employeeSkill(skillId: $skillId) {
@@ -1605,6 +1758,26 @@ export const EmployeeSkillDocument = gql`
 
 export function useEmployeeSkillQuery(options: Omit<Urql.UseQueryArgs<EmployeeSkillQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<EmployeeSkillQuery>({ query: EmployeeSkillDocument, ...options });
+};
+export const EmployeeSkillsDocument = gql`
+    query EmployeeSkills($cursor: Int, $limit: Int!) {
+  employeeSkills(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        ...EmployeeSkill
+      }
+    }
+  }
+}
+    ${ErrorFragmentDoc}
+${EmployeeSkillFragmentDoc}`;
+
+export function useEmployeeSkillsQuery(options: Omit<Urql.UseQueryArgs<EmployeeSkillsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EmployeeSkillsQuery>({ query: EmployeeSkillsDocument, ...options });
 };
 export const ManagersNamesDocument = gql`
     query ManagersNames {

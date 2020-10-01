@@ -1,0 +1,13 @@
+query EmployeeCertifications($cursor: Int, $limit: Int!) {
+  employeeCertifications(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        ...EmployeeCertification
+      }
+    }
+  }
+}

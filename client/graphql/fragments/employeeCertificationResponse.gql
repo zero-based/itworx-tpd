@@ -1,0 +1,8 @@
+fragment EmployeeCertificationResponse on EmployeeCertificationResponse {
+  errors {
+    ...Error
+  }
+  data {
+    ...EmployeeCertification
+  }
+}

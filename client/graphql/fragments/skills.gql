@@ -1,0 +1,3 @@
+fragment Skills on Skills {
+  skillName
+}
