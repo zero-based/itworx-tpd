@@ -2,4 +2,11 @@ fragment EmployeeCertification on EmployeeCertifications {
   employeeId
   certificationId
   expirationDate
+  certification {
+    certificationName
+    certificationProvider {
+      certificatoinProviderId
+      certificationProviderName
+    }
+  }
 }
