@@ -30,7 +30,8 @@ export const EmployeeSkillForm: React.FC<EmployeeSkillFormProps> = ({
       cursor: 0,
     },
   });
-  if (fetching || !data) return <Loading />;
+  if (fetching || !data?.skills?.data) return <Loading />;
+  const employeeSkill = data.skills.data.items;
 
   return (
     <Formik {...props}>
@@ -60,16 +61,16 @@ export const EmployeeSkillForm: React.FC<EmployeeSkillFormProps> = ({
               <ComboboxField
                 name="skillName"
                 label="Skill Name"
-                options={data?.skills?.data?.items}
-                mapOptionToString={(option: Skills) => option.skillName}
+                items={employeeSkill}
+                mapItemToString={(item) => item.skillName}
               />
             </FlexGridItem>
             <FlexGridItem display="flex" flexDirection="column">
               <ComboboxField
                 name="experienceLevel"
                 label="Experience Level"
-                options={["Beginner", "Intermediate", "Expert"]}
-                mapOptionToString={(option: string) => option}
+                items={["Beginner", "Intermediate", "Expert"]}
+                mapItemToString={(item) => item}
               />
             </FlexGridItem>
             <FlexGridItem display="flex" flexDirection="column">

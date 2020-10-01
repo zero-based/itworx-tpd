@@ -58,10 +58,9 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
               <ComboboxField
                 name="managerName"
                 label="Manager Name"
-                options={data.managers}
-                mapOptionToString={(option: EmployeesProfiles) => option.name}
+                items={data.managers}
+                mapItemToString={(item) => item.name}
               />
-
               <InputField name="employeeName" label="Employee Name" required />
               <InputField name="employeeId" label="Employee ID" required />
               <DatePickerStrField

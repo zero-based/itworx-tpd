@@ -56,10 +56,9 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
               <ComboboxField
                 name="managerName"
                 label="Manager Name"
-                options={data.managers}
-                mapOptionToString={(option: EmployeesProfiles) => option.name}
+                items={data.managers}
+                mapItemToString={(item) => item.name}
               />
-
               <InputField name="function" label="Function" required />
               <InputField name="title" label="Title" required />
               <DatePickerStrField
