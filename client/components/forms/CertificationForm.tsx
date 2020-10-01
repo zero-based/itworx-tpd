@@ -8,6 +8,7 @@ import { useStyletron } from "baseui";
 import { ComboboxField } from "../fields/ComboBoxField";
 import { InputField } from "../fields/InputField";
 import { useCertificationsProvidersQuery } from "../../graphql/types";
+import { Loading } from "../common/Loading";
 
 type CertificationInput = {
   certificationName: string;
@@ -23,19 +24,19 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
   ...props
 }) => {
   const [, theme] = useStyletron();
-  const [{ data }] = useCertificationsProvidersQuery({
+  const [{ data, fetching }] = useCertificationsProvidersQuery({
     variables: {
       limit: 30,
       cursor: null,
     },
   });
-  const options = data?.certificationsProviders?.data?.items.map((cp) => ({
-    label: cp.certificationProviderName,
-    id: cp.certificatoinProviderId,
-  }));
-  if (options === undefined) {
+  if (fetching) return <Loading />;
+
+  if (!data?.certificationsProviders?.data) {
     return <p>No Providers Available !</p>;
   }
+  const certificationsProviders = data.certificationsProviders.data.items;
+
   return (
     <Formik {...props}>
       {({ isSubmitting }) => (
@@ -86,8 +87,8 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
               <ComboboxField
                 name="certificateProviderName"
                 label="Certification Provider"
-                options={options}
-                mapOptionToString={(option) => option.label}
+                items={certificationsProviders}
+                mapItemToString={(item) => item.certificationProviderName}
               />
             </FlexGridItem>
 
