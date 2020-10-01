@@ -139,13 +139,13 @@ export class EmployeeSkillResolver {
     }
 
     const updated = {
-      skillId: skill?.skillId,
+      skill: skill,
       experienceLevel: input.experienceLevel,
       lastUsedDate: input.lastUsedDate,
     };
 
     await EmployeeSkills.update(
-      { employeeId: req.session!.profileId, skillId: skill?.skillId },
+      { employeeId: req.session!.profileId, skillId: employeeSkill?.skillId },
       { ...updated }
     );
 
