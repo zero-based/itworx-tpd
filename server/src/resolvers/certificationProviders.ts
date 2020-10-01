@@ -71,9 +71,12 @@ export class CertificationProvidersResolver {
   async certificateProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number
   ): Promise<CertificationProviderResponse | undefined> {
-    const certificateProvider = await CertificationProviders.findOne(
-      certificationProviderId
-    );
+    const certificateProvider = await CertificationProviders.findOne({
+      where: {
+        certificationProviderId: certificationProviderId,
+      },
+      relations: ["certifications"],
+    });
     if (!certificateProvider) {
       return {
         errors: [
