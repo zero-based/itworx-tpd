@@ -22,10 +22,8 @@ CREATE TABLE `employee_skills` (
   `experience_level` varchar(32) NOT NULL,
   `last_used_date` date NOT NULL,
   PRIMARY KEY (`employee_id`,`skill_id`),
-  KEY `Employee_ID_idx` (`employee_id`),
-  KEY `Skill_ID_idx` (`skill_id`),
-  CONSTRAINT `Employee_ID` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `Skill_ID` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`skill_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `employee_skill_employee_id_fk` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `employee_skill_skill_id_fk` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`skill_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

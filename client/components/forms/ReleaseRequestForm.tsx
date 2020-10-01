@@ -87,8 +87,8 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
 
             <FlexGridItem display="flex" flexDirection="column">
               <InputField
-                name="propability"
-                label="Propability"
+                name="probability"
+                label="Probability"
                 type="number"
                 required
               />

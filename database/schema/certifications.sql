@@ -21,8 +21,8 @@ CREATE TABLE `certifications` (
   `certification_provider_id` int(11) NOT NULL,
   `certification_name` varchar(128) NOT NULL,
   PRIMARY KEY (`certification_id`),
-  KEY `certifications_provider_id_fk_idx` (`certification_provider_id`),
-  CONSTRAINT `certifications_provider_id_fk` FOREIGN KEY (`certification_provider_id`) REFERENCES `certification_providers` (`certificatoin_provider_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `certification_certifications_provider_id_fk_idx` (`certification_provider_id`),
+  CONSTRAINT `certification_certifications_provider_id_fk` FOREIGN KEY (`certification_provider_id`) REFERENCES `certification_providers` (`certification_provider_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

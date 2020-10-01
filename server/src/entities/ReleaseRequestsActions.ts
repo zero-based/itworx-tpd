@@ -1,9 +1,15 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { ReleaseRequests } from "./ReleaseRequests";
 
 @Entity("release_requests_actions", { schema: "hackathon" })
 export class ReleaseRequestsActions {
-  @Column("int", { primary: true, name: "action_id" })
+  @PrimaryGeneratedColumn({ type: "int", name: "action_id" })
   actionId: number;
 
   @Column("int", { name: "release_request_reference_number" })

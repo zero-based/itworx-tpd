@@ -49,7 +49,7 @@ const columns = [
   NumericalColumn({
     title: "Probability",
     filterable: false,
-    mapDataToValue: (data: RowDataT) => data.propability,
+    mapDataToValue: (data: RowDataT) => data.probability,
   }),
   NumericalColumn({
     title: "Percentage",
@@ -66,7 +66,7 @@ const columns = [
   }),
   StringColumn({
     title: "Replacement",
-    mapDataToValue: (data: RowDataT) => data.replacenement,
+    mapDataToValue: (data: RowDataT) => data.replacement,
   }),
   StringColumn({
     title: "Replacement For",
@@ -128,11 +128,11 @@ const ViewResourceRequests = () => {
     { label: "Title", key: "title" },
     { label: "Start Date", key: "startDate" },
     { label: "End Date", key: "endDate" },
-    { label: "Probability", key: "propability" },
+    { label: "Probability", key: "probability" },
     { label: "Percentage", key: "percentage" },
     { label: "Status", key: "status" },
     { label: "Core Team Member", key: "coreTeamMember" },
-    { label: "Replacement", key: "replacenement" },
+    { label: "Replacement", key: "replacement" },
     { label: "Replacement For", key: "replacementFor" },
     { label: "Requests Count", key: "requestsCount" },
     { label: "Related Opportunity", key: "relatedOpportunity" },

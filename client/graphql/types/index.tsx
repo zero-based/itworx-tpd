@@ -14,7 +14,7 @@ export type Scalars = {
 
 export type CertificationProviders = {
   __typename?: 'CertificationProviders';
-  certificatoinProviderId: Scalars['Float'];
+  certificationProviderId: Scalars['Float'];
   certificationProviderName: Scalars['String'];
 };
 
@@ -43,11 +43,11 @@ export type ResourceRequests = {
   title: Scalars['String'];
   startDate: Scalars['String'];
   endDate: Scalars['String'];
-  propability: Scalars['Float'];
+  probability: Scalars['Float'];
   percentage: Scalars['Float'];
   status: Scalars['String'];
   coreTeamMember?: Maybe<Scalars['String']>;
-  replacenement?: Maybe<Scalars['String']>;
+  replacement?: Maybe<Scalars['String']>;
   replacementFor?: Maybe<Scalars['String']>;
   requestsCount?: Maybe<Scalars['Int']>;
   relatedOpportunity?: Maybe<Scalars['String']>;
@@ -80,7 +80,7 @@ export type ReleaseRequests = {
   employeeTitle: Scalars['String'];
   function: Scalars['String'];
   releaseDate: Scalars['String'];
-  propability: Scalars['Float'];
+  probability: Scalars['Float'];
   releasePercentage: Scalars['Float'];
   releaseReason: Scalars['String'];
   leaving: Scalars['String'];
@@ -276,7 +276,7 @@ export type ReleaseRequestInput = {
   employeeTitle: Scalars['String'];
   function: Scalars['String'];
   releaseDate: Scalars['String'];
-  propability: Scalars['Float'];
+  probability: Scalars['Float'];
   releasePercentage: Scalars['Float'];
   releaseReason: Scalars['String'];
   leaving: Scalars['String'];
@@ -289,11 +289,11 @@ export type ResourceRequestInput = {
   title: Scalars['String'];
   startDate: Scalars['String'];
   endDate: Scalars['String'];
-  propability: Scalars['Float'];
+  probability: Scalars['Float'];
   percentage: Scalars['Float'];
   status: Scalars['String'];
   coreTeamMember?: Maybe<Scalars['String']>;
-  replacenement?: Maybe<Scalars['String']>;
+  replacement?: Maybe<Scalars['String']>;
   replacementFor?: Maybe<Scalars['String']>;
   requestsCount?: Maybe<Scalars['Float']>;
   relatedOpportunity?: Maybe<Scalars['String']>;
@@ -566,7 +566,7 @@ export type CertficationFragment = (
 
 export type CertificationProviderFragment = (
   { __typename?: 'CertificationProviders' }
-  & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+  & Pick<CertificationProviders, 'certificationProviderId' | 'certificationProviderName'>
 );
 
 export type EmployeeCertificationFragment = (
@@ -577,7 +577,7 @@ export type EmployeeCertificationFragment = (
     & Pick<Certifications, 'certificationName'>
     & { certificationProvider: (
       { __typename?: 'CertificationProviders' }
-      & Pick<CertificationProviders, 'certificatoinProviderId' | 'certificationProviderName'>
+      & Pick<CertificationProviders, 'certificationProviderId' | 'certificationProviderName'>
     ) }
   ) }
 );
@@ -640,7 +640,7 @@ export type RegularUserResponseFragment = (
 
 export type ReleaseRequestFragment = (
   { __typename?: 'ReleaseRequests' }
-  & Pick<ReleaseRequests, 'referenceNumber' | 'managerName' | 'employeeName' | 'employeeId' | 'employeeTitle' | 'function' | 'releaseDate' | 'propability' | 'releasePercentage' | 'releaseReason' | 'leaving' | 'requestStatus'>
+  & Pick<ReleaseRequests, 'referenceNumber' | 'managerName' | 'employeeName' | 'employeeId' | 'employeeTitle' | 'function' | 'releaseDate' | 'probability' | 'releasePercentage' | 'releaseReason' | 'leaving' | 'requestStatus'>
 );
 
 export type ReleaseRequestResponseFragment = (
@@ -656,7 +656,7 @@ export type ReleaseRequestResponseFragment = (
 
 export type ResourceRequestFragment = (
   { __typename?: 'ResourceRequests' }
-  & Pick<ResourceRequests, 'referenceNumber' | 'managerName' | 'function' | 'title' | 'startDate' | 'endDate' | 'propability' | 'percentage' | 'status' | 'coreTeamMember' | 'replacenement' | 'replacementFor' | 'requestsCount' | 'relatedOpportunity' | 'comments' | 'assignedResource' | 'actualPercentage'>
+  & Pick<ResourceRequests, 'referenceNumber' | 'managerName' | 'function' | 'title' | 'startDate' | 'endDate' | 'probability' | 'percentage' | 'status' | 'coreTeamMember' | 'replacement' | 'replacementFor' | 'requestsCount' | 'relatedOpportunity' | 'comments' | 'assignedResource' | 'actualPercentage'>
 );
 
 export type ResourceRequestResponseFragment = (
@@ -1250,7 +1250,7 @@ export type SkillsQuery = (
 
 export const CertificationProviderFragmentDoc = gql`
     fragment CertificationProvider on CertificationProviders {
-  certificatoinProviderId
+  certificationProviderId
   certificationProviderName
 }
     `;
@@ -1278,7 +1278,7 @@ export const EmployeeCertificationFragmentDoc = gql`
   certification {
     certificationName
     certificationProvider {
-      certificatoinProviderId
+      certificationProviderId
       certificationProviderName
     }
   }
@@ -1357,7 +1357,7 @@ export const ReleaseRequestFragmentDoc = gql`
   employeeTitle
   function
   releaseDate
-  propability
+  probability
   releasePercentage
   releaseReason
   leaving
@@ -1383,11 +1383,11 @@ export const ResourceRequestFragmentDoc = gql`
   title
   startDate
   endDate
-  propability
+  probability
   percentage
   status
   coreTeamMember
-  replacenement
+  replacement
   replacementFor
   requestsCount
   relatedOpportunity

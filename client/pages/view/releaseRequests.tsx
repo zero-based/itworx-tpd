@@ -55,7 +55,7 @@ const columns = [
   NumericalColumn({
     title: "Probability",
     filterable: false,
-    mapDataToValue: (data: RowDataT) => data.propability,
+    mapDataToValue: (data: RowDataT) => data.probability,
   }),
   NumericalColumn({
     title: "Release Percentage",
@@ -109,7 +109,7 @@ const ViewReleaseRequests = () => {
     { label: "Employee Title", key: "employeeTitle" },
     { label: "Function", key: "function" },
     { label: "Release Date", key: "releaseDate" },
-    { label: "Probability", key: "propability" },
+    { label: "Probability", key: "probability" },
     { label: "Release Percentage", key: "releasePercentage" },
     { label: "Release Reason", key: "releaseReason" },
     { label: "Leaving", key: "leaving" },

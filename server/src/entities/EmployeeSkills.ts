@@ -11,8 +11,7 @@ import { EmployeesProfiles } from "./EmployeesProfiles";
 import { Skills } from "./Skills";
 
 @ObjectType()
-@Index("Employee_ID_idx", ["employeeId"], {})
-@Index("Skill_ID_idx", ["skillId"], {})
+@Index("employee_skill_skill_id_fk", ["skillId"], {})
 @Entity("employee_skills", { schema: "hackathon" })
 export class EmployeeSkills extends BaseEntity {
   @Field()

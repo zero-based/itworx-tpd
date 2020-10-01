@@ -21,7 +21,7 @@ const CreateReleaseRequest: React.FC<{}> = () => {
     employeeTitle: "",
     function: "",
     releaseDate: "",
-    propability: 0,
+    probability: 0,
     releasePercentage: 0,
     releaseReason: "",
     leaving: "0",

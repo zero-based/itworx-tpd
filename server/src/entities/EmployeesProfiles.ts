@@ -8,11 +8,11 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { Assignment } from "./Assignment";
+import { Assignments } from "./Assignments";
 import { EmployeeCertifications } from "./EmployeeCertifications";
 import { EmployeeSkills } from "./EmployeeSkills";
 import { EmployeeSkillsHistory } from "./EmployeeSkillsHistory";
-import { EmployeeTraining } from "./EmployeeTraining";
+import { EmployeeTrainings } from "./EmployeeTrainings";
 import { ReleaseRequests } from "./ReleaseRequests";
 
 @ObjectType()
@@ -79,8 +79,8 @@ export class EmployeesProfiles extends BaseEntity {
   @Column("varchar", { name: "cost_center", length: 128 })
   costCenter: string;
 
-  @OneToMany(() => Assignment, (assignment) => assignment.employee)
-  assignments: Assignment[];
+  @OneToMany(() => Assignments, (assignments) => assignments.employee)
+  assignments: Assignments[];
 
   @OneToMany(
     () => EmployeeCertifications,
@@ -98,10 +98,10 @@ export class EmployeesProfiles extends BaseEntity {
   employeeSkillsHistories: EmployeeSkillsHistory[];
 
   @OneToMany(
-    () => EmployeeTraining,
-    (employeeTraining) => employeeTraining.employee
+    () => EmployeeTrainings,
+    (employeeTrainings) => employeeTrainings.employee
   )
-  employeeTrainings: EmployeeTraining[];
+  employeeTrainings: EmployeeTrainings[];
 
   @Field(() => EmployeesProfiles, { nullable: true })
   @ManyToOne(

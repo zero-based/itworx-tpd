@@ -71,8 +71,8 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
 
             <FlexGridItem display="flex" flexDirection="column">
               <InputField
-                name="propability"
-                label="Propability"
+                name="probability"
+                label="Probability"
                 required
                 type="number"
               />
@@ -114,7 +114,7 @@ export const ResourceRequestForm: React.FC<ResourceRequestProps> = ({
                 label="Core Team Member"
                 name="coreTeamMember"
               />
-              <CheckBoxStrField label="Replacenement" name="replacenement" />
+              <CheckBoxStrField label="Replacement" name="replacement" />
 
               <Button
                 type="submit"

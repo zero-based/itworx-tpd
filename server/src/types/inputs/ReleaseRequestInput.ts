@@ -29,7 +29,7 @@ export class ReleaseRequestInput {
 
   @IsNotEmpty({ message: "required field" })
   @Field()
-  propability: number;
+  probability: number;
 
   @IsNotEmpty({ message: "required field" })
   @Field()

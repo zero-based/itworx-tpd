@@ -23,7 +23,7 @@ CREATE TABLE `resource_request_actions` (
   `action_note` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`action_id`),
   KEY `resource_request_reference_number_fk_idx` (`resource_request_reference_number`),
-  CONSTRAINT `resource_request_reference_number_fk` FOREIGN KEY (`resource_request_reference_number`) REFERENCES `resource_requests` (`reference_number`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `resource_request_action_resource_request_reference_number_fk` FOREIGN KEY (`resource_request_reference_number`) REFERENCES `resource_requests` (`reference_number`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

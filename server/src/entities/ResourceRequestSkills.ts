@@ -2,9 +2,8 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { ResourceRequests } from "./ResourceRequests";
 import { Skills } from "./Skills";
 
-@Index("skill_id_fk_idx", ["skillId"], {})
 @Index(
-  "resource_request_skills_reference_number_fk_idx",
+  "resource_request_skill_resource_request_reference_number_fk",
   ["requestReferenceNumber"],
   {}
 )

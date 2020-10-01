@@ -5,11 +5,11 @@ fragment ResourceRequest on ResourceRequests {
   title
   startDate
   endDate
-  propability
+  probability
   percentage
   status
   coreTeamMember
-  replacenement
+  replacement
   replacementFor
   requestsCount
   relatedOpportunity

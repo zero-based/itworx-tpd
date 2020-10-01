@@ -47,7 +47,7 @@ const EditCertificationProvider: React.FC<{}> = () => {
             certificationProviderName: values.certificationProviderName,
           },
           certificationProviderId:
-            certificationProvider.certificatoinProviderId,
+            certificationProvider.certificationProviderId,
         });
         router.push("/view/certificateProviders");
       }}

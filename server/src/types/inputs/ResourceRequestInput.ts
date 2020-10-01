@@ -25,7 +25,7 @@ export class ResourceRequestInput {
 
   @IsNotEmpty({ message: "required field" })
   @Field()
-  propability: number;
+  probability: number;
 
   @IsNotEmpty({ message: "required field" })
   @Field()
@@ -39,7 +39,7 @@ export class ResourceRequestInput {
   coreTeamMember?: string;
 
   @Field({ nullable: true })
-  replacenement?: string;
+  replacement?: string;
 
   @Field({ nullable: true })
   replacementFor?: string;

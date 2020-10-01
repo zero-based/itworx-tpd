@@ -11,12 +11,7 @@ import { Certifications } from "./Certifications";
 import { EmployeesProfiles } from "./EmployeesProfiles";
 
 @ObjectType()
-@Index("employee_certification_employee_id_fk_idx", ["employeeId"], {})
-@Index(
-  "employee_certification_certification_id_fk_idx",
-  ["certificationId"],
-  {}
-)
+@Index("employee_certification_certification_id_fk", ["certificationId"], {})
 @Entity("employee_certifications", { schema: "hackathon" })
 export class EmployeeCertifications extends BaseEntity {
   @Field()
