@@ -198,7 +198,7 @@ export class EmployeeCertification {
     await EmployeeCertifications.update(
       {
         employeeId: req.session!.profileId,
-        certificationId: certification?.certificationId,
+        certificationId: employeeCertification?.certificationId,
       },
       { ...updated }
     );
