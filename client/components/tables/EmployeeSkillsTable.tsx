@@ -16,7 +16,7 @@ import {
 } from "../../graphql/types";
 import { Loading } from "../common/Loading";
 
-interface EmployeeSkillsProps {}
+interface EmployeeSkillsTableProps {}
 
 type RowDataT = {
   employeeId: string;
@@ -37,23 +37,19 @@ const columns = [
     filterable: true,
     mapDataToValue: (data: RowDataT) => data.skill.skillName,
   }),
-
   CategoricalColumn({
     title: "Experience Level",
     filterable: true,
-
     mapDataToValue: (data: RowDataT) => data.experienceLevel,
   }),
-
   CategoricalColumn({
     title: "Last Used Date",
     filterable: true,
-
     mapDataToValue: (data: RowDataT) => data.lastUsedDate,
   }),
 ];
 
-export const EmployeeSkills: React.FC<EmployeeSkillsProps> = () => {
+export const EmployeeSkillsTable: React.FC<EmployeeSkillsTableProps> = () => {
   const [, deleteEmployeeSkill] = useDeleteEmployeeSkillMutation();
   var router = useRouter();
   const [{ data }] = useEmployeeSkillsQuery({
