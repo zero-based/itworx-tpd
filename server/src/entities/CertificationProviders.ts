@@ -19,6 +19,7 @@ export class CertificationProviders extends BaseEntity {
   @Column("varchar", { name: "certification_provider_name", length: 128 })
   certificationProviderName: string;
 
+  @Field(() => [Certifications])
   @OneToMany(
     () => Certifications,
     (certifications) => certifications.certificationProvider
