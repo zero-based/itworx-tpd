@@ -69,7 +69,7 @@ export class CertificationResolver {
     }
     await Certifications.update(certificationId, {
       certificationName: input.certificationName,
-      certificationProviderId: provider.certificatoinProviderId,
+      certificationProviderId: provider.certificationProviderId,
     });
 
     return {
@@ -77,7 +77,7 @@ export class CertificationResolver {
         ...certification,
         certificationId: certificationId,
         certificationName: input.certificationName,
-        certificationProviderId: provider.certificatoinProviderId,
+        certificationProviderId: provider.certificationProviderId,
       } as Certifications,
     };
   }
@@ -125,7 +125,7 @@ export class CertificationResolver {
     return {
       data: await Certifications.create({
         certificationName: input.certificationName,
-        certificationProviderId: provider.certificatoinProviderId,
+        certificationProviderId: provider.certificationProviderId,
       }).save(),
     };
   }

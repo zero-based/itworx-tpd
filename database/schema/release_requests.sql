@@ -24,7 +24,7 @@ CREATE TABLE `release_requests` (
   `employee_title` varchar(128) NOT NULL,
   `function` varchar(128) NOT NULL,
   `release_date` date NOT NULL,
-  `propability` int(11) NOT NULL,
+  `probability` int(11) NOT NULL,
   `release_percentage` int(11) NOT NULL,
   `release_reason` varchar(256) NOT NULL,
   `leaving` varchar(1) NOT NULL,

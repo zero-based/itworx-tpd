@@ -22,7 +22,7 @@ CREATE TABLE `release_requests_actions` (
   `action` varchar(32) NOT NULL,
   `action_note` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`action_id`),
-  CONSTRAINT `release_request_reference_number_fk` FOREIGN KEY (`action_id`) REFERENCES `release_requests` (`reference_number`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `release_requests_action_release_request_reference_number_fk` FOREIGN KEY (`action_id`) REFERENCES `release_requests` (`reference_number`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

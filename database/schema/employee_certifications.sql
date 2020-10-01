@@ -21,8 +21,6 @@ CREATE TABLE `employee_certifications` (
   `certification_id` int(11) NOT NULL,
   `expiration_date` date DEFAULT NULL,
   PRIMARY KEY (`employee_id`,`certification_id`),
-  KEY `employee_certification_employee_id_fk_idx` (`employee_id`),
-  KEY `employee_certification_certification_id_fk_idx` (`certification_id`),
   CONSTRAINT `employee_certification_certification_id_fk` FOREIGN KEY (`certification_id`) REFERENCES `certifications` (`certification_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `employee_certification_employee_id_fk` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

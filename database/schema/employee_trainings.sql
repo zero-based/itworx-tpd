@@ -10,13 +10,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `employee_training`
+-- Table structure for table `employee_trainings`
 --
 
-DROP TABLE IF EXISTS `employee_training`;
+DROP TABLE IF EXISTS `employee_trainings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee_training` (
+CREATE TABLE `employee_trainings` (
   `employee_id` varchar(36) NOT NULL,
   `training_activity_name` varchar(256) NOT NULL,
   `training_event_name` varchar(256) NOT NULL,
@@ -24,18 +24,17 @@ CREATE TABLE `employee_training` (
   `event_to_date` date NOT NULL,
   `total_training_hours` int(11) NOT NULL,
   PRIMARY KEY (`employee_id`,`training_activity_name`),
-  KEY `employee_id_idx` (`employee_id`),
-  CONSTRAINT `employee_id_training` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `employee_training_employee_id_fk` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee_training`
+-- Dumping data for table `employee_trainings`
 --
 
-LOCK TABLES `employee_training` WRITE;
-/*!40000 ALTER TABLE `employee_training` DISABLE KEYS */;
-/*!40000 ALTER TABLE `employee_training` ENABLE KEYS */;
+LOCK TABLES `employee_trainings` WRITE;
+/*!40000 ALTER TABLE `employee_trainings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `employee_trainings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

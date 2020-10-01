@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Role } from "./Role";
+import { Roles } from "./Roles";
 
 @Index("role_id_fk_idx", ["roleId"], {})
 @Entity("users", { schema: "hackathon" })
@@ -27,10 +27,10 @@ export class Users extends BaseEntity {
   @Column("int", { name: "role_id" })
   roleId: number;
 
-  @ManyToOne(() => Role, (role) => role.users, {
+  @ManyToOne(() => Roles, (roles) => roles.users, {
     onDelete: "NO ACTION",
-    onUpdate: "NO ACTION"
+    onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "role_id", referencedColumnName: "id" }])
-  role: Role;
+  role: Roles;
 }

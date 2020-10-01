@@ -45,8 +45,8 @@ export class ReleaseRequests extends BaseEntity {
   releaseDate: string;
 
   @Field()
-  @Column("int", { name: "propability" })
-  propability: number;
+  @Column("int", { name: "probability" })
+  probability: number;
 
   @Field()
   @Column("int", { name: "release_percentage" })

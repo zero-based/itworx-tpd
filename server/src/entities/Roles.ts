@@ -7,8 +7,8 @@ import {
 } from "typeorm";
 import { Users } from "./Users";
 
-@Entity("role", { schema: "hackathon" })
-export class Role extends BaseEntity {
+@Entity("roles", { schema: "hackathon" })
+export class Roles extends BaseEntity {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 

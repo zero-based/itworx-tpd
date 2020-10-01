@@ -13,7 +13,11 @@ import { CertificationProviders } from "./CertificationProviders";
 import { EmployeeCertifications } from "./EmployeeCertifications";
 
 @ObjectType()
-@Index("certifications_provider_id_fk_idx", ["certificationProviderId"], {})
+@Index(
+  "certification_certifications_provider_id_fk_idx",
+  ["certificationProviderId"],
+  {}
+)
 @Entity("certifications", { schema: "hackathon" })
 export class Certifications extends BaseEntity {
   @Field()
@@ -37,7 +41,7 @@ export class Certifications extends BaseEntity {
   @JoinColumn([
     {
       name: "certification_provider_id",
-      referencedColumnName: "certificatoinProviderId",
+      referencedColumnName: "certificationProviderId",
     },
   ])
   certificationProvider: CertificationProviders;

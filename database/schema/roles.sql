@@ -10,34 +10,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `assignment`
+-- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `assignment`;
+DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `assignment` (
-  `assignment_id` int(11) NOT NULL AUTO_INCREMENT,
-  `employee_id` varchar(36) NOT NULL,
-  `workgroup` varchar(128) NOT NULL,
-  `cost_center` varchar(128) NOT NULL,
-  `sdm_reporting_manager` varchar(256) NOT NULL,
-  `allocation_percentage` int(11) NOT NULL,
-  `start_date` date NOT NULL,
-  `release_date` date DEFAULT NULL,
-  PRIMARY KEY (`assignment_id`),
-  KEY `assignment_employee_id_fk_idx` (`employee_id`),
-  CONSTRAINT `assignment_employee_id_fk` FOREIGN KEY (`employee_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `assignment`
+-- Dumping data for table `roles`
 --
 
-LOCK TABLES `assignment` WRITE;
-/*!40000 ALTER TABLE `assignment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `assignment` ENABLE KEYS */;
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

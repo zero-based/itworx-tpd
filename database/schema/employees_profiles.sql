@@ -33,7 +33,7 @@ CREATE TABLE `employees_profiles` (
   `cost_center` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `manager_id_fk_idx` (`direct_manager_id`),
-  CONSTRAINT `manager_id_fk` FOREIGN KEY (`direct_manager_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `employees_profile_direct_manager_id_fk` FOREIGN KEY (`direct_manager_id`) REFERENCES `employees_profiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

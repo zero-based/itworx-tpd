@@ -1,4 +1,4 @@
 fragment CertificationProvider on CertificationProviders {
-  certificatoinProviderId
+  certificationProviderId
   certificationProviderName
 }

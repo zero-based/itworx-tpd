@@ -12,7 +12,7 @@ import { EmployeeSkillsHistory } from "./EmployeeSkillsHistory";
 import { ResourceRequestSkills } from "./ResourceRequestSkills";
 
 @ObjectType()
-@Index("Skill_Name_UNIQUE", ["skillName"], { unique: true })
+@Index("skill_name_unique", ["skillName"], { unique: true })
 @Entity("skills", { schema: "hackathon" })
 export class Skills extends BaseEntity {
   @Field()

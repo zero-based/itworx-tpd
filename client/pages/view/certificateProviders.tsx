@@ -21,7 +21,7 @@ import {
 import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = {
-  certificatoinProviderId: number;
+  certificationProviderId: number;
   certificationProviderName: string;
 };
 
@@ -43,7 +43,7 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
     },
   });
   var rows = data?.certificationsProviders?.data?.items.map((s) => ({
-    id: s.certificatoinProviderId,
+    id: s.certificationProviderId,
     data: s,
   }));
 

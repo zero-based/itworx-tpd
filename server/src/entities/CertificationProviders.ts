@@ -12,8 +12,8 @@ import { Certifications } from "./Certifications";
 @Entity("certification_providers", { schema: "hackathon" })
 export class CertificationProviders extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn({ type: "int", name: "certificatoin_provider_id" })
-  certificatoinProviderId: number;
+  @PrimaryGeneratedColumn({ type: "int", name: "certification_provider_id" })
+  certificationProviderId: number;
 
   @Field()
   @Column("varchar", { name: "certification_provider_name", length: 128 })

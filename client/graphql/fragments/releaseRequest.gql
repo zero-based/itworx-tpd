@@ -6,7 +6,7 @@ fragment ReleaseRequest on ReleaseRequests {
   employeeTitle
   function
   releaseDate
-  propability
+  probability
   releasePercentage
   releaseReason
   leaving

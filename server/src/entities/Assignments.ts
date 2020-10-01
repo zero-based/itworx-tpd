@@ -9,8 +9,8 @@ import {
 import { EmployeesProfiles } from "./EmployeesProfiles";
 
 @Index("assignment_employee_id_fk_idx", ["employeeId"], {})
-@Entity("assignment", { schema: "hackathon" })
-export class Assignment {
+@Entity("assignments", { schema: "hackathon" })
+export class Assignments {
   @PrimaryGeneratedColumn({ type: "int", name: "assignment_id" })
   assignmentId: number;
 

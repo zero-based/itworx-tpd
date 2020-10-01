@@ -20,7 +20,7 @@ CREATE TABLE `skills` (
   `skill_id` int(11) NOT NULL AUTO_INCREMENT,
   `skill_name` varchar(45) NOT NULL,
   PRIMARY KEY (`skill_id`),
-  UNIQUE KEY `Skill_Name_UNIQUE` (`skill_name`)
+  UNIQUE KEY `skill_name_unique` (`skill_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

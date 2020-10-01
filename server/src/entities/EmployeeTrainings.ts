@@ -1,9 +1,8 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { EmployeesProfiles } from "./EmployeesProfiles";
 
-@Index("employee_id_idx", ["employeeId"], {})
-@Entity("employee_training", { schema: "hackathon" })
-export class EmployeeTraining {
+@Entity("employee_trainings", { schema: "hackathon" })
+export class EmployeeTrainings {
   @Column("varchar", { primary: true, name: "employee_id", length: 36 })
   employeeId: string;
 

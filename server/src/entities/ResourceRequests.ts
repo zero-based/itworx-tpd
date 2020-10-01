@@ -37,8 +37,8 @@ export class ResourceRequests extends BaseEntity {
   endDate: string;
 
   @Field()
-  @Column("int", { name: "propability" })
-  propability: number;
+  @Column("int", { name: "probability" })
+  probability: number;
 
   @Field()
   @Column("int", { name: "percentage" })
@@ -53,8 +53,8 @@ export class ResourceRequests extends BaseEntity {
   coreTeamMember: string | null;
 
   @Field(() => String, { nullable: true })
-  @Column("varchar", { name: "replacenement", nullable: true, length: 1 })
-  replacenement: string | null;
+  @Column("varchar", { name: "replacement", nullable: true, length: 1 })
+  replacement: string | null;
 
   @Field(() => String, { nullable: true })
   @Column("varchar", { name: "replacement_for", nullable: true, length: 256 })
