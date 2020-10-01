@@ -37,7 +37,8 @@ export class EmployeeSkillResolver {
     var skill = await Skills.findOne({ skillName: input.skillName });
     if (!skill) {
       const skillResolver = new SkillResolver();
-      skill = (await skillResolver.createSkill(input.skillName)).data;
+      skill = (await skillResolver.createSkill({ skillName: input.skillName }))
+        .data;
     }
     return {
       data: await EmployeeSkills.create({
@@ -133,7 +134,8 @@ export class EmployeeSkillResolver {
     var skill = await Skills.findOne({ skillName: input.skillName });
     if (!skill) {
       const skillResolver = new SkillResolver();
-      skill = (await skillResolver.createSkill(input.skillName)).data;
+      skill = (await skillResolver.createSkill({ skillName: input.skillName }))
+        .data;
     }
 
     const updated = {

@@ -1,5 +1,5 @@
-mutation CreateSkill($skillName: String!) {
-  createSkill(skillName: $skillName) {
+mutation CreateSkill($input: SkillInput!) {
+  createSkill(input: $input) {
     errors {
       ...Error
     }

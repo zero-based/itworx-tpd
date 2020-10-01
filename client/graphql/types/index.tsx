@@ -244,6 +244,15 @@ export type UserResponse = {
   data?: Maybe<EmployeesProfiles>;
 };
 
+export type CertificationProviderInput = {
+  certificationProviderName: Scalars['String'];
+};
+
+export type CertificationInput = {
+  certificationName: Scalars['String'];
+  certificationProviderName: Scalars['String'];
+};
+
 export type EmployeeCertificationInput = {
   certificateProvider: Scalars['String'];
   certificationName: Scalars['String'];
@@ -254,6 +263,10 @@ export type EmployeeSkillInput = {
   skillName: Scalars['String'];
   experienceLevel: Scalars['String'];
   lastUsedDate: Scalars['String'];
+};
+
+export type SkillInput = {
+  skillName: Scalars['String'];
 };
 
 export type ReleaseRequestInput = {
@@ -427,13 +440,13 @@ export type Mutation = {
 
 
 export type MutationUpdateCertificationProviderArgs = {
-  certificationProviderName: Scalars['String'];
+  input: CertificationProviderInput;
   certificationProviderId: Scalars['Int'];
 };
 
 
 export type MutationCreateCertificationProviderArgs = {
-  certificationProviderName: Scalars['String'];
+  input: CertificationProviderInput;
 };
 
 
@@ -443,15 +456,13 @@ export type MutationDeleteCertificateProviderArgs = {
 
 
 export type MutationUpdateCertificationArgs = {
-  certificationProviderName: Scalars['String'];
-  certificationName: Scalars['String'];
+  input: CertificationInput;
   certificationId: Scalars['Int'];
 };
 
 
 export type MutationCreateCertificationArgs = {
-  certificationProviderName: Scalars['String'];
-  certificationName: Scalars['String'];
+  input: CertificationInput;
 };
 
 
@@ -477,12 +488,12 @@ export type MutationDeleteEmployeeCertificationArgs = {
 
 
 export type MutationCreateSkillArgs = {
-  skillName: Scalars['String'];
+  input: SkillInput;
 };
 
 
 export type MutationUpdateSkillArgs = {
-  skillName: Scalars['String'];
+  input: SkillInput;
   skillId: Scalars['Int'];
 };
 
@@ -646,8 +657,7 @@ export type SkillFragment = (
 );
 
 export type CreateCertificationMutationVariables = Exact<{
-  certificationProviderName: Scalars['String'];
-  certificationName: Scalars['String'];
+  input: CertificationInput;
 }>;
 
 
@@ -666,7 +676,7 @@ export type CreateCertificationMutation = (
 );
 
 export type CreateCertificationProviderMutationVariables = Exact<{
-  certificationProviderName: Scalars['String'];
+  input: CertificationProviderInput;
 }>;
 
 
@@ -724,7 +734,7 @@ export type CreateResourceRequestMutation = (
 );
 
 export type CreateSkillMutationVariables = Exact<{
-  skillName: Scalars['String'];
+  input: SkillInput;
 }>;
 
 
@@ -796,8 +806,7 @@ export type LogoutMutation = (
 
 export type UpdateCertificationMutationVariables = Exact<{
   certificationId: Scalars['Int'];
-  certificationProviderName: Scalars['String'];
-  certificationName: Scalars['String'];
+  input: CertificationInput;
 }>;
 
 
@@ -817,7 +826,7 @@ export type UpdateCertificationMutation = (
 
 export type UpdateCertificationProviderMutationVariables = Exact<{
   certificationProviderId: Scalars['Int'];
-  certificationProviderName: Scalars['String'];
+  input: CertificationProviderInput;
 }>;
 
 
@@ -879,7 +888,7 @@ export type UpdateResourceRequestMutation = (
 
 export type UpdateSkillMutationVariables = Exact<{
   skillId: Scalars['Int'];
-  skillName: Scalars['String'];
+  input: SkillInput;
 }>;
 
 
@@ -1295,8 +1304,8 @@ export const SkillFragmentDoc = gql`
 }
     `;
 export const CreateCertificationDocument = gql`
-    mutation CreateCertification($certificationProviderName: String!, $certificationName: String!) {
-  createCertification(certificationProviderName: $certificationProviderName, certificationName: $certificationName) {
+    mutation CreateCertification($input: CertificationInput!) {
+  createCertification(input: $input) {
     errors {
       ...Error
     }
@@ -1312,8 +1321,8 @@ export function useCreateCertificationMutation() {
   return Urql.useMutation<CreateCertificationMutation, CreateCertificationMutationVariables>(CreateCertificationDocument);
 };
 export const CreateCertificationProviderDocument = gql`
-    mutation CreateCertificationProvider($certificationProviderName: String!) {
-  createCertificationProvider(certificationProviderName: $certificationProviderName) {
+    mutation CreateCertificationProvider($input: CertificationProviderInput!) {
+  createCertificationProvider(input: $input) {
     errors {
       ...Error
     }
@@ -1362,8 +1371,8 @@ export function useCreateResourceRequestMutation() {
   return Urql.useMutation<CreateResourceRequestMutation, CreateResourceRequestMutationVariables>(CreateResourceRequestDocument);
 };
 export const CreateSkillDocument = gql`
-    mutation CreateSkill($skillName: String!) {
-  createSkill(skillName: $skillName) {
+    mutation CreateSkill($input: SkillInput!) {
+  createSkill(input: $input) {
     errors {
       ...Error
     }
@@ -1426,8 +1435,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const UpdateCertificationDocument = gql`
-    mutation UpdateCertification($certificationId: Int!, $certificationProviderName: String!, $certificationName: String!) {
-  updateCertification(certificationId: $certificationId, certificationProviderName: $certificationProviderName, certificationName: $certificationName) {
+    mutation UpdateCertification($certificationId: Int!, $input: CertificationInput!) {
+  updateCertification(certificationId: $certificationId, input: $input) {
     errors {
       ...Error
     }
@@ -1443,8 +1452,8 @@ export function useUpdateCertificationMutation() {
   return Urql.useMutation<UpdateCertificationMutation, UpdateCertificationMutationVariables>(UpdateCertificationDocument);
 };
 export const UpdateCertificationProviderDocument = gql`
-    mutation UpdateCertificationProvider($certificationProviderId: Int!, $certificationProviderName: String!) {
-  updateCertificationProvider(certificationProviderId: $certificationProviderId, certificationProviderName: $certificationProviderName) {
+    mutation UpdateCertificationProvider($certificationProviderId: Int!, $input: CertificationProviderInput!) {
+  updateCertificationProvider(certificationProviderId: $certificationProviderId, input: $input) {
     errors {
       ...Error
     }
@@ -1493,8 +1502,8 @@ export function useUpdateResourceRequestMutation() {
   return Urql.useMutation<UpdateResourceRequestMutation, UpdateResourceRequestMutationVariables>(UpdateResourceRequestDocument);
 };
 export const UpdateSkillDocument = gql`
-    mutation UpdateSkill($skillId: Int!, $skillName: String!) {
-  updateSkill(skillId: $skillId, skillName: $skillName) {
+    mutation UpdateSkill($skillId: Int!, $input: SkillInput!) {
+  updateSkill(skillId: $skillId, input: $input) {
     errors {
       ...Error
     }

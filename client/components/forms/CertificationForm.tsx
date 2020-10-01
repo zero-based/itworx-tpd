@@ -7,12 +7,10 @@ import { useStyletron } from "baseui";
 
 import { ComboboxField } from "../fields/ComboBoxField";
 import { InputField } from "../fields/InputField";
-import { useCertificationsProvidersQuery } from "../../graphql/types";
-
-type CertificationInput = {
-  certificationName: string;
-  certificateProviderName: string;
-};
+import {
+  CertificationInput,
+  useCertificationsProvidersQuery,
+} from "../../graphql/types";
 
 interface CertificationFormProps extends FormikConfig<CertificationInput> {
   action: string;

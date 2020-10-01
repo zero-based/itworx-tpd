@@ -6,6 +6,7 @@ import { CertificationProviders } from "../entities/CertificationProviders";
 import { CertificationResponse } from "../types/responses/CertificationResponse";
 import { PaginatedCertificationResponse } from "../types/responses/PaginatedCertificationResponse";
 import { UserRole as R } from "../types/UserRole";
+import { CertificationInput } from "../types/inputs/CertificationInput";
 
 @Resolver()
 export class CertificationResolver {
@@ -40,12 +41,10 @@ export class CertificationResolver {
   @Mutation(() => CertificationResponse, { nullable: true })
   async updateCertification(
     @Arg("certificationId", () => Int) certificationId: number,
-    @Arg("certificationName") certificationName: string,
-    @Arg("certificationProviderName")
-    certificationProviderName: string
+    @Arg("input") input: CertificationInput
   ): Promise<CertificationResponse | undefined> {
     const provider = await CertificationProviders.findOne({
-      where: { certificationProviderName: certificationProviderName },
+      where: { certificationProviderName: input.certificationProviderName },
     });
     if (!provider) {
       return {
@@ -69,13 +68,16 @@ export class CertificationResolver {
       };
     }
     await Certifications.update(certificationId, {
-      certificationName,
+      certificationName: input.certificationName,
       certificationProviderId: provider.certificatoinProviderId,
     });
+
     return {
       data: {
         ...certification,
-        certificationName,
+        certificationId: certificationId,
+        certificationName: input.certificationName,
+        certificationProviderId: provider.certificatoinProviderId,
       } as Certifications,
     };
   }
@@ -105,12 +107,10 @@ export class CertificationResolver {
   @Authorized()
   @Mutation(() => CertificationResponse)
   async createCertification(
-    @Arg("certificationName") certificationName: string,
-    @Arg("certificationProviderName")
-    certificationProviderName: string
+    @Arg("input") input: CertificationInput
   ): Promise<CertificationResponse> {
     const provider = await CertificationProviders.findOne({
-      where: { certificationProviderName: certificationProviderName },
+      where: { certificationProviderName: input.certificationProviderName },
     });
     if (!provider) {
       return {
@@ -124,7 +124,7 @@ export class CertificationResolver {
     }
     return {
       data: await Certifications.create({
-        certificationName,
+        certificationName: input.certificationName,
         certificationProviderId: provider.certificatoinProviderId,
       }).save(),
     };

@@ -58,10 +58,11 @@ export class EmployeeCertification {
     if (!certification) {
       const certificationResolver = new CertificationResolver();
       certification = (
-        await certificationResolver.createCertification(
-          input.certificationName,
-          certificationProvider.certificationProviderName
-        )
+        await certificationResolver.createCertification({
+          certificationName: input.certificationName,
+          certificationProviderName:
+            certificationProvider.certificationProviderName,
+        })
       ).data;
     }
 
@@ -181,10 +182,11 @@ export class EmployeeCertification {
     if (!certification) {
       const certificationResolver = new CertificationResolver();
       certification = (
-        await certificationResolver.createCertification(
-          input.certificationName,
-          certificationProvider.certificationProviderName
-        )
+        await certificationResolver.createCertification({
+          certificationName: input.certificationName,
+          certificationProviderName:
+            certificationProvider.certificationProviderName,
+        })
       ).data;
     }
 

@@ -5,13 +5,10 @@ import { Form, Formik, FormikConfig } from "formik";
 import { HeadingLevel, Heading } from "baseui/heading";
 
 import { InputField } from "../fields/InputField";
-
-type CertificateProviderInput = {
-  certificationProviderName: string;
-};
+import { CertificationProviderInput } from "../../graphql/types";
 
 interface CertificateProviderFormProps
-  extends FormikConfig<CertificateProviderInput> {
+  extends FormikConfig<CertificationProviderInput> {
   action: string;
 }
 

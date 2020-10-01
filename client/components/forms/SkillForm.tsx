@@ -5,10 +5,7 @@ import { Form, Formik, FormikConfig } from "formik";
 import { HeadingLevel, Heading } from "baseui/heading";
 
 import { InputField } from "../fields/InputField";
-
-type SkillInput = {
-  skillName: string;
-};
+import { SkillInput } from "../../graphql/types";
 
 interface SkillFormProps extends FormikConfig<SkillInput> {
   action: string;
