@@ -13,7 +13,7 @@ const CreateCertification: React.FC<CertificationProps> = () => {
   return (
     <CertificationForm
       initialValues={{
-        certificateProviderName: "",
+        certificationProviderName: "",
         certificationName: "",
       }}
       action="Add"
@@ -21,7 +21,7 @@ const CreateCertification: React.FC<CertificationProps> = () => {
         await createCertification({
           input: {
             certificationName: values.certificationName,
-            certificationProviderName: values.certificateProviderName,
+            certificationProviderName: values.certificationProviderName,
           },
         });
         router.push("/view/certifications");

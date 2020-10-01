@@ -30,7 +30,7 @@ const EditCertification: React.FC<updateCertificationProps> = () => {
     <CertificationForm
       initialValues={{
         certificationName: certification?.certificationName!,
-        certificateProviderName: certification?.certificationProvider
+        certificationProviderName: certification?.certificationProvider
           ?.certificationProviderName!,
       }}
       action="Update"
@@ -38,7 +38,7 @@ const EditCertification: React.FC<updateCertificationProps> = () => {
         await updateCertification({
           input: {
             certificationName: values.certificationName,
-            certificationProviderName: values.certificateProviderName,
+            certificationProviderName: values.certificationProviderName,
           },
           certificationId: certification?.certificationId!,
         });
