@@ -7,7 +7,7 @@ import { Loading } from "../components/common/Loading";
 import { Profile } from "../components/profile/Profile";
 import { EmployeesProfiles, useMeQuery } from "../graphql/types";
 import { withAuth } from "../hocs/withAuth";
-
+import { EmployeeSkills } from "../components/profile/employeeSkill";
 
 const Home: React.FC<{}> = () => {
   const [{ data, fetching }] = useMeQuery();
@@ -30,7 +30,9 @@ const Home: React.FC<{}> = () => {
           }}
         >
           <Tab title="Skills">
-            <Label4>No Skills yet</Label4>
+            <Label4>
+              <EmployeeSkills />
+            </Label4>
           </Tab>
           <Tab title="Certificates">
             <Label4>No Certificates yet</Label4>

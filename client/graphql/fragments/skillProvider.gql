@@ -1,0 +1,3 @@
+fragment SkillProvider on Skills {
+  skillName
+}

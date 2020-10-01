@@ -656,6 +656,11 @@ export type SkillFragment = (
   & Pick<Skills, 'skillId' | 'skillName'>
 );
 
+export type SkillProviderFragment = (
+  { __typename?: 'Skills' }
+  & Pick<Skills, 'skillName'>
+);
+
 export type CreateCertificationMutationVariables = Exact<{
   input: CertificationInput;
 }>;
@@ -770,6 +775,16 @@ export type DeleteCertificationMutationVariables = Exact<{
 export type DeleteCertificationMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteCertification'>
+);
+
+export type DeleteEmployeeSkillMutationVariables = Exact<{
+  skillId: Scalars['Int'];
+}>;
+
+
+export type DeleteEmployeeSkillMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteEmployeeSkill'>
 );
 
 export type DeleteSkillMutationVariables = Exact<{
@@ -1007,6 +1022,30 @@ export type EmployeeSkillQuery = (
     { __typename?: 'EmployeeSkillResponse' }
     & EmployeeSkillResponseFragment
   )> }
+);
+
+export type EmployeeSkillsQueryVariables = Exact<{
+  cursor?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+}>;
+
+
+export type EmployeeSkillsQuery = (
+  { __typename?: 'Query' }
+  & { employeeSkills: (
+    { __typename?: 'PaginatedEmployeeSkillResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & ErrorFragment
+    )>>, data?: Maybe<(
+      { __typename?: 'EmployeeSkillsPage' }
+      & Pick<EmployeeSkillsPage, 'hasMore'>
+      & { items: Array<(
+        { __typename?: 'EmployeeSkills' }
+        & EmployeeSkillFragment
+      )> }
+    )> }
+  ) }
 );
 
 export type ManagersNamesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1303,6 +1342,11 @@ export const SkillFragmentDoc = gql`
   skillName
 }
     `;
+export const SkillProviderFragmentDoc = gql`
+    fragment SkillProvider on Skills {
+  skillName
+}
+    `;
 export const CreateCertificationDocument = gql`
     mutation CreateCertification($input: CertificationInput!) {
   createCertification(input: $input) {
@@ -1404,6 +1448,15 @@ export const DeleteCertificationDocument = gql`
 
 export function useDeleteCertificationMutation() {
   return Urql.useMutation<DeleteCertificationMutation, DeleteCertificationMutationVariables>(DeleteCertificationDocument);
+};
+export const DeleteEmployeeSkillDocument = gql`
+    mutation DeleteEmployeeSkill($skillId: Int!) {
+  deleteEmployeeSkill(skillId: $skillId)
+}
+    `;
+
+export function useDeleteEmployeeSkillMutation() {
+  return Urql.useMutation<DeleteEmployeeSkillMutation, DeleteEmployeeSkillMutationVariables>(DeleteEmployeeSkillDocument);
 };
 export const DeleteSkillDocument = gql`
     mutation DeleteSkill($skillId: Int!) {
@@ -1605,6 +1658,26 @@ export const EmployeeSkillDocument = gql`
 
 export function useEmployeeSkillQuery(options: Omit<Urql.UseQueryArgs<EmployeeSkillQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<EmployeeSkillQuery>({ query: EmployeeSkillDocument, ...options });
+};
+export const EmployeeSkillsDocument = gql`
+    query EmployeeSkills($cursor: Int, $limit: Int!) {
+  employeeSkills(cursor: $cursor, limit: $limit) {
+    errors {
+      ...Error
+    }
+    data {
+      hasMore
+      items {
+        ...EmployeeSkill
+      }
+    }
+  }
+}
+    ${ErrorFragmentDoc}
+${EmployeeSkillFragmentDoc}`;
+
+export function useEmployeeSkillsQuery(options: Omit<Urql.UseQueryArgs<EmployeeSkillsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EmployeeSkillsQuery>({ query: EmployeeSkillsDocument, ...options });
 };
 export const ManagersNamesDocument = gql`
     query ManagersNames {
