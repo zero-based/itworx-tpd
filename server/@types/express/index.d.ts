@@ -1,13 +1,7 @@
-import { UserRole } from "src/types/UserRole";
-
-export {};
+import { AppSession } from "src/types";
 
 declare global {
   namespace Express {
-    interface Session {
-      profileId: string;
-      userRole: UserRole;
-      userName: string;
-    }
+    interface Session extends AppSession {}
   }
 }
