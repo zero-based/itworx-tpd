@@ -1,0 +1,11 @@
+mutation UpdateEmployeeCertification(
+  $input: EmployeeCertificationInput!
+  $certificationId: Int!
+) {
+  updateEmployeeCertification(
+    input: $input
+    certificationId: $certificationId
+  ) {
+    ...EmployeeCertificationResponse
+  }
+}

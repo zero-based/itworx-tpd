@@ -5,6 +5,9 @@ query CertificateProvider($certificationProviderId: Int!) {
     }
     data {
       ...CertificationProvider
+      certifications {
+        ...Certfication
+      }
     }
   }
 }

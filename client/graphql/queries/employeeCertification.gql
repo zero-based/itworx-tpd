@@ -1,0 +1,5 @@
+query EmployeeCertification($certificationId: Int!) {
+  employeeCertification(certificationId: $certificationId) {
+    ...EmployeeCertificationResponse
+  }
+}
