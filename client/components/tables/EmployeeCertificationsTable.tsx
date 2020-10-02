@@ -25,7 +25,7 @@ type RowDataT = {
 
 const columns = [
   CategoricalColumn({
-    title: "Certificate Provider",
+    title: "Certification Provider",
     filterable: true,
     mapDataToValue: (data: RowDataT) =>
       data.certification?.certificationProvider?.certificationProviderName,

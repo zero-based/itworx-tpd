@@ -7,12 +7,12 @@ import { HeadingLevel, Heading } from "baseui/heading";
 import { InputField } from "../fields/InputField";
 import { CertificationProviderInput } from "../../graphql/types";
 
-interface CertificateProviderFormProps
+interface CertificationProviderFormProps
   extends FormikConfig<CertificationProviderInput> {
   action: string;
 }
 
-export const CertificateProviderForm: React.FC<CertificateProviderFormProps> = ({
+export const CertificationProviderForm: React.FC<CertificationProviderFormProps> = ({
   action,
   ...props
 }) => {
@@ -51,7 +51,7 @@ export const CertificateProviderForm: React.FC<CertificateProviderFormProps> = (
             >
               <InputField
                 name="certificationProviderName"
-                label="CertificationProvider Name"
+                label="Certification Provider Name"
                 required
               />
             </FlexGridItem>

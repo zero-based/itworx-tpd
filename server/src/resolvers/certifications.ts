@@ -20,7 +20,7 @@ export class CertificationResolver {
     const requestLimit = Math.min(30, limit);
     const fetchLimit = requestLimit + 1;
 
-    const certificates = await Certifications.find({
+    const certifications = await Certifications.find({
       order: { certificationName: "ASC" },
       where: {
         ...(cursor ? { certificationName: MoreThan(cursor) } : {}),
@@ -30,8 +30,8 @@ export class CertificationResolver {
     });
     return {
       data: {
-        hasMore: certificates.length == fetchLimit,
-        items: certificates.slice(0, requestLimit),
+        hasMore: certifications.length == fetchLimit,
+        items: certifications.slice(0, requestLimit),
       },
     };
   }
@@ -88,19 +88,19 @@ export class CertificationResolver {
   async certification(
     @Arg("certificationId", () => Int) certificationId: number
   ): Promise<CertificationResponse | undefined> {
-    const certificate = await Certifications.findOne(certificationId);
-    if (!certificate) {
+    const certification = await Certifications.findOne(certificationId);
+    if (!certification) {
       return {
         errors: [
           {
             field: "certificationId",
-            message: "Certificate does not exist",
+            message: "Certification does not exist",
           },
         ],
       };
     }
 
-    return { data: certificate };
+    return { data: certification };
   }
 
   // Add Certification

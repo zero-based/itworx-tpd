@@ -13,7 +13,6 @@ import {
   useCertificationsProvidersQuery,
 } from "../../graphql/types";
 
-
 interface CertificationFormProps extends FormikConfig<CertificationInput> {
   action: string;
 }
@@ -84,7 +83,7 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
               }}
             >
               <ComboboxField
-                name="certificateProviderName"
+                name="certificationProviderName"
                 label="Certification Provider"
                 items={certificationsProviders}
                 mapItemToString={(item) => item.certificationProviderName}

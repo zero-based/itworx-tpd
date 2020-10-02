@@ -19,7 +19,7 @@ const EmployeeCertification: React.FC<EmployeeCertificationProps> = () => {
   const router = useRouter();
 
   const initialValues: EmployeeCertificationInput = {
-    certificateProvider: "",
+    certificationProvider: "",
     certificationName: "",
     expirationDate: "",
   };

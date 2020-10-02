@@ -15,7 +15,7 @@ import { CSVLink } from "react-csv";
 import { Loading } from "../../components/common/Loading";
 import {
   useCertificationsProvidersQuery,
-  useDeleteCertificateProviderMutation,
+  useDeleteCertificationProviderMutation,
   UserRole,
 } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
@@ -27,15 +27,18 @@ type RowDataT = {
 
 const columns = [
   StringColumn({
-    title: "Certificate Provider Name",
+    title: "Certification Provider Name",
     mapDataToValue: (data: RowDataT) => data.certificationProviderName,
   }),
 ];
 
-const ViewCertificateProviders: React.FC<{}> = ({}) => {
+const ViewCertificationProviders: React.FC<{}> = ({}) => {
   const [, theme] = useStyletron();
   var router = useRouter();
-  const [, deleteCertificateProvider] = useDeleteCertificateProviderMutation();
+  const [
+    ,
+    deleteCertificationProvider,
+  ] = useDeleteCertificationProviderMutation();
   const [{ data }] = useCertificationsProvidersQuery({
     variables: {
       limit: 30,
@@ -51,14 +54,14 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/certificateProvider/${row.id}`);
+        router.push(`/edit/certificationProvider/${row.id}`);
       },
       renderIcon: Show,
     },
     {
       label: "Delete",
       onClick: async ({ row }) => {
-        await deleteCertificateProvider({
+        await deleteCertificationProvider({
           certificationProviderId: parseInt(row.id.toString(), 10),
         });
         window.location.reload();
@@ -83,7 +86,7 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
                     fontSize: "x-large",
                   }}
                 >
-                  Certificates Provider
+                  Certifications Provider
                 </div>
               </Cell>
               <Cell skip={[4, 7]} span={[1, 2]}>
@@ -92,7 +95,7 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
                     type="submit"
                     startEnhancer={() => <Plus />}
                     onClick={() => {
-                      router.push("../create/certificateProvider");
+                      router.push("../create/certificationProvider");
                     }}
                   >
                     Add New
@@ -117,7 +120,7 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
             <Button $style={{ textAlign: "end", marginTop: "1%" }}>
               <CSVLink
                 data={data?.certificationsProviders?.data?.items!}
-                filename="CertificateProviders.csv"
+                filename="CertificationProviders.csv"
                 style={{ color: "white", textDecoration: "none" }}
               >
                 Export
@@ -130,4 +133,4 @@ const ViewCertificateProviders: React.FC<{}> = ({}) => {
   );
 };
 
-export default withAuth(ViewCertificateProviders, [UserRole.Admin]);
+export default withAuth(ViewCertificationProviders, [UserRole.Admin]);

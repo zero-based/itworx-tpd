@@ -33,7 +33,7 @@ const Home: React.FC<{}> = () => {
           <Tab title="Skills">
             <EmployeeSkillsTable />
           </Tab>
-          <Tab title="Certificates">
+          <Tab title="Certifications">
             <EmployeeCertificationsTable />
           </Tab>
           <Tab title="Trainings">

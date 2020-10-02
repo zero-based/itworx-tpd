@@ -19,7 +19,7 @@ export class CertificationProvidersResolver {
     const requestLimit = Math.min(30, limit);
     const fetchLimit = requestLimit + 1;
 
-    const certificatesProviders = await CertificationProviders.find({
+    const certificationsProviders = await CertificationProviders.find({
       order: { certificationProviderName: "ASC" },
       where: {
         ...(cursor ? { certificationProviderName: MoreThan(cursor) } : {}),
@@ -28,8 +28,8 @@ export class CertificationProvidersResolver {
     });
     return {
       data: {
-        hasMore: certificatesProviders.length == fetchLimit,
-        items: certificatesProviders.slice(0, requestLimit),
+        hasMore: certificationsProviders.length == fetchLimit,
+        items: certificationsProviders.slice(0, requestLimit),
       },
     };
   }
@@ -65,30 +65,30 @@ export class CertificationProvidersResolver {
     };
   }
 
-  // Get A Certificate Provider
+  // Get A Certification Provider
   @Authorized(R.ADMIN)
   @Query(() => CertificationProviderResponse, { nullable: true })
-  async certificateProvider(
+  async certificationProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number
   ): Promise<CertificationProviderResponse | undefined> {
-    const certificateProvider = await CertificationProviders.findOne({
+    const certificationProvider = await CertificationProviders.findOne({
       where: {
         certificationProviderId: certificationProviderId,
       },
       relations: ["certifications"],
     });
-    if (!certificateProvider) {
+    if (!certificationProvider) {
       return {
         errors: [
           {
             field: "certificationProviderId",
-            message: "Certificate Provider does not exist",
+            message: "Certification Provider does not exist",
           },
         ],
       };
     }
 
-    return { data: certificateProvider };
+    return { data: certificationProvider };
   }
 
   // Add Certification Provider
@@ -107,7 +107,7 @@ export class CertificationProvidersResolver {
   // Delete Certification Provider
   @Authorized(R.ADMIN)
   @Mutation(() => Boolean)
-  async deleteCertificateProvider(
+  async deleteCertificationProvider(
     @Arg("certificationProviderId", () => Int) certificationProviderId: number
   ): Promise<boolean> {
     await CertificationProviders.delete(certificationProviderId);

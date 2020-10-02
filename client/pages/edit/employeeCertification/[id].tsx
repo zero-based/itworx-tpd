@@ -37,7 +37,7 @@ const EditEmployeeCertification: React.FC<{}> = () => {
 
   const certification = employeeCertification.certification;
   const initialValues: EmployeeCertificationInput = {
-    certificateProvider:
+    certificationProvider:
       certification.certificationProvider.certificationProviderName,
     certificationName: certification.certificationName,
     expirationDate: employeeCertification.expirationDate ?? "",
