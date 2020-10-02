@@ -8,19 +8,21 @@ import {
   useUpdateCertificationMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
+import { useRouteId } from "../../../hooks/useRouteId";
 
 interface updateCertificationProps {}
 
 const EditCertification: React.FC<updateCertificationProps> = () => {
+  const [, updateCertification] = useUpdateCertificationMutation();
   const router = useRouter();
-  const id =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  const id = useRouteId();
+
   const [{ data }] = useCertificationQuery({
     variables: {
       certificationId: id,
     },
   });
-  const [, updateCertification] = useUpdateCertificationMutation();
+
   const certification = data?.certification?.data;
 
   if (certification === undefined) {

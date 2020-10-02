@@ -10,6 +10,7 @@ import {
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 import { toErrorMap } from "../../../utils/toErrorMap";
+import { useRouteId } from "../../../hooks/useRouteId";
 
 const EditEmployeeCertification: React.FC<{}> = () => {
   const [
@@ -17,15 +18,14 @@ const EditEmployeeCertification: React.FC<{}> = () => {
     updateEmployeeCertification,
   ] = useUpdateEmployeeCertificationMutation();
   const router = useRouter();
-
-  const id =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  const id = useRouteId();
 
   const [{ data, fetching }] = useEmployeeCertificationQuery({
     variables: {
       certificationId: id,
     },
   });
+
   if (fetching) {
     return <Loading />;
   }

@@ -9,12 +9,13 @@ import {
   useUpdateSkillMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
+import { useRouteId } from "../../../hooks/useRouteId";
 
 const EditSkill: React.FC<{}> = () => {
   const [, updateSkill] = useUpdateSkillMutation();
   const router = useRouter();
-  const id =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  const id = useRouteId();
+
   const [{ data, fetching }] = useSkillQuery({
     variables: {
       skillId: id,
