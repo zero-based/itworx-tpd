@@ -10,7 +10,7 @@ import { useStyletron } from "baseui";
 import { ComboboxField } from "../fields/ComboBoxField";
 import {
   EmployeeCertificationInput,
-  useCertificateProviderQuery,
+  useCertificationProviderQuery,
   useCertificationsProvidersQuery,
 } from "../../graphql/types";
 import { DatePickerStrField } from "../fields/DatePickerStrField";
@@ -28,7 +28,7 @@ export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps>
 }) => {
   const [css, theme] = useStyletron();
 
-  // Certificate Provider
+  // Certification Provider
   const [certificationProviderId, setCertificationProviderId] = React.useState(
     intitalCertitficationProviderId ?? -1
   );
@@ -46,19 +46,19 @@ export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps>
   });
 
   // Certifications
-  const [{ data: certificationsData }] = useCertificateProviderQuery({
+  const [{ data: certificationsData }] = useCertificationProviderQuery({
     variables: {
       certificationProviderId: certificationProviderId,
     },
   });
-  const certificationsName = !certificationsData?.certificateProvider?.data
+  const certificationsName = !certificationsData?.certificationProvider?.data
     ? [{ certificationName: "", certificationId: -1 }]
-    : certificationsData.certificateProvider.data.certifications;
+    : certificationsData.certificationProvider.data.certifications;
 
   if (certificationProviderFetching) return <Loading />;
 
   if (!CertificationProviderData?.certificationsProviders?.data)
-    return <p> No Certificate Providers Avaliable yet !! </p>;
+    return <p> No Certification Providers Avaliable yet !! </p>;
 
   const certificationProviders =
     CertificationProviderData.certificationsProviders.data.items;
@@ -89,8 +89,8 @@ export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps>
           >
             <FlexGridItem display="flex" flexDirection="column">
               <ComboboxField
-                name="certificateProvider"
-                label="Certificate Provider"
+                name="certificationProvider"
+                label="Certification Provider"
                 items={certificationProviders}
                 mapItemToString={(item) => item.certificationProviderName}
                 onItemChanged={(item) => {

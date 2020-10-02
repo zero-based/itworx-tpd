@@ -1,5 +1,5 @@
-query CertificateProvider($certificationProviderId: Int!) {
-  certificateProvider(certificationProviderId: $certificationProviderId) {
+query CertificationProvider($certificationProviderId: Int!) {
+  certificationProvider(certificationProviderId: $certificationProviderId) {
     errors {
       ...Error
     }

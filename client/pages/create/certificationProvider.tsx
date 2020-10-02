@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { CertificateProviderForm } from "../../components/forms/CertificateProviderForm";
+import { CertificationProviderForm } from "../../components/forms/CertificationProviderForm";
 import {
   useCreateCertificationProviderMutation,
   UserRole,
@@ -15,7 +15,7 @@ const CreateCertificationProvider: React.FC<{}> = () => {
     createCertificationProvider,
   ] = useCreateCertificationProviderMutation();
   return (
-    <CertificateProviderForm
+    <CertificationProviderForm
       initialValues={{ certificationProviderName: "" }}
       action="Add"
       onSubmit={async (values) => {
@@ -24,7 +24,7 @@ const CreateCertificationProvider: React.FC<{}> = () => {
             certificationProviderName: values.certificationProviderName,
           },
         });
-        router.push("/view/certificateProviders");
+        router.push("/view/certificationProviders");
       }}
     />
   );

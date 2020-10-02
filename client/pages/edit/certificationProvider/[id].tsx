@@ -1,10 +1,10 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { CertificateProviderForm } from "../../../components/forms/CertificateProviderForm";
+import { CertificationProviderForm } from "../../../components/forms/CertificationProviderForm";
 import { Loading } from "../../../components/common/Loading";
 import {
-  useCertificateProviderQuery,
+  useCertificationProviderQuery,
   UserRole,
   useUpdateCertificationProviderMutation,
 } from "../../../graphql/types";
@@ -14,7 +14,7 @@ const EditCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
   const id =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
-  const [{ data, fetching }] = useCertificateProviderQuery({
+  const [{ data, fetching }] = useCertificationProviderQuery({
     variables: {
       certificationProviderId: id,
     },
@@ -28,14 +28,14 @@ const EditCertificationProvider: React.FC<{}> = () => {
     return <Loading />;
   }
 
-  if (!data?.certificateProvider?.data) {
+  if (!data?.certificationProvider?.data) {
     return <p>Could Not Find Certification Provider</p>;
   }
 
-  const certificationProvider = data?.certificateProvider?.data!;
+  const certificationProvider = data?.certificationProvider?.data!;
 
   return (
-    <CertificateProviderForm
+    <CertificationProviderForm
       initialValues={{
         certificationProviderName:
           certificationProvider.certificationProviderName,
@@ -49,7 +49,7 @@ const EditCertificationProvider: React.FC<{}> = () => {
           certificationProviderId:
             certificationProvider.certificationProviderId,
         });
-        router.push("/view/certificateProviders");
+        router.push("/view/certificationProviders");
       }}
     />
   );

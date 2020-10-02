@@ -46,7 +46,7 @@ const columns = [
 const Certifications: React.FC<{}> = ({}) => {
   const [, theme] = useStyletron();
   var router = useRouter();
-  const [, deleteCertificates] = useDeleteCertificationMutation();
+  const [, deleteCertifications] = useDeleteCertificationMutation();
   const [{ data }] = useCertificationsQuery({
     variables: {
       limit: 30,
@@ -69,7 +69,7 @@ const Certifications: React.FC<{}> = ({}) => {
     {
       label: "Delete",
       onClick: async ({ row }) => {
-        await deleteCertificates({
+        await deleteCertifications({
           certificationId: parseInt(row.id.toString(), 10),
         });
         window.location.reload();

@@ -5,7 +5,7 @@ import { Field, InputType } from "type-graphql";
 export class EmployeeCertificationInput {
   @IsNotEmpty({ message: "required field" })
   @Field()
-  certificateProvider: string;
+  certificationProvider: string;
 
   @IsNotEmpty({ message: "required field" })
   @Field()

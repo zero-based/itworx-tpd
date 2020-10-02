@@ -91,8 +91,8 @@ export const NavBar: React.FC<NavBarProps> = () => {
               items: [
                 { label: "Certifications", route: "/view/certifications" },
                 {
-                  label: "Certificate Providers",
-                  route: "/view/certificateProviders",
+                  label: "Certification Providers",
+                  route: "/view/certificationProviders",
                 },
               ],
             },
@@ -128,8 +128,8 @@ export const NavBar: React.FC<NavBarProps> = () => {
               items: [
                 { label: "Skill", route: "/create/skill" },
                 {
-                  label: "Certificate Provider",
-                  route: "/create/certificateProvider",
+                  label: "Certification Provider",
+                  route: "/create/certificationProvider",
                 },
               ],
             },

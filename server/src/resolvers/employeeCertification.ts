@@ -38,14 +38,14 @@ export class EmployeeCertification {
     // Get Certification Provider Id
     const certificationProvider = await CertificationProviders.findOne({
       where: {
-        certificationProviderName: input.certificateProvider,
+        certificationProviderName: input.certificationProvider,
       },
     });
     if (!certificationProvider) {
       return {
         errors: [
           {
-            field: "certificateProvider",
+            field: "certificationProvider",
             message: "Can not find this Certification Provider",
           },
         ],
@@ -162,15 +162,15 @@ export class EmployeeCertification {
     // Get Certification Provider Id
     const certificationProvider = await CertificationProviders.findOne({
       where: {
-        certificationProviderName: input.certificateProvider,
+        certificationProviderName: input.certificationProvider,
       },
     });
     if (!certificationProvider) {
       return {
         errors: [
           {
-            field: "certificateProvider",
-            message: "Can not find this Certificate Provider",
+            field: "certificationProvider",
+            message: "Can not find this Certification Provider",
           },
         ],
       };
