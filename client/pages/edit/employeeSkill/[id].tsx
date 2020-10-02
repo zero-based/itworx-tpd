@@ -10,13 +10,12 @@ import {
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 import { toErrorMap } from "../../../utils/toErrorMap";
+import { useRouteId } from "../../../hooks/useRouteId";
 
 const EditEmployeeSkill: React.FC<{}> = () => {
   const [, updateEmployeeSkill] = useUpdateEmployeeSkillMutation();
   const router = useRouter();
-
-  const id =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  const id = useRouteId();
 
   const [{ data, fetching }] = useEmployeeSkillQuery({
     variables: {

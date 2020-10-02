@@ -9,20 +9,21 @@ import {
   useUpdateCertificationProviderMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
+import { useRouteId } from "../../../hooks/useRouteId";
 
 const EditCertificationProvider: React.FC<{}> = () => {
+  const [
+    ,
+    updateCertificationProvider,
+  ] = useUpdateCertificationProviderMutation();
   const router = useRouter();
-  const id =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  const id = useRouteId();
+
   const [{ data, fetching }] = useCertificationProviderQuery({
     variables: {
       certificationProviderId: id,
     },
   });
-  const [
-    ,
-    updateCertificationProvider,
-  ] = useUpdateCertificationProviderMutation();
 
   if (fetching) {
     return <Loading />;
