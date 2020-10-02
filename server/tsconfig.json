@@ -23,6 +23,9 @@
     "resolveJsonModule": true,
     "baseUrl": "."
   },
-  "exclude": ["node_modules/@types/"],
-  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
+  "exclude": ["node_modules/"],
+  "include": ["src", "@types"],
+  "ts-node": {
+    "files": true
+  }
 }
