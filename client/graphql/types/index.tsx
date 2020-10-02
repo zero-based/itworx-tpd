@@ -16,6 +16,7 @@ export type CertificationProviders = {
   __typename?: 'CertificationProviders';
   certificationProviderId: Scalars['Float'];
   certificationProviderName: Scalars['String'];
+  certifications: Array<Certifications>;
 };
 
 export type Certifications = {
@@ -555,6 +556,15 @@ export type MutationLoginArgs = {
   input: UserInput;
 };
 
+export type CertificateProviderFragment = (
+  { __typename?: 'CertificationProviders' }
+  & Pick<CertificationProviders, 'certificationProviderId' | 'certificationProviderName'>
+  & { certifications: Array<(
+    { __typename?: 'Certifications' }
+    & Pick<Certifications, 'certificationName'>
+  )> }
+);
+
 export type CertficationFragment = (
   { __typename?: 'Certifications' }
   & Pick<Certifications, 'certificationId' | 'certificationProviderId' | 'certificationName'>
@@ -715,6 +725,19 @@ export type CreateCertificationProviderMutation = (
       { __typename?: 'CertificationProviders' }
       & CertificationProviderFragment
     )> }
+  ) }
+);
+
+export type CreateEmployeeCertificationMutationVariables = Exact<{
+  input: EmployeeCertificationInput;
+}>;
+
+
+export type CreateEmployeeCertificationMutation = (
+  { __typename?: 'Mutation' }
+  & { createEmployeeCertification: (
+    { __typename?: 'EmployeeCertificationResponse' }
+    & EmployeeCertificationResponseFragment
   ) }
 );
 
@@ -888,6 +911,20 @@ export type UpdateCertificationProviderMutation = (
   )> }
 );
 
+export type UpdateEmployeeCertificationMutationVariables = Exact<{
+  input: EmployeeCertificationInput;
+  certificationId: Scalars['Int'];
+}>;
+
+
+export type UpdateEmployeeCertificationMutation = (
+  { __typename?: 'Mutation' }
+  & { updateEmployeeCertification?: Maybe<(
+    { __typename?: 'EmployeeCertificationResponse' }
+    & EmployeeCertificationResponseFragment
+  )> }
+);
+
 export type UpdateEmployeeSkillMutationVariables = Exact<{
   input: EmployeeSkillInput;
   skillId: Scalars['Int'];
@@ -964,6 +1001,10 @@ export type CertificateProviderQuery = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'CertificationProviders' }
+      & { certifications: Array<(
+        { __typename?: 'Certifications' }
+        & CertficationFragment
+      )> }
       & CertificationProviderFragment
     )> }
   )> }
@@ -1037,6 +1078,19 @@ export type CertificationsProvidersQuery = (
         & CertificationProviderFragment
       )> }
     )> }
+  )> }
+);
+
+export type EmployeeCertificationQueryVariables = Exact<{
+  certificationId: Scalars['Int'];
+}>;
+
+
+export type EmployeeCertificationQuery = (
+  { __typename?: 'Query' }
+  & { employeeCertification?: Maybe<(
+    { __typename?: 'EmployeeCertificationResponse' }
+    & EmployeeCertificationResponseFragment
   )> }
 );
 
@@ -1248,6 +1302,15 @@ export type SkillsQuery = (
   ) }
 );
 
+export const CertificateProviderFragmentDoc = gql`
+    fragment CertificateProvider on CertificationProviders {
+  certificationProviderId
+  certificationProviderName
+  certifications {
+    certificationName
+  }
+}
+    `;
 export const CertificationProviderFragmentDoc = gql`
     fragment CertificationProvider on CertificationProviders {
   certificationProviderId
@@ -1452,6 +1515,17 @@ ${CertificationProviderFragmentDoc}`;
 export function useCreateCertificationProviderMutation() {
   return Urql.useMutation<CreateCertificationProviderMutation, CreateCertificationProviderMutationVariables>(CreateCertificationProviderDocument);
 };
+export const CreateEmployeeCertificationDocument = gql`
+    mutation CreateEmployeeCertification($input: EmployeeCertificationInput!) {
+  createEmployeeCertification(input: $input) {
+    ...EmployeeCertificationResponse
+  }
+}
+    ${EmployeeCertificationResponseFragmentDoc}`;
+
+export function useCreateEmployeeCertificationMutation() {
+  return Urql.useMutation<CreateEmployeeCertificationMutation, CreateEmployeeCertificationMutationVariables>(CreateEmployeeCertificationDocument);
+};
 export const CreateEmployeeSkillDocument = gql`
     mutation CreateEmployeeSkill($input: EmployeeSkillInput!) {
   createEmployeeSkill(input: $input) {
@@ -1601,6 +1675,17 @@ ${CertificationProviderFragmentDoc}`;
 export function useUpdateCertificationProviderMutation() {
   return Urql.useMutation<UpdateCertificationProviderMutation, UpdateCertificationProviderMutationVariables>(UpdateCertificationProviderDocument);
 };
+export const UpdateEmployeeCertificationDocument = gql`
+    mutation UpdateEmployeeCertification($input: EmployeeCertificationInput!, $certificationId: Int!) {
+  updateEmployeeCertification(input: $input, certificationId: $certificationId) {
+    ...EmployeeCertificationResponse
+  }
+}
+    ${EmployeeCertificationResponseFragmentDoc}`;
+
+export function useUpdateEmployeeCertificationMutation() {
+  return Urql.useMutation<UpdateEmployeeCertificationMutation, UpdateEmployeeCertificationMutationVariables>(UpdateEmployeeCertificationDocument);
+};
 export const UpdateEmployeeSkillDocument = gql`
     mutation UpdateEmployeeSkill($input: EmployeeSkillInput!, $skillId: Int!) {
   updateEmployeeSkill(input: $input, skillId: $skillId) {
@@ -1659,11 +1744,15 @@ export const CertificateProviderDocument = gql`
     }
     data {
       ...CertificationProvider
+      certifications {
+        ...Certfication
+      }
     }
   }
 }
     ${ErrorFragmentDoc}
-${CertificationProviderFragmentDoc}`;
+${CertificationProviderFragmentDoc}
+${CertficationFragmentDoc}`;
 
 export function useCertificateProviderQuery(options: Omit<Urql.UseQueryArgs<CertificateProviderQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificateProviderQuery>({ query: CertificateProviderDocument, ...options });
@@ -1727,6 +1816,17 @@ export const CertificationsProvidersDocument = gql`
 
 export function useCertificationsProvidersQuery(options: Omit<Urql.UseQueryArgs<CertificationsProvidersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CertificationsProvidersQuery>({ query: CertificationsProvidersDocument, ...options });
+};
+export const EmployeeCertificationDocument = gql`
+    query EmployeeCertification($certificationId: Int!) {
+  employeeCertification(certificationId: $certificationId) {
+    ...EmployeeCertificationResponse
+  }
+}
+    ${EmployeeCertificationResponseFragmentDoc}`;
+
+export function useEmployeeCertificationQuery(options: Omit<Urql.UseQueryArgs<EmployeeCertificationQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EmployeeCertificationQuery>({ query: EmployeeCertificationDocument, ...options });
 };
 export const EmployeeCertificationsDocument = gql`
     query EmployeeCertifications($cursor: Int, $limit: Int!) {
