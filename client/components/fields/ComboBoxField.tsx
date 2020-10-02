@@ -17,12 +17,20 @@ export function ComboboxField<T>({
   ...props
 }: ComboboxFieldProps<T>) {
   const [field, { error }, { setValue }] = useField<string>(props.name!);
+
+  const filteredOptions = React.useMemo(() => {
+    return props.items.filter((item) => {
+      const itemAsString = props.mapItemToString(item);
+      return itemAsString.toLowerCase().includes(field.value.toLowerCase());
+    });
+  }, [props.items, field.value]);
+
   return (
     <FormControl label={() => props.label} error={!!error ? error : null}>
       <Combobox
         {...field}
         {...props}
-        options={props.items}
+        options={filteredOptions}
         mapOptionToString={props.mapItemToString}
         value={field.value}
         onChange={(nextValue, option) => {
