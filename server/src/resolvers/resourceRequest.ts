@@ -16,7 +16,7 @@ import { AppContext } from "../types";
 import { ResourceRequestInput } from "../types/inputs/ResourceRequestInput";
 import { PaginatedResourceRequestResponse } from "../types/responses/PaginatedResourceRequestResponse";
 import { ResourceRequestResponse } from "../types/responses/ResourceRequestResponse";
-import { UserRole as R } from "../types/UserRole";
+import { UserRole as R, UserRole } from "../types/UserRole";
 import { mapToFieldError } from "../utils/mapToFieldError";
 
 @Resolver()
@@ -51,6 +51,13 @@ export class ResourceRequestResolver {
         ],
       };
     }
+
+    if (!input.requestsCount) {
+      input.requestsCount = 1;
+    }
+    for (var i = 0; i < input.requestsCount - 1; i++) {
+      await ResourceRequests.create({ ...input }).save();
+    }
     return {
       data: await ResourceRequests.create({ ...input }).save(),
     };
@@ -82,8 +89,15 @@ export class ResourceRequestResolver {
   @Mutation(() => ResourceRequestResponse, { nullable: true })
   async updateResourceRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number,
-    @Arg("input") input: ResourceRequestInput
+    @Arg("input") input: ResourceRequestInput,
+    @Ctx() { req }: AppContext
   ): Promise<ResourceRequestResponse | undefined> {
+    const validationErrors = await validate(input);
+    if (validationErrors.length > 0) {
+      return {
+        errors: mapToFieldError(validationErrors),
+      };
+    }
     const resourceRequest = await ResourceRequests.findOne(referenceNumber);
     if (!resourceRequest) {
       return {
@@ -113,6 +127,50 @@ export class ResourceRequestResolver {
         ],
       };
     }
+
+    const managerStatus = ["Open", "Cancelled", "On Hold"];
+    const tpdStatus = [
+      "Open",
+      "Cancelled",
+      "On Hold",
+      "Moved",
+      "Pending Hiring Request",
+      "Hired",
+      "Pending Outsourcing Request",
+      "Outsourced",
+      "Over allocated",
+    ];
+
+    if (
+      (req.session!.userRole === UserRole.MANAGER &&
+        !managerStatus.includes(input.status)) ||
+      (req.session!.userRole === UserRole.ADMIN &&
+        !tpdStatus.includes(input.status))
+    ) {
+      return {
+        errors: [
+          {
+            field: "status",
+            message: "Please Enter A Valid Status",
+          },
+        ],
+      };
+    }
+
+    if (!input.requestsCount) {
+      input.requestsCount = 1;
+    }
+    if (!resourceRequest.requestsCount) {
+      resourceRequest.requestsCount = 1;
+    }
+    for (
+      var i = 0;
+      i < input.requestsCount - resourceRequest.requestsCount;
+      i++
+    ) {
+      await ResourceRequests.create({ ...input }).save();
+    }
+
     await ResourceRequests.update(referenceNumber, { ...input });
     return { data: { ...resourceRequest, ...input } as ResourceRequests };
   }

@@ -13,4 +13,10 @@ export class EmployeeResolver {
       },
     });
   }
+
+  @Authorized(R.ADMIN, R.MANAGER)
+  @Query(() => [EmployeesProfiles])
+  employeesProfiles(): Promise<EmployeesProfiles[]> {
+    return EmployeesProfiles.find({});
+  }
 }
