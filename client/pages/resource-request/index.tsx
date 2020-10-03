@@ -44,16 +44,18 @@ const ViewResourceRequest: React.FC<{}> = () => {
       error={!!data?.resourceRequests?.errors}
       contentStyle={{ height: "65vh" }}
       action={
-        <Button>
-          <CSVLink
-            headers={csvHeaders}
-            data={requests!}
-            filename="ResourceRequests.csv"
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            Export
-          </CSVLink>
-        </Button>
+        requests ? (
+          <Button>
+            <CSVLink
+              headers={csvHeaders}
+              data={requests}
+              filename="ResourceRequests.csv"
+              style={{ color: "white", textDecoration: "none" }}
+            >
+              Export
+            </CSVLink>
+          </Button>
+        ) : null
       }
     >
       <ResourceRequestTable data={requests} />

@@ -39,16 +39,18 @@ const ViewReleaseRequest: React.FC<{}> = () => {
       error={!!data?.releaseRequests?.errors}
       contentStyle={{ height: "65vh" }}
       action={
-        <Button>
-          <CSVLink
-            data={requests!}
-            filename="releaseRequests.csv"
-            style={{ color: "white", textDecoration: "none" }}
-            headers={csvHeaders}
-          >
-            Export
-          </CSVLink>
-        </Button>
+        requests ? (
+          <Button>
+            <CSVLink
+              data={requests}
+              filename="releaseRequests.csv"
+              style={{ color: "white", textDecoration: "none" }}
+              headers={csvHeaders}
+            >
+              Export
+            </CSVLink>
+          </Button>
+        ) : null
       }
     >
       <ReleaseRequestTable data={requests} />

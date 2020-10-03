@@ -28,15 +28,17 @@ const ViewCertificationProvider: React.FC<{}> = () => {
       error={!!data?.certificationsProviders?.errors}
       contentStyle={{ height: "65vh" }}
       action={
-        <Button>
-          <CSVLink
-            data={providers!}
-            filename="CertificationProviders.csv"
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            Export
-          </CSVLink>
-        </Button>
+        providers ? (
+          <Button>
+            <CSVLink
+              data={providers}
+              filename="CertificationProviders.csv"
+              style={{ color: "white", textDecoration: "none" }}
+            >
+              Export
+            </CSVLink>
+          </Button>
+        ) : null
       }
     >
       <CertificationProviderTable
