@@ -2,51 +2,52 @@ import React from "react";
 import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import {
+  NumericalColumn,
   RowActionT,
   StringColumn,
   Unstable_StatefulDataTable,
 } from "baseui/data-table";
-import { HeadingLevel } from "baseui/heading";
 import { Delete, Plus, Show } from "baseui/icon";
 import { Cell, Grid } from "baseui/layout-grid";
 import { useRouter } from "next/dist/client/router";
-import { CSVLink } from "react-csv";
 
 import { Loading } from "../../components/common/Loading";
 import {
-  useCertificationsProvidersQuery,
-  useDeleteCertificationProviderMutation,
+  useDeleteSkillMutation,
   UserRole,
+  useSkillsQuery,
 } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
-type RowDataT = {
-  certificationProviderId: number;
-  certificationProviderName: string;
-};
+type RowDataT = { skillId: number; skillName: string };
 
 const columns = [
+  NumericalColumn({
+    title: "Skill ID",
+    minWidth: 1,
+    maxWidth: 1,
+    mapDataToValue: (data: RowDataT) => data.skillId,
+  }),
   StringColumn({
-    title: "Certification Provider Name",
-    mapDataToValue: (data: RowDataT) => data.certificationProviderName,
+    title: "Skill Name",
+    minWidth: 5,
+    maxWidth: 5,
+    mapDataToValue: (data: RowDataT) => data.skillName,
   }),
 ];
 
-const ViewCertificationProviders: React.FC<{}> = ({}) => {
+const ViewSkill: React.FC<{}> = () => {
   const [, theme] = useStyletron();
+  const [, deleteSkill] = useDeleteSkillMutation();
   var router = useRouter();
-  const [
-    ,
-    deleteCertificationProvider,
-  ] = useDeleteCertificationProviderMutation();
-  const [{ data }] = useCertificationsProvidersQuery({
+  const [{ data }] = useSkillsQuery({
     variables: {
       limit: 30,
       cursor: null,
     },
   });
-  var rows = data?.certificationsProviders?.data?.items.map((s) => ({
-    id: s.certificationProviderId,
+  var rows = data?.skills.data?.items.map((s) => ({
+    id: s.skillId,
     data: s,
   }));
 
@@ -54,15 +55,15 @@ const ViewCertificationProviders: React.FC<{}> = ({}) => {
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/certificationProvider/${row.id}`);
+        router.push(`/skill/edit/${row.id}`);
       },
       renderIcon: Show,
     },
     {
       label: "Delete",
       onClick: async ({ row }) => {
-        await deleteCertificationProvider({
-          certificationProviderId: parseInt(row.id.toString(), 10),
+        await deleteSkill({
+          skillId: parseInt(row.id.toString(), 10),
         });
         window.location.reload();
       },
@@ -78,7 +79,7 @@ const ViewCertificationProviders: React.FC<{}> = ({}) => {
         <>
           <div>
             <Grid>
-              <Cell span={3}>
+              <Cell span={2}>
                 <div
                   style={{
                     color: theme.colors.accent,
@@ -86,16 +87,16 @@ const ViewCertificationProviders: React.FC<{}> = ({}) => {
                     fontSize: "x-large",
                   }}
                 >
-                  Certifications Provider
+                  Skills
                 </div>
               </Cell>
-              <Cell skip={[4, 7]} span={[1, 2]}>
-                <div>
+              <Cell skip={[1, 4, 7]} span={[1, 2, 3]}>
+                <div style={{ textAlignLast: "end" }}>
                   <Button
                     type="submit"
                     startEnhancer={() => <Plus />}
                     onClick={() => {
-                      router.push("../create/certificationProvider");
+                      router.push("/skill/create");
                     }}
                   >
                     Add New
@@ -107,7 +108,8 @@ const ViewCertificationProviders: React.FC<{}> = ({}) => {
           <div
             style={{
               height: "70vh",
-              width: "50%",
+              width: "fit-content",
+              marginLeft: "5%",
             }}
           >
             <Unstable_StatefulDataTable
@@ -116,21 +118,10 @@ const ViewCertificationProviders: React.FC<{}> = ({}) => {
               rowActions={rowActions}
             />
           </div>
-          <div style={{ textAlign: "end" }}>
-            <Button $style={{ textAlign: "end", marginTop: "1%" }}>
-              <CSVLink
-                data={data?.certificationsProviders?.data?.items!}
-                filename="CertificationProviders.csv"
-                style={{ color: "white", textDecoration: "none" }}
-              >
-                Export
-              </CSVLink>
-            </Button>
-          </div>
         </>
       )}
     </>
   );
 };
 
-export default withAuth(ViewCertificationProviders, [UserRole.Admin]);
+export default withAuth(ViewSkill, [UserRole.Admin]);

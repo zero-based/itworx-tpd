@@ -20,7 +20,7 @@ import {
 import { withAuth } from "../../hocs/withAuth";
 
 type RowDataT = {
-  certificatoinId: number;
+  certificationId: number;
   certificationName: string;
   certificationProvider: CertificationProviders;
   talentsCount: number;
@@ -43,7 +43,7 @@ const columns = [
   }),
 ];
 
-const Certifications: React.FC<{}> = ({}) => {
+const ViewCertification: React.FC<{}> = () => {
   const [, theme] = useStyletron();
   var router = useRouter();
   const [, deleteCertifications] = useDeleteCertificationMutation();
@@ -62,7 +62,7 @@ const Certifications: React.FC<{}> = ({}) => {
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/certification/${row.id}`);
+        router.push(`/certification/edit/${row.id}`);
       },
       renderIcon: Show,
     },
@@ -80,7 +80,6 @@ const Certifications: React.FC<{}> = ({}) => {
 
   return (
     <>
-      {" "}
       {!data ? (
         <Loading />
       ) : (
@@ -113,4 +112,4 @@ const Certifications: React.FC<{}> = ({}) => {
   );
 };
 
-export default withAuth(Certifications, [UserRole.Admin]);
+export default withAuth(ViewCertification, [UserRole.Admin]);

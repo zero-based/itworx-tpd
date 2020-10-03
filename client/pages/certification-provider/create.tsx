@@ -24,7 +24,7 @@ const CreateCertificationProvider: React.FC<{}> = () => {
             certificationProviderName: values.certificationProviderName,
           },
         });
-        router.push("/view/certificationProviders");
+        router.push("/certification-provider");
       }}
     />
   );

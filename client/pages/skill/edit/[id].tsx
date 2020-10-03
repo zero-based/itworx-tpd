@@ -43,7 +43,7 @@ const EditSkill: React.FC<{}> = () => {
           },
           skillId: skill?.skillId,
         });
-        router.push("/view/skills");
+        router.push("/skill");
       }}
     />
   );

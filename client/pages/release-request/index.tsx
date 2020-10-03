@@ -76,7 +76,7 @@ const columns = [
   }),
 ];
 
-const ViewReleaseRequests = () => {
+const ViewReleaseRequest: React.FC<{}> = () => {
   const router = useRouter();
 
   const [{ data }] = useReleaseRequestsQuery({
@@ -95,7 +95,7 @@ const ViewReleaseRequests = () => {
     {
       label: "Check",
       onClick: ({ row }) => {
-        router.push(`/edit/releaseRequest/${row.id}`);
+        router.push(`/release-request/edit/${row.id}`);
       },
       renderIcon: Show,
     },
@@ -147,7 +147,4 @@ const ViewReleaseRequests = () => {
   );
 };
 
-export default withAuth(ViewReleaseRequests, [
-  UserRole.Admin,
-  UserRole.Manager,
-]);
+export default withAuth(ViewReleaseRequest, [UserRole.Admin, UserRole.Manager]);

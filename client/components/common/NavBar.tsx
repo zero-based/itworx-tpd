@@ -61,11 +61,11 @@ export const NavBar: React.FC<NavBarProps> = () => {
               items: [
                 {
                   label: "Resource Request",
-                  route: "/view/resourceRequests",
+                  route: "/resource-request",
                 },
                 {
                   label: "Release Request",
-                  route: "/view/releaseRequests",
+                  route: "/release-request",
                 },
               ],
             },
@@ -82,17 +82,20 @@ export const NavBar: React.FC<NavBarProps> = () => {
               items: [
                 {
                   label: "Skills",
-                  route: "/view/skills",
+                  route: "/skill",
                 },
               ],
             },
             {
               title: "Certifications",
               items: [
-                { label: "Certifications", route: "/view/certifications" },
+                {
+                  label: "Certifications",
+                  route: "/certification",
+                },
                 {
                   label: "Certification Providers",
-                  route: "/view/certificationProviders",
+                  route: "/certification-provider",
                 },
               ],
             },
@@ -114,11 +117,11 @@ export const NavBar: React.FC<NavBarProps> = () => {
               items: [
                 {
                   label: "Resource Request",
-                  route: "/create/resourceRequest",
+                  route: "/resource-request/create",
                 },
                 {
                   label: "Release Request",
-                  route: "/create/releaseRequest",
+                  route: "/release-request/create",
                 },
               ],
             },
@@ -126,10 +129,13 @@ export const NavBar: React.FC<NavBarProps> = () => {
               title: "Lists",
               authorizedFor: [R.Admin],
               items: [
-                { label: "Skill", route: "/create/skill" },
+                {
+                  label: "Skill",
+                  route: "/skill/create",
+                },
                 {
                   label: "Certification Provider",
-                  route: "/create/certificationProvider",
+                  route: "/certification-provider/create",
                 },
               ],
             },
