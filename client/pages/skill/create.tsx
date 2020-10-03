@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { SkillForm } from "../../components/forms/SkillForm";
+import { SkillForm } from "../../components/skills/SkillForm";
 import { useCreateSkillMutation, UserRole } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 

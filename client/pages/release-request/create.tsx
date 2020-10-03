@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { ReleaseRequestForm } from "../../components/forms/ReleaseRequestForm";
+import { ReleaseRequestForm } from "../../components/requests/ReleaseRequestForm";
 import {
   ReleaseRequestInput,
   useCreateReleaseRequestMutation,

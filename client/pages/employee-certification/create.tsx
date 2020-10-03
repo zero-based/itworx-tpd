@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { EmployeeCertificationForm } from "../../components/forms/EmployeeCertificationForm";
+import { EmployeeCertificationForm } from "../../components/certifications/EmployeeCertificationForm";
 import {
   EmployeeCertificationInput,
   useCreateEmployeeCertificationMutation,

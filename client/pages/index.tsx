@@ -7,8 +7,8 @@ import { Loading } from "../components/common/Loading";
 import { Profile } from "../components/profile/Profile";
 import { EmployeesProfiles, useMeQuery } from "../graphql/types";
 import { withAuth } from "../hocs/withAuth";
-import { EmployeeSkillsTable } from "../components/tables/EmployeeSkillsTable";
-import { EmployeeCertificationsTable } from "../components/tables/EmployeeCertificationsTable";
+import { EmployeeSkillTable } from "../components/skills/EmployeeSkillTable";
+import { EmployeeCertificationTable } from "../components/certifications/EmployeeCertificationTable";
 
 const Home: React.FC<{}> = () => {
   const [{ data, fetching }] = useMeQuery();
@@ -31,10 +31,10 @@ const Home: React.FC<{}> = () => {
           }}
         >
           <Tab title="Skills">
-            <EmployeeSkillsTable />
+            <EmployeeSkillTable />
           </Tab>
           <Tab title="Certifications">
-            <EmployeeCertificationsTable />
+            <EmployeeCertificationTable />
           </Tab>
           <Tab title="Trainings">
             <Label4>No Trainings yet</Label4>
