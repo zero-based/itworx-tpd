@@ -21,6 +21,10 @@ const ViewCertificationProvider: React.FC<{}> = () => {
 
   const providers = data?.certificationsProviders?.data?.items;
 
+  const csvHeaders = [
+    { label: "Certification Provider Name", key: "certificationProviderName" },
+  ];
+
   return (
     <PageLayout
       title="Certification Providers"
@@ -34,6 +38,7 @@ const ViewCertificationProvider: React.FC<{}> = () => {
               data={providers}
               filename="CertificationProviders.csv"
               style={{ color: "white", textDecoration: "none" }}
+              headers={csvHeaders}
             >
               Export
             </CSVLink>
