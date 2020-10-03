@@ -32,7 +32,7 @@ export class Certifications extends BaseEntity {
   @Column("varchar", { name: "certification_name", length: 128 })
   certificationName: string;
 
-  @Field()
+  @Field(() => CertificationProviders)
   @ManyToOne(
     () => CertificationProviders,
     (certificationProviders) => certificationProviders.certifications,
