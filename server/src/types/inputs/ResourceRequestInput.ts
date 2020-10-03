@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, Min, ValidateIf } from "class-validator";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
@@ -23,11 +23,11 @@ export class ResourceRequestInput {
   @Field()
   endDate: string;
 
-  @IsNotEmpty({ message: "required field" })
+  @Min(10)
   @Field()
   probability: number;
 
-  @IsNotEmpty({ message: "required field" })
+  @Min(10)
   @Field()
   percentage: number;
 
@@ -41,6 +41,8 @@ export class ResourceRequestInput {
   @Field({ nullable: true })
   replacement?: string;
 
+  @ValidateIf((o) => o.replacement === "1")
+  @IsNotEmpty({ message: "required field" })
   @Field({ nullable: true })
   replacementFor?: string;
 
@@ -53,9 +55,18 @@ export class ResourceRequestInput {
   @Field({ nullable: true })
   comments?: string;
 
+  @ValidateIf(
+    (o) =>
+      o.status === "Outsourced" ||
+      o.status === "Moved" ||
+      o.status === "Hired" ||
+      o.status === "Over allocated"
+  )
+  @IsNotEmpty({ message: "required field" })
   @Field({ nullable: true })
   assignedResource?: string;
 
+  @Min(10)
   @Field({ nullable: true })
   actualPercentage?: number;
 }
