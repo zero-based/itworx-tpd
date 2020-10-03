@@ -26,7 +26,7 @@ export class EmployeeCertifications extends BaseEntity {
   @Column("date", { name: "expiration_date", nullable: true })
   expirationDate: string | null;
 
-  @Field()
+  @Field(() => Certifications)
   @ManyToOne(
     () => Certifications,
     (certifications) => certifications.employeeCertifications,
