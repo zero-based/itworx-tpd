@@ -51,6 +51,11 @@ export class ResourceRequestResolver {
         ],
       };
     }
+
+    const inputRequestsCount = input.requestsCount ?? 1;
+    for (var i = 0; i < inputRequestsCount - 1; i++) {
+      await ResourceRequests.create({ ...input }).save();
+    }
     return {
       data: await ResourceRequests.create({ ...input }).save(),
     };
@@ -82,8 +87,16 @@ export class ResourceRequestResolver {
   @Mutation(() => ResourceRequestResponse, { nullable: true })
   async updateResourceRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number,
-    @Arg("input") input: ResourceRequestInput
+    @Arg("input") input: ResourceRequestInput,
+    @Ctx() { req }: AppContext
   ): Promise<ResourceRequestResponse | undefined> {
+    const validationErrors = await validate(input);
+    if (validationErrors.length > 0) {
+      return {
+        errors: mapToFieldError(validationErrors),
+      };
+    }
+
     const resourceRequest = await ResourceRequests.findOne(referenceNumber);
     if (!resourceRequest) {
       return {
@@ -113,6 +126,42 @@ export class ResourceRequestResolver {
         ],
       };
     }
+
+    const managerStatus = ["Open", "Cancelled", "On Hold"];
+    const tpdStatus = [
+      "Open",
+      "Cancelled",
+      "On Hold",
+      "Moved",
+      "Pending Hiring Request",
+      "Hired",
+      "Pending Outsourcing Request",
+      "Outsourced",
+      "Over allocated",
+    ];
+
+    if (
+      (req.session!.userRole === R.MANAGER &&
+        !managerStatus.includes(input.status)) ||
+      (req.session!.userRole === R.ADMIN && !tpdStatus.includes(input.status))
+    ) {
+      return {
+        errors: [
+          {
+            field: "status",
+            message: "Please Enter A Valid Status",
+          },
+        ],
+      };
+    }
+
+    const inputRequestsCount = input.requestsCount ?? 1;
+    const resourceRequestsCount = resourceRequest.requestsCount ?? 1;
+
+    for (var i = 0; i < inputRequestsCount - resourceRequestsCount; i++) {
+      await ResourceRequests.create({ ...input }).save();
+    }
+
     await ResourceRequests.update(referenceNumber, { ...input });
     return { data: { ...resourceRequest, ...input } as ResourceRequests };
   }
