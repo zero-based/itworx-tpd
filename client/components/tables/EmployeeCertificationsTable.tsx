@@ -65,7 +65,7 @@ export const EmployeeCertificationsTable: React.FC<EmployeeCertificationsTablePr
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/employeeCertification/${row.id}`);
+        router.push(`/employee-certification/edit/${row.id}`);
       },
       renderIcon: Show,
     },
@@ -94,7 +94,7 @@ export const EmployeeCertificationsTable: React.FC<EmployeeCertificationsTablePr
               right: "10%",
             }}
             onClick={() => {
-              router.push(`/create/employeeCertification`);
+              router.push("/employee-certification/create");
             }}
           >
             Add New

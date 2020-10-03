@@ -10,9 +10,7 @@ import {
 import { withAuth } from "../../../hocs/withAuth";
 import { useRouteId } from "../../../hooks/useRouteId";
 
-interface updateCertificationProps {}
-
-const EditCertification: React.FC<updateCertificationProps> = () => {
+const EditCertification: React.FC<{}> = () => {
   const [, updateCertification] = useUpdateCertificationMutation();
   const router = useRouter();
   const id = useRouteId();
@@ -44,7 +42,7 @@ const EditCertification: React.FC<updateCertificationProps> = () => {
           },
           certificationId: certification?.certificationId!,
         });
-        router.push("/view/certifications");
+        router.push("/certification");
       }}
     />
   );

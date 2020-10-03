@@ -2,7 +2,6 @@ import React from "react";
 import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import {
-  NumericalColumn,
   RowActionT,
   StringColumn,
   Unstable_StatefulDataTable,
@@ -11,44 +10,43 @@ import { HeadingLevel } from "baseui/heading";
 import { Delete, Plus, Show } from "baseui/icon";
 import { Cell, Grid } from "baseui/layout-grid";
 import { useRouter } from "next/dist/client/router";
+import { CSVLink } from "react-csv";
 
 import { Loading } from "../../components/common/Loading";
 import {
-  useDeleteSkillMutation,
+  useCertificationsProvidersQuery,
+  useDeleteCertificationProviderMutation,
   UserRole,
-  useSkillsQuery,
 } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
-type RowDataT = { skillId: number; skillName: string };
+type RowDataT = {
+  certificationProviderId: number;
+  certificationProviderName: string;
+};
 
 const columns = [
-  NumericalColumn({
-    title: "Skill ID",
-    minWidth: 1,
-    maxWidth: 1,
-    mapDataToValue: (data: RowDataT) => data.skillId,
-  }),
   StringColumn({
-    title: "Skill Name",
-    minWidth: 5,
-    maxWidth: 5,
-    mapDataToValue: (data: RowDataT) => data.skillName,
+    title: "Certification Provider Name",
+    mapDataToValue: (data: RowDataT) => data.certificationProviderName,
   }),
 ];
 
-const ViewSkills: React.FC<{}> = ({}) => {
+const ViewCertificationProvider: React.FC<{}> = () => {
   const [, theme] = useStyletron();
-  const [, deleteSkill] = useDeleteSkillMutation();
   var router = useRouter();
-  const [{ data }] = useSkillsQuery({
+  const [
+    ,
+    deleteCertificationProvider,
+  ] = useDeleteCertificationProviderMutation();
+  const [{ data }] = useCertificationsProvidersQuery({
     variables: {
       limit: 30,
       cursor: null,
     },
   });
-  var rows = data?.skills.data?.items.map((s) => ({
-    id: s.skillId,
+  var rows = data?.certificationsProviders?.data?.items.map((s) => ({
+    id: s.certificationProviderId,
     data: s,
   }));
 
@@ -56,15 +54,15 @@ const ViewSkills: React.FC<{}> = ({}) => {
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/skill/${row.id}`);
+        router.push(`/edit/certificationProvider/${row.id}`);
       },
       renderIcon: Show,
     },
     {
       label: "Delete",
       onClick: async ({ row }) => {
-        await deleteSkill({
-          skillId: parseInt(row.id.toString(), 10),
+        await deleteCertificationProvider({
+          certificationProviderId: parseInt(row.id.toString(), 10),
         });
         window.location.reload();
       },
@@ -80,7 +78,7 @@ const ViewSkills: React.FC<{}> = ({}) => {
         <>
           <div>
             <Grid>
-              <Cell span={2}>
+              <Cell span={3}>
                 <div
                   style={{
                     color: theme.colors.accent,
@@ -88,16 +86,16 @@ const ViewSkills: React.FC<{}> = ({}) => {
                     fontSize: "x-large",
                   }}
                 >
-                  Skills
+                  Certifications Provider
                 </div>
               </Cell>
-              <Cell skip={[1, 4, 7]} span={[1, 2, 3]}>
-                <div style={{ textAlignLast: "end" }}>
+              <Cell skip={[4, 7]} span={[1, 2]}>
+                <div>
                   <Button
                     type="submit"
                     startEnhancer={() => <Plus />}
                     onClick={() => {
-                      router.push("../create/skill");
+                      router.push("../create/certificationProvider");
                     }}
                   >
                     Add New
@@ -109,8 +107,7 @@ const ViewSkills: React.FC<{}> = ({}) => {
           <div
             style={{
               height: "70vh",
-              width: "fit-content",
-              marginLeft: "5%",
+              width: "50%",
             }}
           >
             <Unstable_StatefulDataTable
@@ -119,10 +116,21 @@ const ViewSkills: React.FC<{}> = ({}) => {
               rowActions={rowActions}
             />
           </div>
+          <div style={{ textAlign: "end" }}>
+            <Button $style={{ textAlign: "end", marginTop: "1%" }}>
+              <CSVLink
+                data={data?.certificationsProviders?.data?.items!}
+                filename="CertificationProviders.csv"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Export
+              </CSVLink>
+            </Button>
+          </div>
         </>
       )}
     </>
   );
 };
 
-export default withAuth(ViewSkills, [UserRole.Admin]);
+export default withAuth(ViewCertificationProvider, [UserRole.Admin]);

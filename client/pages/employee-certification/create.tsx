@@ -9,9 +9,7 @@ import {
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 
-interface EmployeeCertificationProps {}
-
-const EmployeeCertification: React.FC<EmployeeCertificationProps> = () => {
+const CreateEmployeeCertification: React.FC<{}> = () => {
   const [
     ,
     createEmployeeCertification,
@@ -23,6 +21,7 @@ const EmployeeCertification: React.FC<EmployeeCertificationProps> = () => {
     certificationName: "",
     expirationDate: "",
   };
+
   return (
     <EmployeeCertificationForm
       initialValues={initialValues}
@@ -41,4 +40,4 @@ const EmployeeCertification: React.FC<EmployeeCertificationProps> = () => {
   );
 };
 
-export default withAuth(EmployeeCertification);
+export default withAuth(CreateEmployeeCertification);

@@ -9,7 +9,7 @@ import { InputField } from "../components/fields/InputField";
 import { useLoginMutation } from "../graphql/types";
 import { toErrorMap } from "../utils/toErrorMap";
 
-const Login: React.FC<{}> = ({}) => {
+const Login: React.FC<{}> = () => {
   const [css] = useStyletron();
   const [, login] = useLoginMutation();
   const router = useRouter();

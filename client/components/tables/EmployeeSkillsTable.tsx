@@ -70,7 +70,7 @@ export const EmployeeSkillsTable: React.FC<EmployeeSkillsTableProps> = () => {
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/edit/employeeSkill/${row.id}`);
+        router.push(`/employee-skill/edit/${row.id}`);
       },
       renderIcon: Show,
     },
@@ -99,7 +99,7 @@ export const EmployeeSkillsTable: React.FC<EmployeeSkillsTableProps> = () => {
               right: "10%",
             }}
             onClick={() => {
-              router.push(`/create/employeeSkill`);
+              router.push("/employee-skill/create");
             }}
           >
             Add New

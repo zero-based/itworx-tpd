@@ -9,9 +9,7 @@ import {
   useCreateEmployeeSkillMutation,
 } from "../../graphql/types";
 
-interface EmployeeSkillProps {}
-
-const EmployeeSkill: React.FC<EmployeeSkillProps> = () => {
+const CreateEmployeeSkill: React.FC<{}> = () => {
   const [, createEmployeeSkill] = useCreateEmployeeSkillMutation();
   const router = useRouter();
 
@@ -20,6 +18,7 @@ const EmployeeSkill: React.FC<EmployeeSkillProps> = () => {
     experienceLevel: "",
     lastUsedDate: "",
   };
+
   return (
     <EmployeeSkillForm
       initialValues={initialValues}
@@ -38,4 +37,4 @@ const EmployeeSkill: React.FC<EmployeeSkillProps> = () => {
   );
 };
 
-export default withAuth(EmployeeSkill);
+export default withAuth(CreateEmployeeSkill);

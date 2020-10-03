@@ -5,9 +5,7 @@ import { CertificationForm } from "../../components/forms/CertificationForm";
 import { useCreateCertificationMutation } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 
-interface CertificationProps {}
-
-const CreateCertification: React.FC<CertificationProps> = () => {
+const CreateCertification: React.FC<{}> = () => {
   const router = useRouter();
   const [, createCertification] = useCreateCertificationMutation();
   return (
@@ -24,7 +22,7 @@ const CreateCertification: React.FC<CertificationProps> = () => {
             certificationProviderName: values.certificationProviderName,
           },
         });
-        router.push("/view/certifications");
+        router.push("/certification");
       }}
     />
   );

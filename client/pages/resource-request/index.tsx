@@ -7,7 +7,6 @@ import {
   StringColumn,
   Unstable_StatefulDataTable,
 } from "baseui/data-table";
-import { HeadingLevel } from "baseui/heading";
 import { Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
 import { CSVLink } from "react-csv";
@@ -96,7 +95,7 @@ const columns = [
   }),
 ];
 
-const ViewResourceRequests = () => {
+const ViewResourceRequest: React.FC<{}> = () => {
   const router = useRouter();
 
   const [{ data }] = useResourceRequestsQuery({
@@ -115,7 +114,7 @@ const ViewResourceRequests = () => {
     {
       label: "Check",
       onClick: ({ row }) => {
-        router.push(`/edit/resourceRequest/${row.id}`);
+        router.push(`/resource-request/edit/${row.id}`);
       },
       renderIcon: Show,
     },
@@ -172,7 +171,7 @@ const ViewResourceRequests = () => {
   );
 };
 
-export default withAuth(ViewResourceRequests, [
+export default withAuth(ViewResourceRequest, [
   UserRole.Admin,
   UserRole.Manager,
 ]);
