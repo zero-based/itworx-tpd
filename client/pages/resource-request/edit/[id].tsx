@@ -5,6 +5,7 @@ import { ResourceRequestForm } from "../../../components/requests/ResourceReques
 import {
   EmployeesProfiles,
   ResourceRequestInput,
+  ResourceRequests,
   useManagersNamesQuery,
   useResourceRequestQuery,
   UserRole,
@@ -30,6 +31,11 @@ const EditResourceRequest: React.FC<{}> = () => {
 
   const resourceRequest = resourceRequestData?.resourceRequest?.data;
 
+  const getInitialValues = (r: ResourceRequests): ResourceRequestInput => {
+    const { __typename, referenceNumber, ...initialValues } = r;
+    return initialValues;
+  };
+
   const [
     { data: managersData, fetching: managersFetching },
   ] = useManagersNamesQuery();
@@ -41,27 +47,27 @@ const EditResourceRequest: React.FC<{}> = () => {
       error={!resourceRequest || !managersData?.managers}
       errorMessage={"Resource Request not found"}
     >
-      <ResourceRequestForm
-        action="Update"
-        managers={managersData?.managers as EmployeesProfiles[]}
-        initialValues={
-          resourceRequestData?.resourceRequest?.data as ResourceRequestInput
-        }
-        onSubmit={async (values, { setErrors }) => {
-          const response = await updateResourceRequest({
-            referenceNumber: id,
-            input: values,
-          });
+      {resourceRequest ? (
+        <ResourceRequestForm
+          action="Update"
+          managers={managersData?.managers as EmployeesProfiles[]}
+          initialValues={getInitialValues(resourceRequest)}
+          onSubmit={async (values, { setErrors }) => {
+            const response = await updateResourceRequest({
+              referenceNumber: id,
+              input: values,
+            });
 
-          const errors = response.data?.updateResourceRequest?.errors;
-          if (errors) {
-            var errorMap = toErrorMap(errors);
-            setErrors(errorMap);
-          } else {
-            router.push("/");
-          }
-        }}
-      />
+            const errors = response.data?.updateResourceRequest?.errors;
+            if (errors) {
+              var errorMap = toErrorMap(errors);
+              setErrors(errorMap);
+            } else {
+              router.push("/");
+            }
+          }}
+        />
+      ) : null}
     </PageLayout>
   );
 };

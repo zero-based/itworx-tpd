@@ -22,7 +22,7 @@ const EditSkill: React.FC<{}> = () => {
     },
   });
 
-  const skill = data?.skill?.data!;
+  const skill = data?.skill?.data;
 
   return (
     <PageLayout
@@ -31,19 +31,21 @@ const EditSkill: React.FC<{}> = () => {
       error={!skill}
       errorMessage={"Skill not found"}
     >
-      <SkillForm
-        action="Update"
-        initialValues={{ skillName: skill.skillName }}
-        onSubmit={async (values) => {
-          await updateSkill({
-            input: {
-              skillName: values.skillName,
-            },
-            skillId: skill?.skillId,
-          });
-          router.push("/skill");
-        }}
-      />
+      {skill ? (
+        <SkillForm
+          action="Update"
+          initialValues={{ skillName: skill.skillName }}
+          onSubmit={async (values) => {
+            await updateSkill({
+              input: {
+                skillName: values.skillName,
+              },
+              skillId: skill?.skillId,
+            });
+            router.push("/skill");
+          }}
+        />
+      ) : null}
     </PageLayout>
   );
 };

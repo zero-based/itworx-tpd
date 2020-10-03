@@ -27,11 +27,6 @@ const EditCertification: React.FC<{}> = () => {
   });
 
   const certification = certificationData?.certification?.data;
-  const initialValues = {
-    certificationName: certification?.certificationName!,
-    certificationProviderName: certification?.certificationProvider
-      ?.certificationProviderName!,
-  };
 
   const [
     { data: providersData, fetching: providersFetching },
@@ -51,19 +46,25 @@ const EditCertification: React.FC<{}> = () => {
       error={!certification || !providers}
       errorMessage={"Certification not found"}
     >
-      <CertificationForm
-        action="Update"
-        providers={providers?.items as CertificationProviders[]}
-        initialValues={initialValues}
-        onSubmit={async (values) => {
-          await updateCertification({
-            certificationId: id,
-            input: values,
-          });
+      {certification ? (
+        <CertificationForm
+          action="Update"
+          providers={providers?.items as CertificationProviders[]}
+          initialValues={{
+            certificationName: certification.certificationName!,
+            certificationProviderName: certification.certificationProvider
+              ?.certificationProviderName!,
+          }}
+          onSubmit={async (values) => {
+            await updateCertification({
+              certificationId: id,
+              input: values,
+            });
 
-          router.push("/certification");
-        }}
-      />
+            router.push("/certification");
+          }}
+        />
+      ) : null}
     </PageLayout>
   );
 };

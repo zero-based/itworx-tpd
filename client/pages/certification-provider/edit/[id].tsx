@@ -5,6 +5,7 @@ import { CertificationProviderForm } from "../../../components/certifications/Ce
 import { PageLayout } from "../../../components/common/PageLayout";
 import {
   CertificationProviderInput,
+  CertificationProviders,
   useCertificationProviderQuery,
   UserRole,
   useUpdateCertificationProviderMutation,
@@ -24,7 +25,13 @@ const EditCertificationProvider: React.FC<{}> = () => {
   });
 
   const provider = data?.certificationProvider?.data;
-  const initialValues = provider as CertificationProviderInput;
+
+  const getInitialValues = (
+    p: CertificationProviders
+  ): CertificationProviderInput => {
+    const { __typename, certificationProviderId, ...initialValues } = p;
+    return initialValues;
+  };
 
   return (
     <PageLayout
@@ -33,18 +40,20 @@ const EditCertificationProvider: React.FC<{}> = () => {
       error={!data?.certificationProvider?.data}
       errorMessage={"Certification Provider not found"}
     >
-      <CertificationProviderForm
-        action="Update"
-        initialValues={initialValues}
-        onSubmit={async (values) => {
-          await updateProvider({
-            certificationProviderId: id,
-            input: values,
-          });
+      {provider ? (
+        <CertificationProviderForm
+          action="Update"
+          initialValues={getInitialValues(provider as CertificationProviders)}
+          onSubmit={async (values) => {
+            await updateProvider({
+              certificationProviderId: id,
+              input: values,
+            });
 
-          router.push("/view/certificationProviders");
-        }}
-      />
+            router.push("/view/certificationProviders");
+          }}
+        />
+      ) : null}
     </PageLayout>
   );
 };

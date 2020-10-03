@@ -6,6 +6,7 @@ import { ReleaseRequestForm } from "../../../components/requests/ReleaseRequestF
 import {
   EmployeesProfiles,
   ReleaseRequestInput,
+  ReleaseRequests,
   useManagersNamesQuery,
   useReleaseRequestQuery,
   UserRole,
@@ -29,6 +30,11 @@ const EditReleaseRequest: React.FC<{}> = () => {
   });
 
   const releaseRequest = releaseRequestData?.releaseRequest?.data;
+  
+  const getInitialValues = (r: ReleaseRequests): ReleaseRequestInput => {
+    const { __typename, referenceNumber, ...initialValues } = r;
+    return initialValues;
+  };
 
   const [
     { data: managersData, fetching: managersFetching },
@@ -40,25 +46,27 @@ const EditReleaseRequest: React.FC<{}> = () => {
       loading={releaseRequestFetching || managersFetching}
       error={!releaseRequest || !managersData?.managers}
     >
-      <ReleaseRequestForm
-        action="Update"
-        managers={managersData?.managers as EmployeesProfiles[]}
-        initialValues={releaseRequest as ReleaseRequestInput}
-        onSubmit={async (values, { setErrors }) => {
-          const response = await updateReleaseRequest({
-            referenceNumber: id,
-            input: values,
-          });
-          const errors = response.data?.updateReleaseRequest?.errors;
+      {releaseRequest ? (
+        <ReleaseRequestForm
+          action="Update"
+          managers={managersData?.managers as EmployeesProfiles[]}
+          initialValues={getInitialValues(releaseRequest)}
+          onSubmit={async (values, { setErrors }) => {
+            const response = await updateReleaseRequest({
+              referenceNumber: id,
+              input: values,
+            });
+            const errors = response.data?.updateReleaseRequest?.errors;
 
-          if (errors) {
-            var errorMap = toErrorMap(errors);
-            setErrors(errorMap);
-          } else {
-            router.push("/");
-          }
-        }}
-      />
+            if (errors) {
+              var errorMap = toErrorMap(errors);
+              setErrors(errorMap);
+            } else {
+              router.push("/");
+            }
+          }}
+        />
+      ) : null}
     </PageLayout>
   );
 };
