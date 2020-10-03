@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/dist/client/router";
 
 import { Loading } from "../../../components/common/Loading";
-import { EmployeeSkillForm } from "../../../components/forms/EmployeeSkillForm";
+import { EmployeeSkillForm } from "../../../components/skills/EmployeeSkillForm";
 import {
   EmployeeSkillInput,
   useEmployeeSkillQuery,

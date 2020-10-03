@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { EmployeeSkillForm } from "../../components/forms/EmployeeSkillForm";
+import { EmployeeSkillForm } from "../../components/skills/EmployeeSkillForm";
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import {

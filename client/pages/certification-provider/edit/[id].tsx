@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { CertificationProviderForm } from "../../../components/forms/CertificationProviderForm";
+import { CertificationProviderForm } from "../../../components/certifications/CertificationProviderForm";
 import { Loading } from "../../../components/common/Loading";
 import {
   useCertificationProviderQuery,

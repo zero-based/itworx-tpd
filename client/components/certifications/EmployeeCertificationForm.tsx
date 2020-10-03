@@ -18,19 +18,19 @@ import { DatePickerStrField } from "../fields/DatePickerStrField";
 interface EmployeeCertificationFormProps
   extends FormikConfig<EmployeeCertificationInput> {
   action: string;
-  intitalCertitficationProviderId?: number;
+  initialCertificationProviderId?: number;
 }
 
 export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps> = ({
   action,
-  intitalCertitficationProviderId,
+  initialCertificationProviderId,
   ...props
 }) => {
   const [css, theme] = useStyletron();
 
   // Certification Provider
   const [certificationProviderId, setCertificationProviderId] = React.useState(
-    intitalCertitficationProviderId ?? -1
+    initialCertificationProviderId ?? -1
   );
 
   const [

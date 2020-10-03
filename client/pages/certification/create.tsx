@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useRouter } from "next/dist/client/router";
 
-import { CertificationForm } from "../../components/forms/CertificationForm";
+import { CertificationForm } from "../../components/certifications/CertificationForm";
 import { useCreateCertificationMutation } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 

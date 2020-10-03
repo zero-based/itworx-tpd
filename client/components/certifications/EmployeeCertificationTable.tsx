@@ -1,84 +1,74 @@
-import React from "react";
 import { Button } from "baseui/button";
 import {
   CategoricalColumn,
-  NumericalColumn,
   RowActionT,
   Unstable_StatefulDataTable,
 } from "baseui/data-table";
 import { Delete, Show } from "baseui/icon";
 import { useRouter } from "next/dist/client/router";
+import React from "react";
 import {
-  Skills,
-  useDeleteEmployeeSkillMutation,
-  useEmployeeSkillsQuery,
+  EmployeeCertifications,
+  useDeleteEmployeeCertificationMutation,
+  useEmployeeCertificationsQuery,
 } from "../../graphql/types";
 import { Loading } from "../common/Loading";
 
-interface EmployeeSkillsTableProps {}
+type RowDataT = EmployeeCertifications;
 
-type RowDataT = {
-  employeeId: string;
-  experienceLevel: string;
-  lastUsedDate: string;
-  skill: Skills;
-  skillId: number;
-};
+interface EmployeeCertificationTableProps {}
 
 const columns = [
-  NumericalColumn({
-    title: "Skill ID",
+  CategoricalColumn({
+    title: "Certification Provider",
     filterable: true,
-    mapDataToValue: (data: RowDataT) => data.skillId,
+    mapDataToValue: (data: RowDataT) =>
+      data.certification?.certificationProvider?.certificationProviderName,
   }),
   CategoricalColumn({
-    title: "Skill Name",
+    title: "Certification Name",
     filterable: true,
-    mapDataToValue: (data: RowDataT) => data.skill.skillName,
-  }),
-
-  CategoricalColumn({
-    title: "Experience Level",
-    filterable: true,
-
-    mapDataToValue: (data: RowDataT) => data.experienceLevel,
+    mapDataToValue: (data: RowDataT) => data.certification.certificationName,
   }),
 
   CategoricalColumn({
-    title: "Last Used Date",
+    title: "Expiration Date",
     filterable: true,
 
-    mapDataToValue: (data: RowDataT) => data.lastUsedDate,
+    mapDataToValue: (data: RowDataT) => data.expirationDate,
   }),
 ];
 
-export const EmployeeSkillsTable: React.FC<EmployeeSkillsTableProps> = () => {
-  const [, deleteEmployeeSkill] = useDeleteEmployeeSkillMutation();
+export const EmployeeCertificationTable: React.FC<EmployeeCertificationTableProps> = () => {
+  const [
+    ,
+    deleteEmployeeCertification,
+  ] = useDeleteEmployeeCertificationMutation();
   var router = useRouter();
-  const [{ data }] = useEmployeeSkillsQuery({
+  const [{ data }] = useEmployeeCertificationsQuery({
     variables: {
       limit: 30,
       cursor: null,
     },
   });
-  var rows = data?.employeeSkills.data?.items.map((s) => ({
-    id: s.skillId,
-    data: s,
+  var rows = data?.employeeCertifications.data?.items.map((c) => ({
+    id: c.certificationId,
+    data: c,
   }));
 
   const rowActions: RowActionT[] = [
     {
       label: "Edit",
       onClick: ({ row }) => {
-        router.push(`/employee-skill/edit/${row.id}`);
+        router.push(`/employee-certification/edit/${row.id}`);
       },
       renderIcon: Show,
     },
     {
       label: "Delete",
       onClick: async ({ row }) => {
-        await deleteEmployeeSkill({
-          skillId: parseInt(row.id.toString(), 10),
+        await deleteEmployeeCertification({
+          certificationId: parseInt(row.id.toString(), 10),
         });
         window.location.reload();
       },
@@ -99,7 +89,7 @@ export const EmployeeSkillsTable: React.FC<EmployeeSkillsTableProps> = () => {
               right: "10%",
             }}
             onClick={() => {
-              router.push("/employee-skill/create");
+              router.push("/employee-certification/create");
             }}
           >
             Add New
