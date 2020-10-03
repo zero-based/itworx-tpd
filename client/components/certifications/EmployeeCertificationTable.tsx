@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "baseui/button";
 import {
   CategoricalColumn,
@@ -5,8 +6,8 @@ import {
   Unstable_StatefulDataTable,
 } from "baseui/data-table";
 import { Delete, Show } from "baseui/icon";
-import { useRouter } from "next/dist/client/router";
-import React from "react";
+import { useRouter } from "next/router";
+
 import {
   EmployeeCertifications,
   useDeleteEmployeeCertificationMutation,

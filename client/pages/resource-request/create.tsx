@@ -1,14 +1,17 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { ResourceRequestForm } from "../../components/requests/ResourceRequestForm";
 import {
+  EmployeesProfiles,
   ResourceRequestInput,
   useCreateResourceRequestMutation,
+  useManagersNamesQuery,
   UserRole,
 } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
+import { PageLayout } from "../../components/common/PageLayout";
 
 const CreateResourceRequest: React.FC<{}> = () => {
   const [, createResourceRequest] = useCreateResourceRequestMutation();
@@ -32,22 +35,32 @@ const CreateResourceRequest: React.FC<{}> = () => {
     assignedResource: "",
     actualPercentage: 0,
   };
-  return (
-    <ResourceRequestForm
-      action="Add"
-      initialValues={initialValues}
-      onSubmit={async (values, { setErrors }) => {
-        const response = await createResourceRequest({ input: values });
-        const errors = response.data?.createResourceRequest.errors;
 
-        if (errors) {
-          var errorMap = toErrorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-    />
+  const [{ data, fetching }] = useManagersNamesQuery();
+
+  return (
+    <PageLayout
+      title="Resource Request"
+      loading={fetching}
+      error={!data?.managers}
+    >
+      <ResourceRequestForm
+        action="Add"
+        managers={data?.managers as EmployeesProfiles[]}
+        initialValues={initialValues}
+        onSubmit={async (values, { setErrors }) => {
+          const response = await createResourceRequest({ input: values });
+          const errors = response.data?.createResourceRequest.errors;
+
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      />
+    </PageLayout>
   );
 };
 

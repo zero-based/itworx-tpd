@@ -1,6 +1,4 @@
 import React from "react";
-
-import { Button } from "baseui/button";
 import {
   CategoricalColumn,
   NumericalColumn,
@@ -10,16 +8,13 @@ import {
 } from "baseui/data-table";
 import { Show } from "baseui/icon";
 import { useRouter } from "next/router";
-import { CSVLink } from "react-csv";
 
 import { ResourceRequests } from "../../graphql/types";
-import { Loading } from "../common/Loading";
 
 type RowDataT = ResourceRequests;
 
 interface ResourceRequestTableProps {
   data?: RowDataT[];
-  loading: boolean;
 }
 
 export const ResourceRequestTable: React.FC<ResourceRequestTableProps> = (
@@ -117,53 +112,12 @@ export const ResourceRequestTable: React.FC<ResourceRequestTableProps> = (
     },
   ];
 
-  const csvHeaders = [
-    { label: "Reference Number", key: "referenceNumber" },
-    { label: "Manager Name", key: "managerName" },
-    { label: "Function", key: "function" },
-    { label: "Title", key: "title" },
-    { label: "Start Date", key: "startDate" },
-    { label: "End Date", key: "endDate" },
-    { label: "Probability", key: "probability" },
-    { label: "Percentage", key: "percentage" },
-    { label: "Status", key: "status" },
-    { label: "Core Team Member", key: "coreTeamMember" },
-    { label: "Replacement", key: "replacement" },
-    { label: "Replacement For", key: "replacementFor" },
-    { label: "Requests Count", key: "requestsCount" },
-    { label: "Related Opportunity", key: "relatedOpportunity" },
-    { label: "Comments", key: "comments" },
-    { label: "Assigned Resource", key: "assignedResource" },
-    { label: "Actual Percentage", key: "actualPercentage" },
-  ];
-
   return (
-    <>
-      {props.loading ? (
-        <Loading />
-      ) : (
-        <div style={{ height: "70vh" }}>
-          <Unstable_StatefulDataTable
-            columns={columns}
-            rows={rows}
-            searchable={true}
-            loadingMessage="Loading table data.."
-            rowActions={rowActions}
-          />
-          <div style={{ textAlign: "end" }}>
-            <Button $style={{ marginTop: "1%" }}>
-              <CSVLink
-                data={props.data!}
-                filename="resourceRequests.csv"
-                style={{ color: "white", textDecoration: "none" }}
-                headers={csvHeaders}
-              >
-                Export
-              </CSVLink>
-            </Button>
-          </div>
-        </div>
-      )}
-    </>
+    <Unstable_StatefulDataTable
+      columns={columns}
+      rows={rows}
+      searchable={true}
+      rowActions={rowActions}
+    />
   );
 };

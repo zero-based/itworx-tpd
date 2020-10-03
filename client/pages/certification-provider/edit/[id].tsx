@@ -1,9 +1,11 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { CertificationProviderForm } from "../../../components/certifications/CertificationProviderForm";
-import { Loading } from "../../../components/common/Loading";
+import { PageLayout } from "../../../components/common/PageLayout";
 import {
+  CertificationProviderInput,
+  CertificationProviders,
   useCertificationProviderQuery,
   UserRole,
   useUpdateCertificationProviderMutation,
@@ -12,47 +14,47 @@ import { withAuth } from "../../../hocs/withAuth";
 import { useRouteId } from "../../../hooks/useRouteId";
 
 const EditCertificationProvider: React.FC<{}> = () => {
-  const [
-    ,
-    updateCertificationProvider,
-  ] = useUpdateCertificationProviderMutation();
   const router = useRouter();
-  const id = useRouteId();
+  const [, updateProvider] = useUpdateCertificationProviderMutation();
 
+  const id = useRouteId();
   const [{ data, fetching }] = useCertificationProviderQuery({
     variables: {
       certificationProviderId: id,
     },
   });
 
-  if (fetching) {
-    return <Loading />;
-  }
+  const provider = data?.certificationProvider?.data;
 
-  if (!data?.certificationProvider?.data) {
-    return <p>Could Not Find Certification Provider</p>;
-  }
-
-  const certificationProvider = data?.certificationProvider?.data!;
+  const getInitialValues = (
+    p: CertificationProviders
+  ): CertificationProviderInput => {
+    const { __typename, certificationProviderId, ...initialValues } = p;
+    return initialValues;
+  };
 
   return (
-    <CertificationProviderForm
-      initialValues={{
-        certificationProviderName:
-          certificationProvider.certificationProviderName,
-      }}
-      action="Update"
-      onSubmit={async (values) => {
-        await updateCertificationProvider({
-          input: {
-            certificationProviderName: values.certificationProviderName,
-          },
-          certificationProviderId:
-            certificationProvider.certificationProviderId,
-        });
-        router.push("/view/certificationProviders");
-      }}
-    />
+    <PageLayout
+      title="Certification Providers"
+      loading={fetching}
+      error={!data?.certificationProvider?.data}
+      errorMessage={"Certification Provider not found"}
+    >
+      {provider ? (
+        <CertificationProviderForm
+          action="Update"
+          initialValues={getInitialValues(provider as CertificationProviders)}
+          onSubmit={async (values) => {
+            await updateProvider({
+              certificationProviderId: id,
+              input: values,
+            });
+
+            router.push("/certification-provider");
+          }}
+        />
+      ) : null}
+    </PageLayout>
   );
 };
 

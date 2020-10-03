@@ -1,6 +1,6 @@
 import React from "react";
 import { Block } from "baseui/block";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { Loading } from "../components/common/Loading";
 import { MainLayout } from "../components/common/MainLayout";
 import { useRoleQuery, UserRole } from "../graphql/types";

@@ -2,10 +2,8 @@ import React from "react";
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Form, Formik, FormikConfig } from "formik";
-import { HeadingLevel, Heading } from "baseui/heading";
-
-import { InputField } from "../fields/InputField";
 import { SkillInput } from "../../graphql/types";
+import { InputField } from "../fields/InputField";
 
 interface SkillFormProps extends FormikConfig<SkillInput> {
   action: string;
@@ -16,60 +14,22 @@ export const SkillForm: React.FC<SkillFormProps> = ({ action, ...props }) => {
     <Formik {...props}>
       {({ isSubmitting }) => (
         <Form>
-          <HeadingLevel>
-            <Heading
-              styleLevel={2}
-              $style={{
-                paddingLeft: "10%",
-                paddingTop: "5%",
-                color: "#C63527",
-              }}
-            >
-              {action} Skill
-            </Heading>
-          </HeadingLevel>
-
           <FlexGrid
             flexGridColumnGap="scale1000"
             flexGridRowGap="scale800"
-            flexGridColumnCount={[1, 1, 2, 3]}
-            $style={{
-              margin: "auto",
-              padding: "2% 10% 10%",
-            }}
+            flexGridColumnCount={1}
           >
-            <FlexGridItem
-              $style={{
-                display: "flex",
-                alignItems: "center",
-                marginBlock: "10%",
-              }}
-            >
+            <FlexGridItem>
               <InputField name="skillName" label="Skill Name" required />
             </FlexGridItem>
 
-            <FlexGridItem
-              $style={{
-                display: "flex",
-                alignItems: "center",
-                marginBlock: "10%",
-              }}
-            ></FlexGridItem>
-
-            <FlexGridItem
-              $style={{
-                display: "flex",
-                alignItems: "center",
-                marginBlock: "10%",
-              }}
-            >
+            <FlexGridItem display="flex">
               <Button
                 type="submit"
                 isLoading={isSubmitting}
                 $style={{
                   marginTop: "48px",
-                  position: "absolute",
-                  right: "10%",
+                  marginLeft: "auto",
                 }}
               >
                 {action}

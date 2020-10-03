@@ -1,62 +1,73 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
-import { Loading } from "../../../components/common/Loading";
+import { PageLayout } from "../../../components/common/PageLayout";
 import { ReleaseRequestForm } from "../../../components/requests/ReleaseRequestForm";
 import {
+  EmployeesProfiles,
+  ReleaseRequestInput,
+  ReleaseRequests,
+  useManagersNamesQuery,
   useReleaseRequestQuery,
   UserRole,
   useUpdateReleaseRequestMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
-import { toErrorMap } from "../../../utils/toErrorMap";
 import { useRouteId } from "../../../hooks/useRouteId";
+import { toErrorMap } from "../../../utils/toErrorMap";
 
 const EditReleaseRequest: React.FC<{}> = () => {
   const [, updateReleaseRequest] = useUpdateReleaseRequestMutation();
   const router = useRouter();
   const id = useRouteId();
 
-  const [{ data, fetching }] = useReleaseRequestQuery({
+  const [
+    { data: releaseRequestData, fetching: releaseRequestFetching },
+  ] = useReleaseRequestQuery({
     variables: {
       referenceNumber: id,
     },
   });
 
-  if (fetching) {
-    return <Loading />;
-  }
+  const releaseRequest = releaseRequestData?.releaseRequest?.data;
+  
+  const getInitialValues = (r: ReleaseRequests): ReleaseRequestInput => {
+    const { __typename, referenceNumber, ...initialValues } = r;
+    return initialValues;
+  };
 
-  if (!data?.releaseRequest?.data) {
-    return <p>Could Not Find Release Request</p>;
-  }
-  const {
-    referenceNumber,
-    __typename,
-    ...formData
-  } = data?.releaseRequest?.data;
+  const [
+    { data: managersData, fetching: managersFetching },
+  ] = useManagersNamesQuery();
 
   return (
-    <ReleaseRequestForm
-      initialValues={{
-        ...formData,
-      }}
-      action="Update"
-      onSubmit={async (values, { setErrors }) => {
-        const response = await updateReleaseRequest({
-          referenceNumber: referenceNumber,
-          input: values,
-        });
-        const errors = response.data?.updateReleaseRequest?.errors;
+    <PageLayout
+      title="Release Request"
+      loading={releaseRequestFetching || managersFetching}
+      error={!releaseRequest || !managersData?.managers}
+    >
+      {releaseRequest ? (
+        <ReleaseRequestForm
+          action="Update"
+          managers={managersData?.managers as EmployeesProfiles[]}
+          initialValues={getInitialValues(releaseRequest)}
+          onSubmit={async (values, { setErrors }) => {
+            const response = await updateReleaseRequest({
+              referenceNumber: id,
+              input: values,
+            });
+            const errors = response.data?.updateReleaseRequest?.errors;
 
-        if (errors) {
-          var errorMap = toErrorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-    />
+            if (errors) {
+              var errorMap = toErrorMap(errors);
+              setErrors(errorMap);
+            } else {
+              router.push("/");
+            }
+          }}
+        />
+      ) : null}
+    </PageLayout>
   );
 };
 

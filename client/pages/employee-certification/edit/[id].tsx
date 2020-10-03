@@ -1,70 +1,80 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
-import { Loading } from "../../../components/common/Loading";
 import { EmployeeCertificationForm } from "../../../components/certifications/EmployeeCertificationForm";
 import {
+  CertificationProviders,
   EmployeeCertificationInput,
+  useCertificationsProvidersQuery,
   useEmployeeCertificationQuery,
   useUpdateEmployeeCertificationMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 import { toErrorMap } from "../../../utils/toErrorMap";
 import { useRouteId } from "../../../hooks/useRouteId";
+import { PageLayout } from "../../../components/common/PageLayout";
 
 const EditEmployeeCertification: React.FC<{}> = () => {
-  const [
-    ,
-    updateEmployeeCertification,
-  ] = useUpdateEmployeeCertificationMutation();
   const router = useRouter();
-  const id = useRouteId();
+  const [, updateCertification] = useUpdateEmployeeCertificationMutation();
 
-  const [{ data, fetching }] = useEmployeeCertificationQuery({
+  const id = useRouteId();
+  const [
+    { data: certificationData, fetching: certificationFetching },
+  ] = useEmployeeCertificationQuery({
     variables: {
       certificationId: id,
     },
   });
 
-  if (fetching) {
-    return <Loading />;
-  }
-
-  const employeeCertification = data?.employeeCertification?.data;
-  if (!employeeCertification) {
-    return <p>Could Not Find This Certification</p>;
-  }
-
-  const certification = employeeCertification.certification;
+  const employeeCertification = certificationData?.employeeCertification?.data;
+  const certification = employeeCertification?.certification;
+  const provider = certification?.certificationProvider;
   const initialValues: EmployeeCertificationInput = {
-    certificationProvider:
-      certification.certificationProvider.certificationProviderName,
-    certificationName: certification.certificationName,
-    expirationDate: employeeCertification.expirationDate ?? "",
+    certificationName: certification?.certificationName ?? "",
+    expirationDate: employeeCertification?.expirationDate ?? "",
+    certificationProvider: provider?.certificationProviderName ?? "",
   };
 
+  const [
+    { data: providersData, fetching: providersFetching },
+  ] = useCertificationsProvidersQuery({
+    variables: {
+      limit: 30,
+      cursor: "0",
+    },
+  });
+
+  const providers = providersData?.certificationsProviders?.data;
+
   return (
-    <EmployeeCertificationForm
-      initialCertificationProviderId={
-        employeeCertification.certification.certificationProvider
-          .certificationProviderId
-      }
-      initialValues={initialValues}
-      onSubmit={async (values, { setErrors }) => {
-        const response = await updateEmployeeCertification({
-          certificationId: employeeCertification?.certificationId,
-          input: values,
-        });
-        const errors = response.data?.updateEmployeeCertification?.errors;
-        if (errors) {
-          var errorMap = toErrorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-      action="Update"
-    />
+    <PageLayout
+      title="Certification"
+      loading={certificationFetching || providersFetching}
+      error={!employeeCertification || !providers}
+      errorMessage={"Certification not found"}
+    >
+      <EmployeeCertificationForm
+        action="Update"
+        initialCertificationProviderId={provider?.certificationProviderId}
+        providers={providers?.items as CertificationProviders[]}
+        initialValues={initialValues}
+        onSubmit={async (values, { setErrors }) => {
+          const response = await updateCertification({
+            certificationId: id,
+            input: values,
+          });
+
+          const errors = response.data?.updateEmployeeCertification?.errors;
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      />
+    </PageLayout>
   );
 };
 

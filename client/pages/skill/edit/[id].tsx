@@ -1,7 +1,6 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
-import { Loading } from "../../../components/common/Loading";
 import { SkillForm } from "../../../components/skills/SkillForm";
 import {
   UserRole,
@@ -10,6 +9,7 @@ import {
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 import { useRouteId } from "../../../hooks/useRouteId";
+import { PageLayout } from "../../../components/common/PageLayout";
 
 const EditSkill: React.FC<{}> = () => {
   const [, updateSkill] = useUpdateSkillMutation();
@@ -22,30 +22,31 @@ const EditSkill: React.FC<{}> = () => {
     },
   });
 
-  if (fetching) {
-    return <Loading />;
-  }
-
-  if (!data?.skill?.data) {
-    return <p>Could Not Find Skill</p>;
-  }
-
-  const skill = data?.skill?.data!;
+  const skill = data?.skill?.data;
 
   return (
-    <SkillForm
-      action="Update"
-      initialValues={{ skillName: skill.skillName }}
-      onSubmit={async (values) => {
-        await updateSkill({
-          input: {
-            skillName: values.skillName,
-          },
-          skillId: skill?.skillId,
-        });
-        router.push("/skill");
-      }}
-    />
+    <PageLayout
+      title="Skill"
+      loading={fetching}
+      error={!skill}
+      errorMessage={"Skill not found"}
+    >
+      {skill ? (
+        <SkillForm
+          action="Update"
+          initialValues={{ skillName: skill.skillName }}
+          onSubmit={async (values) => {
+            await updateSkill({
+              input: {
+                skillName: values.skillName,
+              },
+              skillId: skill?.skillId,
+            });
+            router.push("/skill");
+          }}
+        />
+      ) : null}
+    </PageLayout>
   );
 };
 

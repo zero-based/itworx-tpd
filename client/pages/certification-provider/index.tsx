@@ -1,5 +1,9 @@
 import React from "react";
+import { Button } from "baseui/button";
+import { CSVLink } from "react-csv";
+
 import { CertificationProviderTable } from "../../components/certifications/CertificationProviderTable";
+import { PageLayout } from "../../components/common/PageLayout";
 import {
   CertificationProviders,
   useCertificationsProvidersQuery,
@@ -15,13 +19,32 @@ const ViewCertificationProvider: React.FC<{}> = () => {
     },
   });
 
+  const providers = data?.certificationsProviders?.data?.items;
+
   return (
-    <CertificationProviderTable
+    <PageLayout
+      title="Certification Providers"
       loading={fetching}
-      data={
-        data?.certificationsProviders?.data?.items as CertificationProviders[]
+      error={!!data?.certificationsProviders?.errors}
+      contentStyle={{ height: "65vh" }}
+      action={
+        providers ? (
+          <Button>
+            <CSVLink
+              data={providers}
+              filename="CertificationProviders.csv"
+              style={{ color: "white", textDecoration: "none" }}
+            >
+              Export
+            </CSVLink>
+          </Button>
+        ) : null
       }
-    />
+    >
+      <CertificationProviderTable
+        data={providers as CertificationProviders[]}
+      />
+    </PageLayout>
   );
 };
 

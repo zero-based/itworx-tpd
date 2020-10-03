@@ -3,7 +3,7 @@ import { useStyletron } from "baseui";
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Form, Formik } from "formik";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { InputField } from "../components/fields/InputField";
 import { useLoginMutation } from "../graphql/types";

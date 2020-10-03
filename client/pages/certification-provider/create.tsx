@@ -1,32 +1,34 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { CertificationProviderForm } from "../../components/certifications/CertificationProviderForm";
 import {
+  CertificationProviderInput,
   useCreateCertificationProviderMutation,
   UserRole,
 } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
+import { PageLayout } from "../../components/common/PageLayout";
 
 const CreateCertificationProvider: React.FC<{}> = () => {
   const router = useRouter();
-  const [
-    ,
-    createCertificationProvider,
-  ] = useCreateCertificationProviderMutation();
+  const [, createProvider] = useCreateCertificationProviderMutation();
+
+  const initialValues: CertificationProviderInput = {
+    certificationProviderName: "",
+  };
+
   return (
-    <CertificationProviderForm
-      initialValues={{ certificationProviderName: "" }}
-      action="Add"
-      onSubmit={async (values) => {
-        await createCertificationProvider({
-          input: {
-            certificationProviderName: values.certificationProviderName,
-          },
-        });
-        router.push("/certification-provider");
-      }}
-    />
+    <PageLayout title="Certification Providers">
+      <CertificationProviderForm
+        action="Add"
+        initialValues={initialValues}
+        onSubmit={async (values) => {
+          await createProvider({ input: values });
+          router.push("/certification-provider");
+        }}
+      />
+    </PageLayout>
   );
 };
 

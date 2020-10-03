@@ -17,7 +17,6 @@ type RowDataT = Certifications;
 
 interface CertificationTableProps {
   data?: RowDataT[];
-  loading: boolean;
 }
 
 export const CertificationTable: React.FC<CertificationTableProps> = (
@@ -68,33 +67,10 @@ export const CertificationTable: React.FC<CertificationTableProps> = (
   ];
 
   return (
-    <>
-      {props.loading ? (
-        <Loading />
-      ) : (
-        <>
-          <div
-            style={{
-              fontWeight: "bold",
-              fontSize: "x-large",
-            }}
-          >
-            Certifications
-          </div>
-          <div
-            style={{
-              height: "58vh",
-              width: "56%",
-            }}
-          >
-            <Unstable_StatefulDataTable
-              columns={columns}
-              rows={rows}
-              rowActions={rowActions}
-            />
-          </div>
-        </>
-      )}
-    </>
+    <Unstable_StatefulDataTable
+      columns={columns}
+      rows={rows}
+      rowActions={rowActions}
+    />
   );
 };

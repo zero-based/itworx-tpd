@@ -1,5 +1,6 @@
 import React from "react";
 import { CertificationTable } from "../../components/certifications/CertificationTable";
+import { PageLayout } from "../../components/common/PageLayout";
 import {
   Certifications,
   useCertificationsQuery,
@@ -16,10 +17,16 @@ const ViewCertification: React.FC<{}> = () => {
   });
 
   return (
-    <CertificationTable
+    <PageLayout
+      title="Certifications"
       loading={fetching}
-      data={data?.certifications?.data?.items as Certifications[]}
-    />
+      error={!!data?.certifications?.errors}
+      contentStyle={{ height: "65vh" }}
+    >
+      <CertificationTable
+        data={data?.certifications?.data?.items as Certifications[]}
+      />
+    </PageLayout>
   );
 };
 

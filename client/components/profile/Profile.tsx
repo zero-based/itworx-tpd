@@ -16,7 +16,7 @@ export const Profile: React.FC<ProfileProps> = ({ data }) => {
   const [, theme] = useStyletron();
 
   return (
-    <Block display="flex" flexDirection="column" padding="0 32px">
+    <Block display="flex" flexDirection="column">
       <FlexGrid flexGridColumnCount={2} gridColumnGap="24px">
         <Avatar
           size="120px"
