@@ -50,7 +50,7 @@ const EditCertificationProvider: React.FC<{}> = () => {
               input: values,
             });
 
-            router.push("/view/certificationProviders");
+            router.push("/certification-provider");
           }}
         />
       ) : null}
