@@ -9,6 +9,8 @@ import { Loading } from "../common/Loading";
 import { useStyletron } from "baseui";
 import { ComboboxField } from "../fields/ComboBoxField";
 import {
+  CertificationProviders,
+  Certifications,
   EmployeeCertificationInput,
   useCertificationProviderQuery,
   useCertificationsProvidersQuery,
@@ -19,6 +21,7 @@ interface EmployeeCertificationFormProps
   extends FormikConfig<EmployeeCertificationInput> {
   action: string;
   initialCertificationProviderId?: number;
+  providers: CertificationProviders[];
 }
 
 export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps> = ({
@@ -26,62 +29,22 @@ export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps>
   initialCertificationProviderId,
   ...props
 }) => {
-  const [css, theme] = useStyletron();
-
-  // Certification Provider
   const [certificationProviderId, setCertificationProviderId] = React.useState(
     initialCertificationProviderId ?? -1
   );
 
-  const [
-    {
-      data: CertificationProviderData,
-      fetching: certificationProviderFetching,
-    },
-  ] = useCertificationsProvidersQuery({
-    variables: {
-      limit: 30,
-      cursor: "0",
-    },
-  });
-
-  // Certifications
-  const [{ data: certificationsData }] = useCertificationProviderQuery({
+  const [{ data }] = useCertificationProviderQuery({
     variables: {
       certificationProviderId: certificationProviderId,
     },
   });
-  const certificationsName = !certificationsData?.certificationProvider?.data
-    ? [{ certificationName: "", certificationId: -1 }]
-    : certificationsData.certificationProvider.data.certifications;
 
-  if (certificationProviderFetching) return <Loading />;
-
-  if (!CertificationProviderData?.certificationsProviders?.data)
-    return <p> No Certification Providers Avaliable yet !! </p>;
-
-  const certificationProviders =
-    CertificationProviderData.certificationsProviders.data.items;
+  const certifications = data?.certificationProvider?.data?.certifications;
 
   return (
     <Formik {...props}>
       {({ isSubmitting }) => (
-        <Form
-          className={css({
-            padding: "2% 5%",
-          })}
-        >
-          <HeadingLevel>
-            <Heading
-              styleLevel={2}
-              $style={{
-                color: theme.colors.primary,
-              }}
-            >
-              Employee Certification
-            </Heading>
-          </HeadingLevel>
-
+        <Form>
           <FlexGrid
             flexGridColumnGap="scale1000"
             flexGridRowGap="scale800"
@@ -91,7 +54,7 @@ export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps>
               <ComboboxField
                 name="certificationProvider"
                 label="Certification Provider"
-                items={certificationProviders}
+                items={props.providers}
                 mapItemToString={(item) => item.certificationProviderName}
                 onItemChanged={(item) => {
                   setCertificationProviderId(
@@ -105,7 +68,7 @@ export const EmployeeCertificationForm: React.FC<EmployeeCertificationFormProps>
               <ComboboxField
                 name="certificationName"
                 label="Certification Name"
-                items={certificationsName}
+                items={certifications ?? []}
                 mapItemToString={(item) => item.certificationName}
               />
             </FlexGridItem>

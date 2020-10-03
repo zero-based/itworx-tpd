@@ -10,64 +10,29 @@ import { ComboboxField } from "../fields/ComboBoxField";
 import { InputField } from "../fields/InputField";
 import {
   CertificationInput,
+  CertificationProviders,
   useCertificationsProvidersQuery,
 } from "../../graphql/types";
 
 interface CertificationFormProps extends FormikConfig<CertificationInput> {
   action: string;
+  providers: CertificationProviders[];
 }
 
 export const CertificationForm: React.FC<CertificationFormProps> = ({
   action,
   ...props
 }) => {
-  const [, theme] = useStyletron();
-  const [{ data, fetching }] = useCertificationsProvidersQuery({
-    variables: {
-      limit: 30,
-      cursor: null,
-    },
-  });
-  if (fetching) return <Loading />;
-
-  if (!data?.certificationsProviders?.data) {
-    return <p>No Providers Available !</p>;
-  }
-  const certificationsProviders = data.certificationsProviders.data.items;
-
   return (
     <Formik {...props}>
       {({ isSubmitting }) => (
         <Form>
-          <HeadingLevel>
-            <Heading
-              styleLevel={2}
-              $style={{
-                paddingLeft: "10%",
-                paddingTop: "5%",
-                color: "#C63527",
-              }}
-            >
-              {action} Certification
-            </Heading>
-          </HeadingLevel>
-
           <FlexGrid
             flexGridColumnGap="scale1000"
             flexGridRowGap="scale800"
-            flexGridColumnCount={[1, 1, 2, 3]}
-            $style={{
-              margin: "auto",
-              padding: "2% 10% 10%",
-            }}
+            flexGridColumnCount={[1, 1, 2, 2]}
           >
-            <FlexGridItem
-              $style={{
-                display: "flex",
-                alignItems: "center",
-                marginBlock: "10%",
-              }}
-            >
+            <FlexGridItem>
               <InputField
                 name="certificationName"
                 label="Certification Name"
@@ -75,36 +40,23 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
               />
             </FlexGridItem>
 
-            <FlexGridItem
-              $style={{
-                display: "flex",
-                alignItems: "center",
-                marginBlock: "10%",
-              }}
-            >
+            <FlexGridItem>
               <ComboboxField
                 name="certificationProviderName"
                 label="Certification Provider"
-                items={certificationsProviders}
+                items={props.providers}
                 mapItemToString={(item) => item.certificationProviderName}
               />
             </FlexGridItem>
 
-            <FlexGridItem
-              $style={{
-                display: "flex",
-                alignItems: "center",
-                marginBlock: "10%",
-              }}
-            >
+            <FlexGridItem />
+            <FlexGridItem display="flex">
               <Button
                 type="submit"
                 isLoading={isSubmitting}
                 $style={{
                   marginTop: "48px",
-                  position: "absolute",
-                  right: "10%",
-                  backgroundColor: theme.colors.primary700,
+                  marginLeft: "auto",
                 }}
               >
                 {action}

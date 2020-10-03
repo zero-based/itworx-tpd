@@ -1,14 +1,17 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { ReleaseRequestForm } from "../../components/requests/ReleaseRequestForm";
 import {
+  EmployeesProfiles,
   ReleaseRequestInput,
   useCreateReleaseRequestMutation,
+  useManagersNamesQuery,
   UserRole,
 } from "../../graphql/types";
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
+import { PageLayout } from "../../components/common/PageLayout";
 
 const CreateReleaseRequest: React.FC<{}> = () => {
   const [, createReleaseRequest] = useCreateReleaseRequestMutation();
@@ -28,22 +31,31 @@ const CreateReleaseRequest: React.FC<{}> = () => {
     requestStatus: "",
   };
 
-  return (
-    <ReleaseRequestForm
-      initialValues={{ ...initialValues }}
-      action="Add"
-      onSubmit={async (values, { setErrors }) => {
-        const response = await createReleaseRequest({ input: values });
-        const errors = response.data?.createReleaseRequest?.errors;
+  const [{ data, fetching }] = useManagersNamesQuery();
 
-        if (errors) {
-          var errorMap = toErrorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-    />
+  return (
+    <PageLayout
+      title="Release Request"
+      loading={fetching}
+      error={!data?.managers}
+    >
+      <ReleaseRequestForm
+        action="Add"
+        managers={data?.managers as EmployeesProfiles[]}
+        initialValues={initialValues}
+        onSubmit={async (values, { setErrors }) => {
+          const response = await createReleaseRequest({ input: values });
+          const errors = response.data?.createReleaseRequest?.errors;
+
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      />
+    </PageLayout>
   );
 };
 

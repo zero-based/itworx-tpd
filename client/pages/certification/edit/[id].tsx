@@ -1,50 +1,70 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { CertificationForm } from "../../../components/certifications/CertificationForm";
 import {
+  CertificationProviders,
   useCertificationQuery,
+  useCertificationsProvidersQuery,
   UserRole,
   useUpdateCertificationMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 import { useRouteId } from "../../../hooks/useRouteId";
+import { PageLayout } from "../../../components/common/PageLayout";
 
 const EditCertification: React.FC<{}> = () => {
-  const [, updateCertification] = useUpdateCertificationMutation();
   const router = useRouter();
-  const id = useRouteId();
+  const [, updateCertification] = useUpdateCertificationMutation();
 
-  const [{ data }] = useCertificationQuery({
+  const id = useRouteId();
+  const [
+    { data: certificationData, fetching: certificationFetching },
+  ] = useCertificationQuery({
     variables: {
       certificationId: id,
     },
   });
 
-  const certification = data?.certification?.data;
+  const certification = certificationData?.certification?.data;
+  const initialValues = {
+    certificationName: certification?.certificationName!,
+    certificationProviderName: certification?.certificationProvider
+      ?.certificationProviderName!,
+  };
 
-  if (certification === undefined) {
-    return <p> Undefined </p>;
-  }
+  const [
+    { data: providersData, fetching: providersFetching },
+  ] = useCertificationsProvidersQuery({
+    variables: {
+      limit: 30,
+      cursor: null,
+    },
+  });
+
+  const providers = providersData?.certificationsProviders?.data;
+
   return (
-    <CertificationForm
-      initialValues={{
-        certificationName: certification?.certificationName!,
-        certificationProviderName: certification?.certificationProvider
-          ?.certificationProviderName!,
-      }}
-      action="Update"
-      onSubmit={async (values) => {
-        await updateCertification({
-          input: {
-            certificationName: values.certificationName,
-            certificationProviderName: values.certificationProviderName,
-          },
-          certificationId: certification?.certificationId!,
-        });
-        router.push("/certification");
-      }}
-    />
+    <PageLayout
+      title="Certification"
+      loading={certificationFetching || providersFetching}
+      error={!certification || !providers}
+      errorMessage={"Certification not found"}
+    >
+      <CertificationForm
+        action="Update"
+        providers={providers?.items as CertificationProviders[]}
+        initialValues={initialValues}
+        onSubmit={async (values) => {
+          await updateCertification({
+            certificationId: id,
+            input: values,
+          });
+
+          router.push("/certification");
+        }}
+      />
+    </PageLayout>
   );
 };
 

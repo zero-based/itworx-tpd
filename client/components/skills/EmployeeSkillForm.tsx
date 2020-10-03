@@ -16,42 +16,17 @@ import { useStyletron } from "baseui";
 
 interface EmployeeSkillFormProps extends FormikConfig<EmployeeSkillInput> {
   action: string;
+  skills: Skills[];
 }
 
 export const EmployeeSkillForm: React.FC<EmployeeSkillFormProps> = ({
   action,
   ...props
 }) => {
-  const [css, theme] = useStyletron();
-
-  const [{ data, fetching }] = useSkillsQuery({
-    variables: {
-      limit: 30,
-      cursor: 0,
-    },
-  });
-  if (fetching || !data?.skills?.data) return <Loading />;
-  const employeeSkill = data.skills.data.items;
-
   return (
     <Formik {...props}>
       {({ isSubmitting }) => (
-        <Form
-          className={css({
-            padding: "2% 5%",
-          })}
-        >
-          <HeadingLevel>
-            <Heading
-              styleLevel={2}
-              $style={{
-                color: theme.colors.primary,
-              }}
-            >
-              Employee Skill
-            </Heading>
-          </HeadingLevel>
-
+        <Form>
           <FlexGrid
             flexGridColumnGap="scale1000"
             flexGridRowGap="scale800"
@@ -61,7 +36,7 @@ export const EmployeeSkillForm: React.FC<EmployeeSkillFormProps> = ({
               <ComboboxField
                 name="skillName"
                 label="Skill Name"
-                items={employeeSkill}
+                items={props.skills}
                 mapItemToString={(item) => item.skillName}
               />
             </FlexGridItem>

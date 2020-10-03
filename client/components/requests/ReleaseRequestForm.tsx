@@ -19,36 +19,17 @@ import { TextAreaField } from "../fields/TextAreaField";
 
 interface ReleaseRequestProps extends FormikConfig<ReleaseRequestInput> {
   action: string;
+  managers: EmployeesProfiles[];
 }
 
 export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
   action,
   ...props
 }) => {
-  const [css, theme] = useStyletron();
-
-  const [{ data, fetching }] = useManagersNamesQuery();
-  if (fetching || !data) return <Loading />;
-
   return (
     <Formik {...props}>
       {({ isSubmitting }) => (
-        <Form
-          className={css({
-            padding: "2% 5%",
-          })}
-        >
-          <HeadingLevel>
-            <Heading
-              styleLevel={2}
-              $style={{
-                color: theme.colors.primary,
-              }}
-            >
-              Release Request
-            </Heading>
-          </HeadingLevel>
-
+        <Form>
           <FlexGrid
             flexGridColumnGap="scale1000"
             flexGridRowGap="scale800"
@@ -58,7 +39,7 @@ export const ReleaseRequestForm: React.FC<ReleaseRequestProps> = ({
               <ComboboxField
                 name="managerName"
                 label="Manager Name"
-                items={data.managers}
+                items={props.managers}
                 mapItemToString={(item) => item.name}
               />
               <InputField name="employeeName" label="Employee Name" required />

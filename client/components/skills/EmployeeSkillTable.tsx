@@ -7,7 +7,7 @@ import {
   Unstable_StatefulDataTable,
 } from "baseui/data-table";
 import { Delete, Show } from "baseui/icon";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import {
   Skills,
   useDeleteEmployeeSkillMutation,

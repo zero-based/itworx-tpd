@@ -4,7 +4,7 @@ import { StyledNavigationItem } from "baseui/header-navigation";
 import { ChevronDown } from "baseui/icon";
 import { StatefulMenu } from "baseui/menu";
 import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 import { UserRole } from "../../graphql/types";
 

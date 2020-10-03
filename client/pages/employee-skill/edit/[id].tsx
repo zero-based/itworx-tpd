@@ -1,60 +1,75 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
-import { Loading } from "../../../components/common/Loading";
 import { EmployeeSkillForm } from "../../../components/skills/EmployeeSkillForm";
 import {
   EmployeeSkillInput,
+  Skills,
   useEmployeeSkillQuery,
+  useSkillsQuery,
   useUpdateEmployeeSkillMutation,
 } from "../../../graphql/types";
 import { withAuth } from "../../../hocs/withAuth";
 import { toErrorMap } from "../../../utils/toErrorMap";
 import { useRouteId } from "../../../hooks/useRouteId";
+import { PageLayout } from "../../../components/common/PageLayout";
 
 const EditEmployeeSkill: React.FC<{}> = () => {
-  const [, updateEmployeeSkill] = useUpdateEmployeeSkillMutation();
   const router = useRouter();
-  const id = useRouteId();
+  const [, updateEmployeeSkill] = useUpdateEmployeeSkillMutation();
 
-  const [{ data, fetching }] = useEmployeeSkillQuery({
+  const id = useRouteId();
+  const [
+    { data: employeeSkillData, fetching: employeeSkillFetching },
+  ] = useEmployeeSkillQuery({
     variables: {
       skillId: id,
     },
   });
-  if (fetching) {
-    return <Loading />;
-  }
 
-  const skill = data?.employeeSkill?.data;
-  if (!skill) {
-    return <p>Could Not Find This Skill</p>;
-  }
-
+  const employeeSkill = employeeSkillData?.employeeSkill?.data;
   const initialValues: EmployeeSkillInput = {
-    skillName: skill.skill.skillName,
-    experienceLevel: skill.experienceLevel,
-    lastUsedDate: skill.lastUsedDate,
+    skillName: employeeSkill?.skill.skillName ?? "",
+    experienceLevel: employeeSkill?.experienceLevel ?? "",
+    lastUsedDate: employeeSkill?.lastUsedDate ?? "",
   };
 
+  const [{ data: skillsData, fetching: skillsFetching }] = useSkillsQuery({
+    variables: {
+      limit: 30,
+      cursor: 0,
+    },
+  });
+
+  const skills = skillsData?.skills.data;
+
   return (
-    <EmployeeSkillForm
-      initialValues={initialValues}
-      onSubmit={async (values, { setErrors }) => {
-        const response = await updateEmployeeSkill({
-          skillId: skill.skillId,
-          input: values,
-        });
-        const errors = response.data?.updateEmployeeSkill?.errors;
-        if (errors) {
-          var errorMap = toErrorMap(errors);
-          setErrors(errorMap);
-        } else {
-          router.push("/");
-        }
-      }}
-      action="Update"
-    />
+    <PageLayout
+      title="Skill"
+      loading={employeeSkillFetching || skillsFetching}
+      error={!employeeSkill || !skills}
+      errorMessage={"Skill not found"}
+    >
+      <EmployeeSkillForm
+        action="Update"
+        skills={skills?.items as Skills[]}
+        initialValues={initialValues}
+        onSubmit={async (values, { setErrors }) => {
+          const response = await updateEmployeeSkill({
+            skillId: id,
+            input: values,
+          });
+
+          const errors = response.data?.updateEmployeeSkill?.errors;
+          if (errors) {
+            var errorMap = toErrorMap(errors);
+            setErrors(errorMap);
+          } else {
+            router.push("/");
+          }
+        }}
+      />
+    </PageLayout>
   );
 };
 

@@ -8,7 +8,7 @@ import {
   StyledNavigationList,
 } from "baseui/header-navigation";
 import { Plus } from "baseui/icon";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
 
 import {
@@ -132,6 +132,10 @@ export const NavBar: React.FC<NavBarProps> = () => {
                 {
                   label: "Skill",
                   route: "/skill/create",
+                },
+                {
+                  label: "Certification",
+                  route: "/certification/create",
                 },
                 {
                   label: "Certification Provider",
