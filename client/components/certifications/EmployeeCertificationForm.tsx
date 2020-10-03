@@ -1,19 +1,13 @@
 import React from "react";
-
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { Heading, HeadingLevel } from "baseui/heading";
 import { Form, Formik, FormikConfig } from "formik";
 
-import { Loading } from "../common/Loading";
-import { useStyletron } from "baseui";
 import { ComboboxField } from "../fields/ComboBoxField";
 import {
   CertificationProviders,
-  Certifications,
   EmployeeCertificationInput,
   useCertificationProviderQuery,
-  useCertificationsProvidersQuery,
 } from "../../graphql/types";
 import { DatePickerStrField } from "../fields/DatePickerStrField";
 

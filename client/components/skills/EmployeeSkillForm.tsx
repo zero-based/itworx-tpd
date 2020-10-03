@@ -2,17 +2,13 @@ import React from "react";
 
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { Heading, HeadingLevel } from "baseui/heading";
 import { Form, Formik, FormikConfig } from "formik";
 import {
   EmployeeSkillInput,
   Skills,
-  useSkillsQuery,
 } from "../../graphql/types";
-import { Loading } from "../common/Loading";
 import { ComboboxField } from "../fields/ComboBoxField";
 import { DatePickerStrField } from "../fields/DatePickerStrField";
-import { useStyletron } from "baseui";
 
 interface EmployeeSkillFormProps extends FormikConfig<EmployeeSkillInput> {
   action: string;

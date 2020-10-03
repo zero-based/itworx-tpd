@@ -1,17 +1,13 @@
-import * as React from "react";
+import React from "react";
 import { Button } from "baseui/button";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Form, Formik, FormikConfig } from "formik";
-import { HeadingLevel, Heading } from "baseui/heading";
-import { useStyletron } from "baseui";
 
-import { Loading } from "../common/Loading";
 import { ComboboxField } from "../fields/ComboBoxField";
 import { InputField } from "../fields/InputField";
 import {
   CertificationInput,
   CertificationProviders,
-  useCertificationsProvidersQuery,
 } from "../../graphql/types";
 
 interface CertificationFormProps extends FormikConfig<CertificationInput> {

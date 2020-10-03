@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import { CertificationProviderForm } from "../../components/certifications/CertificationProviderForm";
 import {
   CertificationProviderInput,
-  CertificationProviders,
-  useCertificationsProvidersQuery,
   useCreateCertificationProviderMutation,
   UserRole,
 } from "../../graphql/types";
