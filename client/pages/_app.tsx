@@ -1,5 +1,6 @@
-import App from "next/app";
 import React from "react";
+import App from "next/app";
+import Head from "next/head";
 import { BaseProvider } from "baseui";
 import { Provider as StyletronProvider } from "styletron-react";
 import { Provider as UrqlProvider } from "urql";
@@ -16,6 +17,9 @@ export default class MainApp extends App {
       <UrqlProvider value={urqlClient}>
         <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
           <BaseProvider theme={ItworxTheme}>
+            <Head>
+              <title>ITWorx | TPD</title>
+            </Head>
             <Component {...pageProps} />
           </BaseProvider>
         </StyletronProvider>
