@@ -82,7 +82,6 @@ export const EmployeeSkillTable: React.FC<EmployeeSkillTableProps> = () => {
         await deleteEmployeeSkill({
           skillId: parseInt(row.id.toString(), 10),
         });
-        window.location.reload();
       },
       renderIcon: Delete,
     },

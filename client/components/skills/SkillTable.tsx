@@ -54,7 +54,6 @@ export const SkillTable: React.FC<SkillTableProps> = (props) => {
         await deleteSkill({
           skillId: parseInt(row.id.toString(), 10),
         });
-        window.location.reload();
       },
     },
   ];

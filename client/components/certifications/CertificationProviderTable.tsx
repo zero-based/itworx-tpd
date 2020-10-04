@@ -50,7 +50,6 @@ export const CertificationProviderTable: React.FC<CertificationProviderTableProp
         await deleteProvider({
           certificationProviderId: parseInt(row.id.toString(), 10),
         });
-        window.location.reload();
       },
     },
   ];
