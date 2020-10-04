@@ -61,7 +61,6 @@ export const CertificationTable: React.FC<CertificationTableProps> = (
         await deleteCertifications({
           certificationId: parseInt(row.id.toString(), 10),
         });
-        window.location.reload();
       },
     },
   ];

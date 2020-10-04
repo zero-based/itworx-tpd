@@ -70,7 +70,6 @@ export const EmployeeCertificationTable: React.FC<EmployeeCertificationTableProp
         await deleteEmployeeCertification({
           certificationId: parseInt(row.id.toString(), 10),
         });
-        window.location.reload();
       },
       renderIcon: Delete,
     },
