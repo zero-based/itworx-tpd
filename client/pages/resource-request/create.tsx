@@ -73,7 +73,7 @@ const CreateResourceRequest: React.FC<{}> = () => {
             var errorMap = toErrorMap(errors);
             setErrors(errorMap);
           } else {
-            router.push("/");
+            router.push("/resource-request");
           }
         }}
       />

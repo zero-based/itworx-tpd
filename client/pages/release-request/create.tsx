@@ -52,7 +52,7 @@ const CreateReleaseRequest: React.FC<{}> = () => {
             var errorMap = toErrorMap(errors);
             setErrors(errorMap);
           } else {
-            router.push("/");
+            router.push("/release-request");
           }
         }}
       />
