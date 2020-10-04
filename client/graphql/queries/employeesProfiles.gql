@@ -1,0 +1,6 @@
+query EmployeesProfiles {
+  employeesProfiles {
+    function
+    title
+  }
+}

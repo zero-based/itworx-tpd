@@ -315,6 +315,8 @@ export type Query = {
   certifications?: Maybe<PaginatedCertificationResponse>;
   certification?: Maybe<CertificationResponse>;
   managers: Array<EmployeesProfiles>;
+  employeesProfiles: Array<EmployeesProfiles>;
+  managerEmployees: Array<EmployeesProfiles>;
   employeeCertification?: Maybe<EmployeeCertificationResponse>;
   employeeCertifications: PaginatedEmployeeCertificationResponse;
   skill?: Maybe<SkillResponse>;
@@ -349,6 +351,11 @@ export type QueryCertificationsArgs = {
 
 export type QueryCertificationArgs = {
   certificationId: Scalars['Int'];
+};
+
+
+export type QueryManagerEmployeesArgs = {
+  directManagerId: Scalars['String'];
 };
 
 
@@ -1146,6 +1153,30 @@ export type EmployeeSkillsQuery = (
   ) }
 );
 
+export type EmployeesProfilesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EmployeesProfilesQuery = (
+  { __typename?: 'Query' }
+  & { employeesProfiles: Array<(
+    { __typename?: 'EmployeesProfiles' }
+    & Pick<EmployeesProfiles, 'function' | 'title'>
+  )> }
+);
+
+export type ManagerEmployeesQueryVariables = Exact<{
+  directManagerId: Scalars['String'];
+}>;
+
+
+export type ManagerEmployeesQuery = (
+  { __typename?: 'Query' }
+  & { managerEmployees: Array<(
+    { __typename?: 'EmployeesProfiles' }
+    & Pick<EmployeesProfiles, 'name'>
+  )> }
+);
+
 export type ManagersNamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1153,7 +1184,7 @@ export type ManagersNamesQuery = (
   { __typename?: 'Query' }
   & { managers: Array<(
     { __typename?: 'EmployeesProfiles' }
-    & Pick<EmployeesProfiles, 'name'>
+    & Pick<EmployeesProfiles, 'name' | 'id'>
   )> }
 );
 
@@ -1861,10 +1892,34 @@ ${EmployeeSkillFragmentDoc}`;
 export function useEmployeeSkillsQuery(options: Omit<Urql.UseQueryArgs<EmployeeSkillsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<EmployeeSkillsQuery>({ query: EmployeeSkillsDocument, ...options });
 };
+export const EmployeesProfilesDocument = gql`
+    query EmployeesProfiles {
+  employeesProfiles {
+    function
+    title
+  }
+}
+    `;
+
+export function useEmployeesProfilesQuery(options: Omit<Urql.UseQueryArgs<EmployeesProfilesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EmployeesProfilesQuery>({ query: EmployeesProfilesDocument, ...options });
+};
+export const ManagerEmployeesDocument = gql`
+    query ManagerEmployees($directManagerId: String!) {
+  managerEmployees(directManagerId: $directManagerId) {
+    name
+  }
+}
+    `;
+
+export function useManagerEmployeesQuery(options: Omit<Urql.UseQueryArgs<ManagerEmployeesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ManagerEmployeesQuery>({ query: ManagerEmployeesDocument, ...options });
+};
 export const ManagersNamesDocument = gql`
     query ManagersNames {
   managers {
     name
+    id
   }
 }
     `;
