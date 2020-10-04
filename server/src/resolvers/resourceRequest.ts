@@ -17,11 +17,13 @@ import { ResourceRequestInput } from "../types/inputs/ResourceRequestInput";
 import { PaginatedResourceRequestResponse } from "../types/responses/PaginatedResourceRequestResponse";
 import { ResourceRequestResponse } from "../types/responses/ResourceRequestResponse";
 import { UserRole as R } from "../types/UserRole";
+import { findOrError } from "../utils/orm/findOrError";
 import { mapToFieldError } from "../utils/mapToFieldError";
+import { paginate } from "../utils/orm/paginate";
 
 @Resolver()
 export class ResourceRequestResolver {
-  // Add Resource Request
+  // Create Resource Request
   @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => ResourceRequestResponse)
   async createResourceRequest(
@@ -34,23 +36,19 @@ export class ResourceRequestResolver {
       };
     }
 
-    const manager = await EmployeesProfiles.find({
-      where: {
-        name: input.managerName,
-        directManagerId: null,
-      },
-    });
+    const [, managerErrors] = await findOrError(
+      EmployeesProfiles,
+      "managerName",
+      undefined,
+      {
+        where: {
+          name: input.managerName,
+          directManagerId: null,
+        },
+      }
+    );
 
-    if (manager.length === 0) {
-      return {
-        errors: [
-          {
-            field: "managerName",
-            message: "Please Enter A Valid Manager Name",
-          },
-        ],
-      };
-    }
+    if (managerErrors) return { errors: managerErrors };
 
     const inputRequestsCount = input.requestsCount ?? 1;
     for (var i = 0; i < inputRequestsCount - 1; i++) {
@@ -61,28 +59,42 @@ export class ResourceRequestResolver {
     };
   }
 
-  // Get A ResourceRequest
+  // Get Resource Request
   @Authorized(R.ADMIN, R.MANAGER)
   @Query(() => ResourceRequestResponse, { nullable: true })
   async resourceRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number
   ): Promise<ResourceRequestResponse | undefined> {
-    const resourceRequest = await ResourceRequests.findOne(referenceNumber);
-    if (!resourceRequest) {
-      return {
-        errors: [
-          {
-            field: "referenceNumber",
-            message: "Resource Request does not exist",
-          },
-        ],
-      };
-    }
+    const [resourceRequest, errors] = await findOrError(
+      ResourceRequests,
+      "referenceNumber",
+      referenceNumber
+    );
 
-    return { data: resourceRequest };
+    return errors ? { errors } : { data: resourceRequest };
   }
 
-  // Update ResourceRequest
+  // Get Resource Requests
+  @Authorized(R.ADMIN, R.MANAGER)
+  @Query(() => PaginatedResourceRequestResponse)
+  async resourceRequests(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
+    @Ctx() { req }: AppContext
+  ): Promise<PaginatedResourceRequestResponse> {
+    const { userRole, userName } = req.session!;
+    return {
+      data: await paginate(ResourceRequests, limit, {
+        order: { referenceNumber: "ASC" },
+        where: {
+          ...(cursor ? { referenceNumber: MoreThan(cursor) } : {}),
+          ...(userRole === R.MANAGER ? { managerName: userName } : {}),
+        },
+      }),
+    };
+  }
+
+  // Update Resource Request
   @Authorized(R.ADMIN, R.MANAGER)
   @Mutation(() => ResourceRequestResponse, { nullable: true })
   async updateResourceRequest(
@@ -97,35 +109,27 @@ export class ResourceRequestResolver {
       };
     }
 
-    const resourceRequest = await ResourceRequests.findOne(referenceNumber);
-    if (!resourceRequest) {
-      return {
-        errors: [
-          {
-            field: "referenceNumber",
-            message: "Resource Request does not exist",
-          },
-        ],
-      };
-    }
+    const [resourceRequest, resourceRequestErrors] = await findOrError(
+      ResourceRequests,
+      "referenceNumber",
+      referenceNumber
+    );
 
-    const manager = await EmployeesProfiles.find({
-      where: {
-        name: input.managerName,
-        directManagerId: null,
-      },
-    });
+    if (resourceRequestErrors) return { errors: resourceRequestErrors };
 
-    if (manager.length === 0) {
-      return {
-        errors: [
-          {
-            field: "managerName",
-            message: "Please Enter A Valid Manager Name",
-          },
-        ],
-      };
-    }
+    const [, managerErrors] = await findOrError(
+      EmployeesProfiles,
+      "managerName",
+      undefined,
+      {
+        where: {
+          name: input.managerName,
+          directManagerId: null,
+        },
+      }
+    );
+
+    if (managerErrors) return { errors: managerErrors };
 
     const managerStatus = ["Open", "Cancelled", "On Hold"];
     const tpdStatus = [
@@ -156,7 +160,7 @@ export class ResourceRequestResolver {
     }
 
     const inputRequestsCount = input.requestsCount ?? 1;
-    const resourceRequestsCount = resourceRequest.requestsCount ?? 1;
+    const resourceRequestsCount = resourceRequest?.requestsCount ?? 1;
 
     for (var i = 0; i < inputRequestsCount - resourceRequestsCount; i++) {
       await ResourceRequests.create({ ...input }).save();
@@ -174,34 +178,5 @@ export class ResourceRequestResolver {
   ): Promise<boolean> {
     await ResourceRequests.delete(referenceNumber);
     return true;
-  }
-
-  // Get 30 ResourceRequest
-  @Authorized(R.ADMIN, R.MANAGER)
-  @Query(() => PaginatedResourceRequestResponse)
-  async resourceRequests(
-    @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
-    @Ctx() { req }: AppContext
-  ): Promise<PaginatedResourceRequestResponse> {
-    const requestLimit = Math.min(30, limit);
-    const fetchLimit = requestLimit + 1;
-
-    const { userRole, userName } = req.session!;
-    const requests = await ResourceRequests.find({
-      order: { referenceNumber: "ASC" },
-      where: {
-        ...(cursor ? { referenceNumber: MoreThan(cursor) } : {}),
-        ...(userRole === R.MANAGER ? { managerName: userName } : {}),
-      },
-      take: fetchLimit,
-    });
-
-    return {
-      data: {
-        hasMore: requests.length == fetchLimit,
-        items: requests.slice(0, requestLimit),
-      },
-    };
   }
 }
