@@ -9,6 +9,7 @@ import {
   Resolver,
 } from "type-graphql";
 import { MoreThan } from "typeorm";
+
 import { EmployeeSkills } from "../entities/EmployeeSkills";
 import { Skills } from "../entities/Skills";
 import { AppContext } from "../types";
@@ -16,6 +17,8 @@ import { EmployeeSkillInput } from "../types/inputs/EmployeeSkillInput";
 import { EmployeeSkillResponse } from "../types/responses/EmployeeSkillResponse";
 import { PaginatedEmployeeSkillResponse } from "../types/responses/PaginatedEmployeeSkillResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
+import { findOrError } from "../utils/orm/findOrError";
+import { paginate } from "../utils/orm/paginate";
 import { SkillResolver } from "./skill";
 
 @Resolver()
@@ -58,27 +61,22 @@ export class EmployeeSkillResolver {
     @Arg("skillId", () => Int) skillId: number,
     @Ctx() { req }: AppContext
   ): Promise<EmployeeSkillResponse | undefined> {
-    const employeeSkill = await EmployeeSkills.findOne({
-      where: {
-        employeeId: req.session!.profileId,
-        skillId: skillId,
-      },
-    });
-    if (!employeeSkill) {
-      return {
-        errors: [
-          {
-            field: "skillId",
-            message: "Skill does not exist",
-          },
-        ],
-      };
-    }
+    const [employeeSkill, errors] = await findOrError(
+      EmployeeSkills,
+      "skillId",
+      undefined,
+      {
+        where: {
+          employeeId: req.session!.profileId,
+          skillId: skillId,
+        },
+      }
+    );
 
-    return { data: employeeSkill };
+    return errors ? { errors } : { data: employeeSkill };
   }
 
-  // Get 30 EmployeeSkill
+  // Get EmployeeSkill
   @Authorized()
   @Query(() => PaginatedEmployeeSkillResponse)
   async employeeSkills(
@@ -86,23 +84,14 @@ export class EmployeeSkillResolver {
     @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
     @Ctx() { req }: AppContext
   ): Promise<PaginatedEmployeeSkillResponse> {
-    const requestLimit = Math.min(30, limit);
-    const fetchLimit = requestLimit + 1;
-
-    const requests = await EmployeeSkills.find({
-      order: { skillId: "ASC" },
-      where: {
-        ...(cursor ? { skillId: MoreThan(cursor) } : {}),
-        employeeId: req.session!.profileId,
-      },
-      take: fetchLimit,
-    });
-
     return {
-      data: {
-        hasMore: requests.length == fetchLimit,
-        items: requests.slice(0, requestLimit),
-      },
+      data: await paginate(EmployeeSkills, limit, {
+        order: { skillId: "ASC" },
+        where: {
+          ...(cursor ? { skillId: MoreThan(cursor) } : {}),
+          employeeId: req.session!.profileId,
+        },
+      }),
     };
   }
 
@@ -114,42 +103,37 @@ export class EmployeeSkillResolver {
     @Arg("input") input: EmployeeSkillInput,
     @Ctx() { req }: AppContext
   ): Promise<EmployeeSkillResponse | undefined> {
-    const employeeSkill = await EmployeeSkills.findOne({
-      where: {
-        employeeId: req.session!.profileId,
-        skillId: skillId,
-      },
-    });
-    if (!employeeSkill) {
-      return {
-        errors: [
-          {
-            field: "skillId",
-            message: "Can not find this skill",
-          },
-        ],
-      };
-    }
+    const [employeeSkill, errors] = await findOrError(
+      EmployeeSkills,
+      "skillId",
+      undefined,
+      {
+        where: {
+          employeeId: req.session!.profileId,
+          skillId: skillId,
+        },
+      }
+    );
+
+    if (errors) return { errors };
 
     var skill = await Skills.findOne({ skillName: input.skillName });
+
+    // Create skill if it doesn't exist
     if (!skill) {
       const skillResolver = new SkillResolver();
       skill = (await skillResolver.createSkill({ skillName: input.skillName }))
         .data;
     }
 
-    const updated = {
-      skill: skill,
-      experienceLevel: input.experienceLevel,
-      lastUsedDate: input.lastUsedDate,
+    return {
+      data: await EmployeeSkills.save({
+        ...employeeSkill,
+        skill,
+        experienceLevel: input.experienceLevel,
+        lastUsedDate: input.lastUsedDate,
+      } as EmployeeSkills),
     };
-
-    await EmployeeSkills.update(
-      { employeeId: req.session!.profileId, skillId: employeeSkill?.skillId },
-      { ...updated }
-    );
-
-    return { data: { ...employeeSkill, ...updated } as EmployeeSkills };
   }
 
   // Delete Employee Skill

@@ -7,32 +7,66 @@ import { CertificationResponse } from "../types/responses/CertificationResponse"
 import { PaginatedCertificationResponse } from "../types/responses/PaginatedCertificationResponse";
 import { UserRole as R } from "../types/UserRole";
 import { CertificationInput } from "../types/inputs/CertificationInput";
+import { paginate } from "../utils/orm/paginate";
+import { findOrError } from "../utils/orm/findOrError";
 
 @Resolver()
 export class CertificationResolver {
+  // Create Certification
+  @Authorized()
+  @Mutation(() => CertificationResponse)
+  async createCertification(
+    @Arg("input") input: CertificationInput
+  ): Promise<CertificationResponse> {
+    const [provider, errors] = await findOrError(
+      CertificationProviders,
+      "certificationProviderName",
+      undefined,
+      {
+        where: { certificationProviderName: input.certificationProviderName },
+      }
+    );
+
+    return !provider
+      ? { errors }
+      : {
+          data: await Certifications.create({
+            certificationName: input.certificationName,
+            certificationProviderId: provider.certificationProviderId,
+          }).save(),
+        };
+  }
+
   // Get Certification
+  @Authorized(R.ADMIN)
+  @Query(() => CertificationResponse, { nullable: true })
+  async certification(
+    @Arg("certificationId", () => Int) certificationId: number
+  ): Promise<CertificationResponse | undefined> {
+    const [certification, errors] = await findOrError(
+      Certifications,
+      "certificationId",
+      certificationId
+    );
+
+    return errors ? { errors } : { data: certification };
+  }
+
+  // Get Certifications
   @Authorized(R.ADMIN)
   @Query(() => PaginatedCertificationResponse, { nullable: true })
   async certifications(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null
   ): Promise<PaginatedCertificationResponse | undefined> {
-    const requestLimit = Math.min(30, limit);
-    const fetchLimit = requestLimit + 1;
-
-    const certifications = await Certifications.find({
-      order: { certificationName: "ASC" },
-      where: {
-        ...(cursor ? { certificationName: MoreThan(cursor) } : {}),
-      },
-      relations: ["employeeCertifications"],
-      take: fetchLimit,
-    });
     return {
-      data: {
-        hasMore: certifications.length == fetchLimit,
-        items: certifications.slice(0, requestLimit),
-      },
+      data: await paginate(Certifications, limit, {
+        order: { certificationName: "ASC" },
+        where: {
+          ...(cursor ? { certificationName: MoreThan(cursor) } : {}),
+        },
+        relations: ["employeeCertifications"],
+      }),
     };
   }
 
@@ -43,91 +77,34 @@ export class CertificationResolver {
     @Arg("certificationId", () => Int) certificationId: number,
     @Arg("input") input: CertificationInput
   ): Promise<CertificationResponse | undefined> {
-    const provider = await CertificationProviders.findOne({
-      where: { certificationProviderName: input.certificationProviderName },
-    });
-    if (!provider) {
-      return {
-        errors: [
-          {
-            field: "certificationProviderName",
-            message: "Certification Provider does not exist",
-          },
-        ],
-      };
-    }
-    const certification = await Certifications.findOne(certificationId);
-    if (!certification) {
-      return {
-        errors: [
-          {
-            field: "certificationId",
-            message: "Certification does not exist",
-          },
-        ],
-      };
-    }
-    await Certifications.update(certificationId, {
-      certificationName: input.certificationName,
-      certificationProviderId: provider.certificationProviderId,
-    });
+    const [certification, certificationErrors] = await findOrError(
+      Certifications,
+      "certificationId",
+      certificationId
+    );
 
-    return {
-      data: {
-        ...certification,
-        certificationId: certificationId,
-        certificationName: input.certificationName,
-        certificationProviderId: provider.certificationProviderId,
-      } as Certifications,
-    };
-  }
+    if (certificationErrors) return { errors: certificationErrors };
 
-  // Get A Certification
-  @Authorized(R.ADMIN)
-  @Query(() => CertificationResponse, { nullable: true })
-  async certification(
-    @Arg("certificationId", () => Int) certificationId: number
-  ): Promise<CertificationResponse | undefined> {
-    const certification = await Certifications.findOne(certificationId);
-    if (!certification) {
-      return {
-        errors: [
-          {
-            field: "certificationId",
-            message: "Certification does not exist",
-          },
-        ],
-      };
-    }
+    const [provider, providerErrors] = await findOrError(
+      CertificationProviders,
+      "certificationProviderName",
+      undefined,
+      {
+        where: {
+          certificationProviderName: input.certificationProviderName,
+        },
+      }
+    );
 
-    return { data: certification };
-  }
-
-  // Add Certification
-  @Authorized()
-  @Mutation(() => CertificationResponse)
-  async createCertification(
-    @Arg("input") input: CertificationInput
-  ): Promise<CertificationResponse> {
-    const provider = await CertificationProviders.findOne({
-      where: { certificationProviderName: input.certificationProviderName },
-    });
-    if (!provider) {
-      return {
-        errors: [
-          {
-            field: "certificationProviderName",
-            message: "Certification Provider does not exist",
-          },
-        ],
-      };
-    }
-    return {
-      data: await Certifications.create({
-        certificationName: input.certificationName,
-        certificationProviderId: provider.certificationProviderId,
-      }).save(),
-    };
+    return providerErrors
+      ? { errors: providerErrors }
+      : {
+          data: await Certifications.save({
+            ...certification,
+            certificationName: input.certificationName,
+            certificationProviderId: provider?.certificationProviderId,
+          } as Certifications),
+        };
   }
 
   // Delete Certification

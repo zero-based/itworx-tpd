@@ -18,6 +18,8 @@ import { PaginatedReleaseRequestResponse } from "../types/responses/PaginatedRel
 import { ReleaseRequestResponse } from "../types/responses/ReleaseRequestResponse";
 import { UserRole as R } from "../types/UserRole";
 import { mapToFieldError } from "../utils/mapToFieldError";
+import { findOrError } from "../utils/orm/findOrError";
+import { paginate } from "../utils/orm/paginate";
 
 @Resolver()
 export class ReleaseRequestResolver {
@@ -29,67 +31,69 @@ export class ReleaseRequestResolver {
   ): Promise<ReleaseRequestResponse> {
     const validationErrors = await validate(input);
     if (validationErrors.length > 0) {
-      return {
-        errors: mapToFieldError(validationErrors),
-      };
+      return { errors: mapToFieldError(validationErrors) };
     }
 
-    const manager = await EmployeesProfiles.find({
-      where: {
-        name: input.managerName,
-        directManagerId: null,
-      },
-    });
+    const [, managerErrors] = await findOrError(
+      EmployeesProfiles,
+      "managerName",
+      undefined,
+      {
+        where: {
+          name: input.managerName,
+          directManagerId: null,
+        },
+      }
+    );
 
-    if (manager.length === 0) {
-      return {
-        errors: [
-          {
-            field: "managerName",
-            message: "Please Enter A Valid Manager Name",
-          },
-        ],
-      };
-    }
-    const employeeExists = await EmployeesProfiles.findOne({
-      id: input.employeeId,
-    });
+    if (managerErrors) return { errors: managerErrors };
 
-    if (!employeeExists) {
-      return {
-        errors: [
-          {
-            field: "employeeId",
-            message: "Incorrect Employee Id",
-          },
-        ],
-      };
-    }
+    const [, employeeErrors] = await findOrError(
+      EmployeesProfiles,
+      "employeeId",
+      input.employeeId
+    );
+
+    if (employeeErrors) return { errors: employeeErrors };
 
     return {
       data: await ReleaseRequests.create({ ...input }).save(),
     };
   }
 
-  // Get A RleaseRequest
+  // Get A ReleaseRequest
   @Authorized(R.ADMIN, R.MANAGER)
   @Query(() => ReleaseRequestResponse, { nullable: true })
   async releaseRequest(
     @Arg("referenceNumber", () => Int) referenceNumber: number
   ): Promise<ReleaseRequestResponse | undefined> {
-    const releaseRequest = await ReleaseRequests.findOne(referenceNumber);
-    if (!releaseRequest) {
-      return {
-        errors: [
-          {
-            field: "referenceNumber",
-            message: "Release Request does not exist",
-          },
-        ],
-      };
-    }
+    const [releaseRequest, errors] = await findOrError(
+      ReleaseRequests,
+      "referenceNumber",
+      referenceNumber
+    );
 
-    return { data: releaseRequest };
+    return errors ? { errors } : { data: releaseRequest };
+  }
+
+  // Get ReleaseRequest
+  @Authorized(R.ADMIN, R.MANAGER)
+  @Query(() => PaginatedReleaseRequestResponse)
+  async releaseRequests(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
+    @Ctx() { req }: AppContext
+  ): Promise<PaginatedReleaseRequestResponse> {
+    const { userRole, userName } = req.session!;
+    return {
+      data: await paginate(ReleaseRequests, limit, {
+        order: { referenceNumber: "ASC" },
+        where: {
+          ...(cursor ? { referenceNumber: MoreThan(cursor) } : {}),
+          ...(userRole === R.MANAGER ? { managerName: userName } : {}),
+        },
+      }),
+    };
   }
 
   // Update ReleaseRequest
@@ -99,52 +103,42 @@ export class ReleaseRequestResolver {
     @Arg("referenceNumber", () => Int) referenceNumber: number,
     @Arg("input") input: ReleaseRequestInput
   ): Promise<ReleaseRequestResponse | undefined> {
-    const ReleaseRequest = await ReleaseRequests.findOne(referenceNumber);
-    if (!ReleaseRequest) {
-      return {
-        errors: [
-          {
-            field: "referenceNumber",
-            message: "Release Request does not exist",
-          },
-        ],
-      };
-    }
+    const [releaseRequest, releaseRequestErrors] = await findOrError(
+      ReleaseRequests,
+      "referenceNumber",
+      referenceNumber
+    );
 
-    const manager = await EmployeesProfiles.find({
-      where: {
-        name: input.managerName,
-        directManagerId: null,
-      },
-    });
+    if (releaseRequestErrors) return { errors: releaseRequestErrors };
 
-    if (manager.length === 0) {
-      return {
-        errors: [
-          {
-            field: "managerName",
-            message: "Please Enter A Valid Manager Name",
-          },
-        ],
-      };
-    }
-    const employeeExists = await EmployeesProfiles.findOne({
-      id: input.employeeId,
-    });
+    const [, managerErrors] = await findOrError(
+      EmployeesProfiles,
+      "managerName",
+      undefined,
+      {
+        where: {
+          name: input.managerName,
+          directManagerId: null,
+        },
+      }
+    );
 
-    if (!employeeExists) {
-      return {
-        errors: [
-          {
-            field: "employeeId",
-            message: "Incorrect Employee Id",
-          },
-        ],
-      };
-    }
+    if (managerErrors) return { errors: managerErrors };
 
-    await ReleaseRequests.update(referenceNumber, { ...input });
-    return { data: { ...ReleaseRequest, ...input } as ReleaseRequests };
+    const [, employeeErrors] = await findOrError(
+      EmployeesProfiles,
+      "employeeId",
+      input.employeeId
+    );
+
+    if (employeeErrors) return { errors: employeeErrors };
+
+    return {
+      data: await ReleaseRequests.save({
+        ...releaseRequest,
+        ...input,
+      } as ReleaseRequests),
+    };
   }
 
   // Delete Release Request
@@ -155,34 +149,5 @@ export class ReleaseRequestResolver {
   ): Promise<boolean> {
     await ReleaseRequests.delete(referenceNumber);
     return true;
-  }
-
-  // Get 30 ReleaseRequest
-  @Authorized(R.ADMIN, R.MANAGER)
-  @Query(() => PaginatedReleaseRequestResponse)
-  async releaseRequests(
-    @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
-    @Ctx() { req }: AppContext
-  ): Promise<PaginatedReleaseRequestResponse> {
-    const requestLimit = Math.min(30, limit);
-    const fetchLimit = requestLimit + 1;
-
-    const { userRole, userName } = req.session!;
-    const requests = await ReleaseRequests.find({
-      order: { referenceNumber: "ASC" },
-      where: {
-        ...(cursor ? { referenceNumber: MoreThan(cursor) } : {}),
-        ...(userRole === R.MANAGER ? { managerName: userName } : {}),
-      },
-      take: fetchLimit,
-    });
-
-    return {
-      data: {
-        hasMore: requests.length == fetchLimit,
-        items: requests.slice(0, requestLimit),
-      },
-    };
   }
 }

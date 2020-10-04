@@ -88,7 +88,7 @@ describe("Certification Resolver Tests", async () => {
     expect(response.data).to.not.exist;
     expect(response.errors).to.exist;
     expect(response.errors).to.have.length(1);
-    expect(response.errors[0].field).to.equal("certificationProviderName");
+    expect(response.errors[0].field).to.equal("certificationId");
   });
 
   it("update with valid id", async () => {

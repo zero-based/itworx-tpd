@@ -9,6 +9,7 @@ import {
   Resolver,
 } from "type-graphql";
 import { MoreThan } from "typeorm";
+
 import { CertificationProviders } from "../entities/CertificationProviders";
 import { Certifications } from "../entities/Certifications";
 import { EmployeeCertifications } from "../entities/EmployeeCertifications";
@@ -18,6 +19,8 @@ import { EmployeeCertificationResponse } from "../types/responses/EmployeeCertif
 import { PaginatedEmployeeCertificationResponse } from "../types/responses/PaginatedEmployeeCertificationResponse";
 import { mapToFieldError } from "../utils/mapToFieldError";
 import { CertificationResolver } from "./certifications";
+import { paginate } from "../utils/orm/paginate";
+import { findOrError } from "../utils/orm/findOrError";
 
 @Resolver()
 export class EmployeeCertification {
@@ -36,32 +39,30 @@ export class EmployeeCertification {
     }
 
     // Get Certification Provider Id
-    const certificationProvider = await CertificationProviders.findOne({
-      where: {
-        certificationProviderName: input.certificationProvider,
-      },
-    });
-    if (!certificationProvider) {
-      return {
-        errors: [
-          {
-            field: "certificationProvider",
-            message: "Can not find this Certification Provider",
-          },
-        ],
-      };
-    }
+    const [provider, errors] = await findOrError(
+      CertificationProviders,
+      "certificationProviderName",
+      undefined,
+      {
+        where: {
+          certificationProviderName: input.certificationProvider,
+        },
+      }
+    );
+
+    if (!provider) return { errors };
 
     var certification = await Certifications.findOne({
       certificationName: input.certificationName,
     });
+
+    // Create certification if it doesn't exist
     if (!certification) {
       const certificationResolver = new CertificationResolver();
       certification = (
         await certificationResolver.createCertification({
           certificationName: input.certificationName,
-          certificationProviderName:
-            certificationProvider.certificationProviderName,
+          certificationProviderName: provider.certificationProviderName,
         })
       ).data;
     }
@@ -83,29 +84,22 @@ export class EmployeeCertification {
     @Arg("certificationId", () => Int) certificationId: number,
     @Ctx() { req }: AppContext
   ): Promise<EmployeeCertificationResponse | undefined> {
-    // Get Certification
-    const employeeCertification = await EmployeeCertifications.findOne({
-      where: {
-        employeeId: req.session!.profileId,
-        certificationId: certificationId,
-      },
-    });
+    const [employeeCertification, errors] = await findOrError(
+      EmployeeCertifications,
+      "certificationId",
+      undefined,
+      {
+        where: {
+          employeeId: req.session!.profileId,
+          certificationId: certificationId,
+        },
+      }
+    );
 
-    if (!employeeCertification) {
-      return {
-        errors: [
-          {
-            field: "certificationId",
-            message: "Employee Certification does not exist",
-          },
-        ],
-      };
-    }
-
-    return { data: employeeCertification };
+    return errors ? { errors } : { data: employeeCertification };
   }
 
-  // Get 30 EmployeeCertification
+  // Get EmployeeCertifications
   @Authorized()
   @Query(() => PaginatedEmployeeCertificationResponse)
   async employeeCertifications(
@@ -113,23 +107,14 @@ export class EmployeeCertification {
     @Arg("cursor", () => Int, { nullable: true }) cursor: number | null,
     @Ctx() { req }: AppContext
   ): Promise<PaginatedEmployeeCertificationResponse> {
-    const requestLimit = Math.min(30, limit);
-    const fetchLimit = requestLimit + 1;
-
-    const requests = await EmployeeCertifications.find({
-      order: { certificationId: "ASC" },
-      where: {
-        employeeId: req.session!.profileId,
-        ...(cursor ? { certificationId: MoreThan(cursor) } : {}),
-      },
-      take: fetchLimit,
-    });
-
     return {
-      data: {
-        hasMore: requests.length == fetchLimit,
-        items: requests.slice(0, requestLimit),
-      },
+      data: await paginate(EmployeeCertifications, limit, {
+        order: { certificationId: "ASC" },
+        where: {
+          ...(cursor ? { certificationId: MoreThan(cursor) } : {}),
+          employeeId: req.session!.profileId,
+        },
+      }),
     };
   }
 
@@ -141,40 +126,33 @@ export class EmployeeCertification {
     @Arg("input") input: EmployeeCertificationInput,
     @Ctx() { req }: AppContext
   ): Promise<EmployeeCertificationResponse | undefined> {
-    const employeeCertification = await EmployeeCertifications.findOne({
-      where: {
-        employeeId: req.session!.profileId,
-        certificationId: certificationId,
-      },
-    });
+    const [employeeCertification, certificationErrors] = await findOrError(
+      EmployeeCertifications,
+      "certificationId",
+      undefined,
+      {
+        where: {
+          employeeId: req.session!.profileId,
+          certificationId: certificationId,
+        },
+      }
+    );
 
-    if (!employeeCertification) {
-      return {
-        errors: [
-          {
-            field: "certificationId",
-            message: "Can not find this Certification",
-          },
-        ],
-      };
-    }
+    if (!employeeCertification) return { errors: certificationErrors };
 
     // Get Certification Provider Id
-    const certificationProvider = await CertificationProviders.findOne({
-      where: {
-        certificationProviderName: input.certificationProvider,
-      },
-    });
-    if (!certificationProvider) {
-      return {
-        errors: [
-          {
-            field: "certificationProvider",
-            message: "Can not find this Certification Provider",
-          },
-        ],
-      };
-    }
+    const [provider, providerErrors] = await findOrError(
+      CertificationProviders,
+      "certificationProvider",
+      undefined,
+      {
+        where: {
+          certificationProviderName: input.certificationProvider,
+        },
+      }
+    );
+
+    if (!provider) return { errors: providerErrors };
 
     var certification = await Certifications.findOne({
       certificationName: input.certificationName,
@@ -184,27 +162,17 @@ export class EmployeeCertification {
       certification = (
         await certificationResolver.createCertification({
           certificationName: input.certificationName,
-          certificationProviderName:
-            certificationProvider.certificationProviderName,
+          certificationProviderName: provider.certificationProviderName,
         })
       ).data;
     }
 
-    const updated = {
-      certification: certification,
-      expirationDate: input.expirationDate,
-    };
-
-    await EmployeeCertifications.update(
-      {
-        employeeId: req.session!.profileId,
-        certificationId: employeeCertification?.certificationId,
-      },
-      { ...updated }
-    );
-
     return {
-      data: { ...employeeCertification, ...updated } as EmployeeCertifications,
+      data: await EmployeeCertifications.save({
+        ...employeeCertification,
+        certification: certification,
+        expirationDate: input.expirationDate,
+      } as EmployeeCertifications),
     };
   }
 
