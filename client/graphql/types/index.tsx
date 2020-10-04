@@ -16,7 +16,7 @@ export type CertificationProviders = {
   __typename?: 'CertificationProviders';
   certificationProviderId: Scalars['Float'];
   certificationProviderName: Scalars['String'];
-  certifications: Array<Certifications>;
+  certifications?: Maybe<Array<Certifications>>;
 };
 
 export type Certifications = {
@@ -310,10 +310,10 @@ export type UserInput = {
 
 export type Query = {
   __typename?: 'Query';
-  certificationsProviders?: Maybe<PaginatedCertificationProviderResponse>;
   certificationProvider?: Maybe<CertificationProviderResponse>;
-  certifications?: Maybe<PaginatedCertificationResponse>;
+  certificationsProviders?: Maybe<PaginatedCertificationProviderResponse>;
   certification?: Maybe<CertificationResponse>;
+  certifications?: Maybe<PaginatedCertificationResponse>;
   managers: Array<EmployeesProfiles>;
   employeesProfiles: Array<EmployeesProfiles>;
   managerEmployees: Array<EmployeesProfiles>;
@@ -332,18 +332,12 @@ export type Query = {
 };
 
 
-export type QueryCertificationsProvidersArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
-};
-
-
 export type QueryCertificationProviderArgs = {
   certificationProviderId: Scalars['Int'];
 };
 
 
-export type QueryCertificationsArgs = {
+export type QueryCertificationsProvidersArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
 };
@@ -351,6 +345,12 @@ export type QueryCertificationsArgs = {
 
 export type QueryCertificationArgs = {
   certificationId: Scalars['Int'];
+};
+
+
+export type QueryCertificationsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -421,11 +421,11 @@ export enum UserRole {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  updateCertificationProvider?: Maybe<CertificationProviderResponse>;
   createCertificationProvider: CertificationProviderResponse;
+  updateCertificationProvider?: Maybe<CertificationProviderResponse>;
   deleteCertificationProvider: Scalars['Boolean'];
-  updateCertification?: Maybe<CertificationResponse>;
   createCertification: CertificationResponse;
+  updateCertification?: Maybe<CertificationResponse>;
   deleteCertification: Scalars['Boolean'];
   createEmployeeCertification: EmployeeCertificationResponse;
   updateEmployeeCertification?: Maybe<EmployeeCertificationResponse>;
@@ -447,14 +447,14 @@ export type Mutation = {
 };
 
 
-export type MutationUpdateCertificationProviderArgs = {
+export type MutationCreateCertificationProviderArgs = {
   input: CertificationProviderInput;
-  certificationProviderId: Scalars['Int'];
 };
 
 
-export type MutationCreateCertificationProviderArgs = {
+export type MutationUpdateCertificationProviderArgs = {
   input: CertificationProviderInput;
+  certificationProviderId: Scalars['Int'];
 };
 
 
@@ -463,14 +463,14 @@ export type MutationDeleteCertificationProviderArgs = {
 };
 
 
-export type MutationUpdateCertificationArgs = {
+export type MutationCreateCertificationArgs = {
   input: CertificationInput;
-  certificationId: Scalars['Int'];
 };
 
 
-export type MutationCreateCertificationArgs = {
+export type MutationUpdateCertificationArgs = {
   input: CertificationInput;
+  certificationId: Scalars['Int'];
 };
 
 
@@ -1018,10 +1018,10 @@ export type CertificationProviderQuery = (
       & ErrorFragment
     )>>, data?: Maybe<(
       { __typename?: 'CertificationProviders' }
-      & { certifications: Array<(
+      & { certifications?: Maybe<Array<(
         { __typename?: 'Certifications' }
         & CertficationFragment
-      )> }
+      )>> }
       & CertificationProviderFragment
     )> }
   )> }
