@@ -11,6 +11,7 @@ import {
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { PageLayout } from "../../components/common/PageLayout";
+import { formatDate } from "../../utils/formatDate";
 
 const CreateEmployeeCertification: React.FC<{}> = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const CreateEmployeeCertification: React.FC<{}> = () => {
   const initialValues: EmployeeCertificationInput = {
     certificationProvider: "",
     certificationName: "",
-    expirationDate: "",
+    expirationDate: formatDate(new Date()),
   };
 
   const [{ data, fetching }] = useCertificationsProvidersQuery({

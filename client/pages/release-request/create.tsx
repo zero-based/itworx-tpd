@@ -12,6 +12,7 @@ import {
 import { withAuth } from "../../hocs/withAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { PageLayout } from "../../components/common/PageLayout";
+import { formatDate } from "../../utils/formatDate";
 
 const CreateReleaseRequest: React.FC<{}> = () => {
   const [, createReleaseRequest] = useCreateReleaseRequestMutation();
@@ -23,7 +24,7 @@ const CreateReleaseRequest: React.FC<{}> = () => {
     employeeId: "",
     employeeTitle: "",
     function: "",
-    releaseDate: "",
+    releaseDate: formatDate(new Date()),
     probability: 0,
     releasePercentage: 0,
     releaseReason: "",

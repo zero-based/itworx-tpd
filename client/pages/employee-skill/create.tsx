@@ -11,6 +11,7 @@ import {
   useSkillsQuery,
 } from "../../graphql/types";
 import { PageLayout } from "../../components/common/PageLayout";
+import { formatDate } from "../../utils/formatDate";
 
 const CreateEmployeeSkill: React.FC<{}> = () => {
   const [, createEmployeeSkill] = useCreateEmployeeSkillMutation();
@@ -19,7 +20,7 @@ const CreateEmployeeSkill: React.FC<{}> = () => {
   const initialValues: EmployeeSkillInput = {
     skillName: "",
     experienceLevel: "",
-    lastUsedDate: "",
+    lastUsedDate: formatDate(new Date()),
   };
 
   const [{ data, fetching }] = useSkillsQuery({
