@@ -32,7 +32,7 @@ const CreateEmployeeSkill: React.FC<{}> = () => {
   const skills = data?.skills.data;
 
   return (
-    <PageLayout title="Skill" loading={fetching} error={!!skills}>
+    <PageLayout title="Skill" loading={fetching} error={!skills}>
       <EmployeeSkillForm
         action="Add"
         skills={skills?.items as Skills[]}

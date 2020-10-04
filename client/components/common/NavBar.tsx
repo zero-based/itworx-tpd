@@ -112,6 +112,23 @@ export const NavBar: React.FC<NavBarProps> = () => {
           currentRole={role}
           groups={[
             {
+              title: "Profile",
+              items: [
+                {
+                  label: "Skill",
+                  route: "/employee-skill/create",
+                },
+                {
+                  label: "Certification",
+                  route: "/employee-certification/create",
+                },
+                {
+                  label: "Training",
+                  route: "/",
+                },
+              ],
+            },
+            {
               title: "Requests",
               authorizedFor: [R.Admin, R.Manager],
               items: [

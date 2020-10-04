@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "baseui/button";
 import {
   CategoricalColumn,
   NumericalColumn,
@@ -94,29 +93,15 @@ export const EmployeeSkillTable: React.FC<EmployeeSkillTableProps> = () => {
       {!data ? (
         <Loading />
       ) : (
-        <>
-          <Button
-            type="submit"
-            $style={{
-              position: "absolute",
-              right: "10%",
-            }}
-            onClick={() => {
-              router.push("/employee-skill/create");
-            }}
-          >
-            Add New
-          </Button>
-          <div style={{ height: "70vh" }}>
-            <Unstable_StatefulDataTable
-              columns={columns}
-              rows={rows}
-              searchable={true}
-              loadingMessage="Loading table data.."
-              rowActions={rowActions}
-            />
-          </div>
-        </>
+        <div style={{ height: "70vh" }}>
+          <Unstable_StatefulDataTable
+            columns={columns}
+            rows={rows}
+            searchable={true}
+            loadingMessage="Loading table data.."
+            rowActions={rowActions}
+          />
+        </div>
       )}
     </>
   );
