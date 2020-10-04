@@ -1,0 +1,5 @@
+query ManagerEmployees($directManagerId: String!) {
+  managerEmployees(directManagerId: $directManagerId) {
+    name
+  }
+}
